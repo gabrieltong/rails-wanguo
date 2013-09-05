@@ -1,0 +1,27 @@
+<h1>Listing laws</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Content</th>
+    <th>Ancestry</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @laws.each do |law| %>
+  <tr>
+    <td><%= law.title %></td>
+    <td><%= law.content %></td>
+    <td><%= law.ancestry %></td>
+    <td><%= link_to 'Show', law %></td>
+    <td><%= link_to 'Edit', edit_law_path(law) %></td>
+    <td><%= link_to 'Destroy', law, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Law', new_law_path %>

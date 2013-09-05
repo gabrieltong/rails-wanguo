@@ -12,7 +12,7 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: rails-wanguo_development
+  database: rails-wanguo_gabriellocal
   pool: 5
   username: root
   password:
@@ -36,6 +36,16 @@ production:
   encoding: utf8
   reconnect: false
   database: rails-wanguo_production
+  pool: 5
+  username: root
+  password:
+  socket: /tmp/mysql.sock
+
+gabriellocal:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: rails-wanguo_gabriellocal
   pool: 5
   username: root
   password:

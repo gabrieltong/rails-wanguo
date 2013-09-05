@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Title:</b>
+  <%= @law.title %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%= @law.content %>
+</p>
+
+<p>
+  <b>Ancestry:</b>
+  <%= @law.ancestry %>
+</p>
+
+
+<%= link_to 'Edit', edit_law_path(@law) %> |
+<%= link_to 'Back', laws_path %>

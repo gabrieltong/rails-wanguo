@@ -1,4 +1,5 @@
-source 'https://rubygems.org'
+# source 'https://rubygems.org'
+source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.13'
 
@@ -36,3 +37,11 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+gem "therubyracer"
+gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem "twitter-bootstrap-rails"
+gem 'state_machine'
+gem 'ancestry'
+gem 'roo'
+gem "paperclip", "= 3.0.4"
+gem 'clearance'

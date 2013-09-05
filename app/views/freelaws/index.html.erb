@@ -1,0 +1,27 @@
+<h1>Listing freelaws</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Content</th>
+    <th>Ancestry</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @freelaws.each do |freelaw| %>
+  <tr>
+    <td><%= freelaw.title %></td>
+    <td><%= freelaw.content %></td>
+    <td><%= freelaw.ancestry %></td>
+    <td><%= link_to 'Show', freelaw %></td>
+    <td><%= link_to 'Edit', edit_freelaw_path(freelaw) %></td>
+    <td><%= link_to 'Destroy', freelaw, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Freelaw', new_freelaw_path %>

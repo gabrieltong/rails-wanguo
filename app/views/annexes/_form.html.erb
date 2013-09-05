@@ -1,0 +1,29 @@
+<%= form_for(@annex) do |f| %>
+  <% if @annex.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@annex.errors.count, "error") %> prohibited this annex from being saved:</h2>
+
+      <ul>
+      <% @annex.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :law_id %><br />
+    <%= f.number_field :law_id %>
+  </div>
+  <div class="field">
+    <%= f.label :state %><br />
+    <%= f.text_field :state %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Title:</b>
+  <%= @freelaw.title %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%= @freelaw.content %>
+</p>
+
+<p>
+  <b>Ancestry:</b>
+  <%= @freelaw.ancestry %>
+</p>
+
+
+<%= link_to 'Edit', edit_freelaw_path(@freelaw) %> |
+<%= link_to 'Back', freelaws_path %>

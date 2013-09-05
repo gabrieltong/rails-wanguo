@@ -1,0 +1,23 @@
+<h1>Listing exampoints</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @exampoints.each do |exampoint| %>
+  <tr>
+    <td><%= exampoint.title %></td>
+    <td><%= link_to 'Show', exampoint %></td>
+    <td><%= link_to 'Edit', edit_exampoint_path(exampoint) %></td>
+    <td><%= link_to 'Destroy', exampoint, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Exampoint', new_exampoint_path %>

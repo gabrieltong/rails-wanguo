@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Title:</b>
+  <%= @annex.title %>
+</p>
+
+<p>
+  <b>Law:</b>
+  <%= @annex.law_id %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%= @annex.state %>
+</p>
+
+
+<%= link_to 'Edit', edit_annex_path(@annex) %> |
+<%= link_to 'Back', annexes_path %>

@@ -1,4 +1,16 @@
 RailsWanguo::Application.routes.draw do
+  resources :annexes
+
+
+  resources :exampoints
+
+
+  resources :laws
+
+
+  resources :freelaws
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
