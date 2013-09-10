@@ -47,7 +47,7 @@ gem 'ancestry'
 gem 'roo'
 gem "paperclip", "= 3.0.4"
 # gem 'clearance'
-
+gem 'randumb'
 group :development,:gabriellocal do 
 	gem 'better_errors'
 end

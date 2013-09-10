@@ -2,8 +2,10 @@ RailsWanguo::Application.routes.draw do
 
   get 'api/epmenus'
 
+  match "api/epmenu_questions/:id(/:limit)"=>"api#epmenu_questions",:as=>"api_epmenu_questions",:defaults=>{:limit=>15}
+
   match "api/ep_questions/:id"=>"api#ep_questions",:as=>"api_ep_questions"
-  
+
   match "api/law_eps/:id"=>"api#law_eps",:as=>"api_law_eps"
 
   match "api/law(/:id)"=>"api#law",:as=>"api_law",:defaults=>{:id=>nil}
