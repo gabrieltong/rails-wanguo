@@ -1,4 +1,9 @@
 RailsWanguo::Application.routes.draw do
+
+  match "api/law(/:id)"=>"api#law",:as=>"api_law",:defaults=>{:id=>nil}
+
+  match "api/freelaw(/:id)"=>"api#freelaw",:as=>"api_freelaw",:defaults=>{:id=>nil}
+
   resources :questions
 
 
