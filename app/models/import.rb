@@ -110,14 +110,17 @@ class Import < ActiveRecord::Base
   			if row[3]
 	  			row[3].split(',').each do |q|
 	  				question_num = q.match(/\d+/).to_s
-	  				choices = q.match(/[ABCDEFGH]+/).to_s
+	  				
 	  				question = Question.find_by_num(question_num)
-
-	  				if question && choices
-
-		  				choices.split('').each do |choice|
-		  					ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,choice)
-		  				end
+	  				if question 
+	  					choices = q.match(/[ABCDEFGH]+/).to_s
+	  					if !choices.blank?
+			  				choices.split('').each do |choice|
+			  					ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,choice)
+			  				end
+			  			else
+			  				ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,'')
+			  			end
 		  			end
 	  			end
 	  		end
