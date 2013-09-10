@@ -1,4 +1,10 @@
 RailsWanguo::Application.routes.draw do
+  resources :questions
+
+
+  resources :imports
+
+
   resources :annexes
 
 

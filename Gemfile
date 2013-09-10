@@ -1,3 +1,4 @@
+gem 'rubyzip', '< 1.0.0'
 # source 'https://rubygems.org'
 source 'http://ruby.taobao.org'
 
@@ -42,6 +43,11 @@ gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) support
 gem "twitter-bootstrap-rails"
 gem 'state_machine'
 gem 'ancestry'
+
 gem 'roo'
 gem "paperclip", "= 3.0.4"
-gem 'clearance'
+# gem 'clearance'
+
+group :development,:gabriellocal do 
+	gem 'better_errors'
+end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130910005021) do
+ActiveRecord::Schema.define(:version => 20130910052851) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -44,25 +44,57 @@ ActiveRecord::Schema.define(:version => 20130910005021) do
   add_index "exampoints_laws", ["law_id"], :name => "index_exampoints_laws_on_law_id"
 
   create_table "freelaws", :force => true do |t|
-    t.string   "title"
+    t.text     "title"
     t.text     "content"
     t.string   "ancestry"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "state"
     t.string   "brief"
+    t.string   "category"
+    t.integer  "ancestry_depth", :default => 0
   end
 
   add_index "freelaws", ["ancestry"], :name => "index_freelaws_on_ancestry"
+  add_index "freelaws", ["ancestry_depth"], :name => "index_freelaws_on_ancestry_depth"
+
+  create_table "imports", :force => true do |t|
+    t.string   "title"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "laws", :force => true do |t|
-    t.string   "title"
+    t.text     "title"
     t.text     "content"
     t.string   "ancestry"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "state"
     t.string   "brief"
+    t.string   "category"
+    t.text     "blanks"
+    t.integer  "ancestry_depth", :default => 0
+  end
+
+  add_index "laws", ["ancestry"], :name => "index_laws_on_ancestry"
+  add_index "laws", ["ancestry_depth"], :name => "index_laws_on_ancestry_depth"
+  add_index "laws", ["state"], :name => "index_laws_on_state"
+
+  create_table "questions", :force => true do |t|
+    t.string   "title"
+    t.integer  "score"
+    t.string   "num"
+    t.string   "state"
+    t.text     "description"
+    t.string   "answer"
+    t.text     "choices"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
 end
