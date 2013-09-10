@@ -96,4 +96,20 @@ class Import < ActiveRecord::Base
   		:wrong_excel
   	end
   end
+
+  def import_eps
+  	s = open
+  	if s[0][0..5] = %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
+  		s[1..-1].each do |row|
+  			menu = Epmenu.find_or_create_by_title(row[0])
+  			sub = menu.children.find_or_create_by_title(row[1])
+  			ep = Exampoint.find_or_create_by_title(row[2])
+  			menu.exampoints << ep
+  			sub.exampoints << ep
+  		end
+  		return true
+  	else
+  		:wrong_excel
+  	end
+  end
 end

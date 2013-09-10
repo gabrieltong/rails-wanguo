@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130910052851) do
+ActiveRecord::Schema.define(:version => 20130910054009) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -20,6 +20,25 @@ ActiveRecord::Schema.define(:version => 20130910052851) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "epmenus", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.string   "ancestry"
+    t.integer  "ancestry_depth"
+  end
+
+  add_index "epmenus", ["ancestry"], :name => "index_epmenus_on_ancestry"
+  add_index "epmenus", ["ancestry_depth"], :name => "index_epmenus_on_ancestry_depth"
+
+  create_table "epmenus_exampoints", :id => false, :force => true do |t|
+    t.integer "epmenu_id"
+    t.integer "exampoint_id"
+  end
+
+  add_index "epmenus_exampoints", ["epmenu_id"], :name => "index_epmenus_exampoints_on_epmenu_id"
+  add_index "epmenus_exampoints", ["exampoint_id"], :name => "index_epmenus_exampoints_on_exampoint_id"
 
   create_table "exampoints", :force => true do |t|
     t.string   "title"
