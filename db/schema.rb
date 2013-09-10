@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130910054009) do
+ActiveRecord::Schema.define(:version => 20130910073946) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(:version => 20130910054009) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "ep_questions", :force => true do |t|
+    t.integer "exampoint_id"
+    t.integer "question_id"
+    t.string  "state"
+  end
+
+  add_index "ep_questions", ["exampoint_id"], :name => "index_ep_questions_on_exampoint_id"
+  add_index "ep_questions", ["question_id"], :name => "index_ep_questions_on_question_id"
+  add_index "ep_questions", ["state"], :name => "index_ep_questions_on_state"
 
   create_table "epmenus", :force => true do |t|
     t.string   "title"
@@ -107,7 +117,7 @@ ActiveRecord::Schema.define(:version => 20130910054009) do
   create_table "questions", :force => true do |t|
     t.string   "title"
     t.integer  "score"
-    t.string   "num"
+    t.integer  "num"
     t.string   "state"
     t.text     "description"
     t.string   "answer"
@@ -115,5 +125,7 @@ ActiveRecord::Schema.define(:version => 20130910054009) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  add_index "questions", ["num"], :name => "index_questions_on_num"
 
 end

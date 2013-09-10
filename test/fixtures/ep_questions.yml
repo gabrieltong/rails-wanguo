@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  exampoint_id: 1
+  question_id: 1
+
+two:
+  exampoint_id: 1
+  question_id: 1

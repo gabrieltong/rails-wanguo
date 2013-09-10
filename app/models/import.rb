@@ -84,7 +84,7 @@ class Import < ActiveRecord::Base
   			q = Question.new
   			q.state = row[0]
   			q.score = row[1]
-  			q.num = row[2]
+  			q.num = row[2].to_i
   			q.title = row[3]
   			q.answer = row[4]
   			q.description = row[5]
@@ -106,6 +106,22 @@ class Import < ActiveRecord::Base
   			ep = Exampoint.find_or_create_by_title(row[2])
   			menu.exampoints << ep
   			sub.exampoints << ep
+
+  			if row[3]
+	  			row[3].split(',').each do |q|
+	  				question_num = q.match(/\d+/).to_s
+	  				choices = q.match(/[ABCDEFGH]+/).to_s
+	  				question = Question.find_by_num(question_num)
+
+	  				if question && choices
+
+		  				choices.split('').each do |choice|
+		  					ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,choice)
+		  				end
+		  			end
+	  			end
+	  		end
+  			
   		end
   		return true
   	else
