@@ -2,7 +2,9 @@ RailsWanguo::Application.routes.draw do
 
   get 'api/epmenus'
 
-  match "api/law_ep/:id"=>"api#law_ep",:as=>"api_law_ep"
+  match "api/ep_questions/:id"=>"api#ep_questions",:as=>"api_ep_questions"
+  
+  match "api/law_eps/:id"=>"api#law_eps",:as=>"api_law_eps"
 
   match "api/law(/:id)"=>"api#law",:as=>"api_law",:defaults=>{:id=>nil}
 

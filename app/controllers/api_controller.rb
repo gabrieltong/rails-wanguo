@@ -17,8 +17,12 @@ class ApiController < ApplicationController
   	render :json=>relation.select(%w(id title brief category))
   end
 
-  def law_ep
+  def law_eps
   	render :json=> Law.find(params[:id]).exampoints.select('id,title')
+  end
+
+  def ep_questions
+  	render :json=> Exampoint.find(params[:id]).questions
   end
 
   def epmenus
