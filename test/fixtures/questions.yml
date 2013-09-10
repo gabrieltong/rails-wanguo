@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  score: 1
+  num: MyString
+  state: MyString
+  description: MyText
+  answer: MyString
+  choices: MyText
+
+two:
+  title: MyString
+  score: 1
+  num: MyString
+  state: MyString
+  description: MyText
+  answer: MyString
+  choices: MyText
