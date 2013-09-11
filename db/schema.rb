@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130911070022) do
+ActiveRecord::Schema.define(:version => 20130911084625) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -37,10 +37,12 @@ ActiveRecord::Schema.define(:version => 20130911070022) do
     t.datetime "updated_at",     :null => false
     t.string   "ancestry"
     t.integer  "ancestry_depth"
+    t.integer  "volumn"
   end
 
   add_index "epmenus", ["ancestry"], :name => "index_epmenus_on_ancestry"
   add_index "epmenus", ["ancestry_depth"], :name => "index_epmenus_on_ancestry_depth"
+  add_index "epmenus", ["volumn"], :name => "index_epmenus_on_volumn"
 
   create_table "epmenus_exampoints", :id => false, :force => true do |t|
     t.integer "epmenu_id"
