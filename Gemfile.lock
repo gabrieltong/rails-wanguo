@@ -37,10 +37,18 @@ GEM
     ancestry (2.0.0)
       activerecord (>= 3.0.0)
     arel (3.0.2)
+    bcrypt-ruby (3.1.2)
     better_errors (0.9.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
     builder (3.0.4)
+    clearance (1.0.1)
+      bcrypt-ruby
+      email_validator (~> 1.4)
+      rails (>= 3.1)
+    clearance_http_auth (0.3.0)
+      clearance (> 0.11)
+      rack (> 1.2)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.1)
@@ -54,6 +62,8 @@ GEM
       execjs
     coffee-script-source (1.6.3)
     commonjs (0.2.7)
+    email_validator (1.4.0)
+      activemodel
     erubis (2.7.0)
     execjs (2.0.1)
     hike (1.2.3)
@@ -160,6 +170,8 @@ PLATFORMS
 DEPENDENCIES
   ancestry
   better_errors
+  clearance
+  clearance_http_auth
   coffee-rails (~> 3.2.1)
   jquery-rails
   less-rails

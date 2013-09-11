@@ -59,4 +59,9 @@ class ApiController < ApplicationController
   	
   	render :json=>questions
   end
+
+  #登录 api
+  def login
+    
+  end
 end

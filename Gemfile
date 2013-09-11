@@ -47,8 +47,8 @@ gem 'ancestry'
 gem 'roo'
 gem "paperclip", "= 3.0.4"
 
-# gem 'clearance', '~> 0.9.1'
-# gem 'clearance_http_auth'
+gem 'clearance'
+gem 'clearance_http_auth'
 
 gem 'randumb'
 gem 'rest-client'
