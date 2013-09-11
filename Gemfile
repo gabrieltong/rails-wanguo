@@ -46,8 +46,13 @@ gem 'ancestry'
 
 gem 'roo'
 gem "paperclip", "= 3.0.4"
-# gem 'clearance'
+
+# gem 'clearance', '~> 0.9.1'
+# gem 'clearance_http_auth'
+
 gem 'randumb'
+gem 'rest-client'
+gem 'qq', :git => 'git://github.com/046569/qq.git'
 group :development,:gabriellocal do 
 	gem 'better_errors'
 end

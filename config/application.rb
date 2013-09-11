@@ -60,3 +60,9 @@ module RailsWanguo
     config.assets.version = '1.0'
   end
 end
+
+APPID='100354750'
+
+APPKEY='89a33ce8a4f413d84f6b71373a845a56'
+
+REDURL='&redirect_uri=http://wg.edu58.cn/entrance/callback'

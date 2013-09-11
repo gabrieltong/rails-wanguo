@@ -1,5 +1,7 @@
 RailsWanguo::Application.routes.draw do
 
+  get "entrance/callback"
+
   get 'api/epmenus'
 
   match "api/epmenu_questions/:id(/:limit)"=>"api#epmenu_questions",:as=>"api_epmenu_questions",:defaults=>{:limit=>15}

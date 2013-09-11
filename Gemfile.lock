@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/046569/qq.git
+  revision: 5beb1f241c7cfd4639cb872db2139685560c9a5b
+  specs:
+    qq (0.0.5)
+
 GEM
   remote: http://ruby.taobao.org/
   specs:
@@ -109,6 +115,8 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     roo (1.12.1)
       nokogiri
       rubyzip
@@ -157,8 +165,10 @@ DEPENDENCIES
   less-rails
   mysql2
   paperclip (= 3.0.4)
+  qq!
   rails (= 3.2.13)
   randumb
+  rest-client
   roo
   rubyzip (< 1.0.0)
   sass-rails (~> 3.2.3)
