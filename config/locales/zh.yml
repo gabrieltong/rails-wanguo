@@ -1,0 +1,56 @@
+'zh-CN': 
+  laws: '收费法条' 
+  freelaws: '免费法条' 
+  questions: '真题'
+  eps: '知识点'
+  imports:
+    index:
+      title: '导入'
+      actions: '操作'
+      edit: '编辑'
+      destroy: '删除'
+      confirm: '确认删除'
+      new: '新建'
+      import_all: '重新导入所有'
+      confirm_import_all: '确认重新导入所有?'
+    list:
+      title: '导入'
+      actions: '操作'
+      edit: '编辑'
+      destroy: '删除'
+      confirm: '确认删除'
+      new: '新建'  
+    new:
+      title: '新建导入'
+    edit:
+      title: '编辑导入'  
+    show:
+      title: '导入'    
+      back: '导入列表'
+      edit: '编辑'
+      destroy: '删除'
+    form:
+      cancel: '取消'
+  time:
+    formats:
+      default: "%H:%M"
+  helpers:
+    submit:
+      create: "创建%{model}"
+      update: "更新%{model}"
+  activerecord:
+    models:
+      import: '导入'
+    attributes:
+      default:
+        state: '审核状态'
+        created_at: '添加日期'
+      import:
+        title: '标题'
+        file_file_name: '文件名称'
+        file_content_type: '文件类型'
+        file_file_size: '文件大小'
+        created_at: '创建日期'
+        file_updated_at: '更新日期'
+        state: '类型'
+        file: '文件'

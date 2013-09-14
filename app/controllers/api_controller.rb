@@ -56,6 +56,12 @@ class ApiController < ApplicationController
 
   #登录 api
   def login
-
+    if User.authenticate params[:email],params[:password]
+      render_success
+    else
+      render_fail
+    end
   end
+
+  def 
 end
