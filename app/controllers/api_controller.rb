@@ -44,24 +44,18 @@ class ApiController < ApplicationController
   	render :json=>arr
   end
 
-# 根据知识点菜单结构随机返回题
+  # 根据知识点菜单结构随机返回题
   def epmenu_questions
-  	questions = []
-  	eps = Epmenu.find(params[:id]).exampoints.random(params[:limit])
-  	eps.each do |ep|
-  		questions.push ep.questions.random(1)
-  	end
-  	questions.flatten!.uniq!
+  	render :json=>R.new.rand_questions_by_epm(Epmenu.find(params[:id]),params[:limit].to_i)
+  end
 
-  	if questions.size < params[:limit]
-  		
-  	end
-  	
-  	render :json=>questions
+  # 随机输入  
+  def rapid_questions
+    render :json=>R.new.rand_questions_by_epms(Epmenu.random(Epmenu.count()),params[:limit].to_i)
   end
 
   #登录 api
   def login
-    
+
   end
 end

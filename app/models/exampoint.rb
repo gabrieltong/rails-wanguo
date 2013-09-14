@@ -6,5 +6,5 @@ class Exampoint < ActiveRecord::Base
   has_and_belongs_to_many :epmenus,:uniq=>true
 
   has_many :ep_questions
-  has_many :questions,:through=>:ep_questions
+  has_many :questions,:through=>:ep_questions,:uniq=>true
 end
