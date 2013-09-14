@@ -51,7 +51,7 @@ class ApiController < ApplicationController
 
   # 随机输入  
   def rapid_questions
-    render :json=>R.new.rand_questions_by_epms(Epmenu.random(Epmenu.count()),params[:limit].to_i)
+    render :json=>R.new.rand_questions_by_epms(Epmenu.roots.where('volumn'=>params[:volumn]),params[:limit].to_i)
   end
 
   #登录 api

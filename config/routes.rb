@@ -6,7 +6,7 @@ RailsWanguo::Application.routes.draw do
 
   match "api/epmenu_questions/:id(/:limit)"=>"api#epmenu_questions",:as=>"api_epmenu_questions",:defaults=>{:limit=>15}
 
-  match "api/rapid_questions(/:limit)"=>"api#rapid_questions",:as=>"api_rapid_questions",:defaults=>{:limit=>15}
+  match "api/rapid_questions/:volumn(/:limit)"=>"api#rapid_questions",:as=>"api_rapid_questions",:defaults=>{:limit=>15}
 
   match "api/ep_questions/:id"=>"api#ep_questions",:as=>"api_ep_questions"
 

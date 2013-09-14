@@ -1,16 +1,5 @@
 class R
-	def random_epmenus(relation,limit)
-		relation.random(limit).select('id')
-	end
-
-	def rand_epmenus_by_volumn(volumn,limit)
-		rand_epmenus Epmenu.roots.where('volumn'=>volumn),limit
-	end
-
-	def rand_eps_by_epmenus(epmenus,limit)
-
-	end
-
+	
 	def rand_questions_by_epms(epms,limit=15)
 		questions = []
 		range = range(limit,epms.size)
@@ -26,7 +15,7 @@ class R
 		questions = []
 		times = epm.exampoints.count 
 		1.upto times do 
-			ep = epm.exampoints.random()
+			ep = Exampoint.uncached {epm.exampoints.random()}
 			question = ep.questions.random()
 			questions.push question if question != nil && !questions.include?(question)
 			break if questions.size >=limit
