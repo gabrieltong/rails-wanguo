@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130911084625) do
+ActiveRecord::Schema.define(:version => 20130914061638) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -97,7 +97,10 @@ ActiveRecord::Schema.define(:version => 20130911084625) do
     t.datetime "file_updated_at"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "state"
   end
+
+  add_index "imports", ["state"], :name => "index_imports_on_state"
 
   create_table "laws", :force => true do |t|
     t.text     "title"

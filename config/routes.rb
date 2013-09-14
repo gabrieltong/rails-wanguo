@@ -1,5 +1,7 @@
 RailsWanguo::Application.routes.draw do
 
+  get 'imports/import_all'
+  
   get "entrance/callback"
 
   get 'api/epmenus'

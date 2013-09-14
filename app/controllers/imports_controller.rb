@@ -22,6 +22,13 @@ class ImportsController < ApplicationController
     end
   end
 
+  # GET /imports/1
+  # GET /imports/1.json
+  def import_all
+    Import.import_all
+    redirect_to request.referer
+  end
+
   # GET /imports/new
   # GET /imports/new.json
   def new
@@ -45,6 +52,7 @@ class ImportsController < ApplicationController
 
     respond_to do |format|
       if @import.save
+        @import.import
         format.html { redirect_to @import, notice: 'Import was successfully created.' }
         format.json { render json: @import, status: :created, location: @import }
       else
