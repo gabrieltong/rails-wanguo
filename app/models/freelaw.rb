@@ -4,6 +4,8 @@ class Freelaw < ActiveRecord::Base
 
   has_and_belongs_to_many :exampoints
 
+  acts_as_collectable
+  
   before_save do |instance|
   	instance.content = '' if instance.content == nil
   	instance.brief = '' if instance.brief == nil

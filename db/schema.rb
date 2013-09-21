@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130914084310) do
+ActiveRecord::Schema.define(:version => 20130921071421) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -20,6 +20,18 @@ ActiveRecord::Schema.define(:version => 20130914084310) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "collects", :force => true do |t|
+    t.integer  "collectable_id"
+    t.string   "collectable_type"
+    t.integer  "user_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "collects", ["collectable_id"], :name => "index_collects_on_collectable_id"
+  add_index "collects", ["collectable_type"], :name => "index_collects_on_collectable_type"
+  add_index "collects", ["user_id"], :name => "index_collects_on_user_id"
 
   create_table "ep_questions", :force => true do |t|
     t.integer "exampoint_id"
@@ -88,6 +100,23 @@ ActiveRecord::Schema.define(:version => 20130914084310) do
 
   add_index "freelaws", ["ancestry"], :name => "index_freelaws_on_ancestry"
   add_index "freelaws", ["ancestry_depth"], :name => "index_freelaws_on_ancestry_depth"
+
+  create_table "histories", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "question_id"
+    t.integer  "exampoint_id"
+    t.string   "epmenu_id"
+    t.string   "state"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.string   "answer"
+  end
+
+  add_index "histories", ["answer"], :name => "index_histories_on_answer"
+  add_index "histories", ["epmenu_id"], :name => "index_histories_on_epmenu_id"
+  add_index "histories", ["exampoint_id"], :name => "index_histories_on_exampoint_id"
+  add_index "histories", ["question_id"], :name => "index_histories_on_question_id"
+  add_index "histories", ["state"], :name => "index_histories_on_state"
 
   create_table "imports", :force => true do |t|
     t.string   "title"

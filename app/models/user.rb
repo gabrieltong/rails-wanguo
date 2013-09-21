@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+	has_many :collects
+
+	has_many :histories
   include Clearance::User
 
   def email_optional?

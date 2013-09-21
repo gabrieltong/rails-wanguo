@@ -56,6 +56,7 @@ class ImportsController < ApplicationController
         format.html { redirect_to @import, notice: 'Import was successfully created.' }
         format.json { render json: @import, status: :created, location: @import }
       else
+        p @import.errors.full_messages
         format.html { render action: "new" }
         format.json { render json: @import.errors, status: :unprocessable_entity }
       end

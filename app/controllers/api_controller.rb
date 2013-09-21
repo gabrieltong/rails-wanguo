@@ -63,5 +63,9 @@ class ApiController < ApplicationController
     end
   end
 
-  
+  def answer_question(question_id,answer)
+    History.log(current_user,question_id,answer)
+  end
+
+    
 end

@@ -7,7 +7,8 @@ class Import < ActiveRecord::Base
 
   validates_attachment :file, :presence => true
   validates_attachment :file, :content_type => {
-  	:content_type=>["application/vnd.ms-excel",     
+  	:content_type=>["application/vnd.ms-excel",   
+             'application/octet-stream',
              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
   } 
 
@@ -62,12 +63,16 @@ class Import < ActiveRecord::Base
   		s = Roo::Excelx.new(file.path)
   	end
 
+    if file_content_type == 'application/octet-stream'
+      s = Roo::Excel.new(file.path)
+    end
+
   	s.to_a
   end
 
   def import_laws
   	s = open
-
+    p s
   	if s[0][0..6] == %w(学科 文件名称 分类 法条章 法条节 内容 关联考点)
 	  	s[1..-1].each do |row|
 	  		one = Law.find_or_create_by_title row[0]
@@ -96,7 +101,6 @@ class Import < ActiveRecord::Base
 
   def import_freelaws
   	s = open
-
   	if s[0][0..5] == %w(学科 文件名称 分类 法条章 法条节 内容)
 	  	s[1..-1].each do |row|
 	  		one = Freelaw.find_or_create_by_title row[0]
