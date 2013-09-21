@@ -64,21 +64,51 @@ class ApiController < ApplicationController
   end
 
   def answer_question
-    History.log(User.find(1),params[:question_id],params[:answer])
+    History.log(current_user.id,params[:question_id],params[:answer])
     render_success
   end
 
   def mistake_epmenus
-    render :json=>User.find(1).epmenus
+    histories = History.wrong.where(:user_id=>current_user.id)
+    list = Epmenu.where(:id=>histories.collect{|i|i.epmenu_id}).select('id,title')
+    list = list.map do |i|
+      attrs = i.attributes
+      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>i.id).select('distinct `question_id`').count()
+      attrs[:eps_count] = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>i.id).select('distinct `exampoint_id`').count()
+      attrs
+    end
+    render :json=>list
+  end
+
+  def mistake_eps
+    histories = History.wrong.where(:user_id=>current_user.id)
+    list = Exampoint.where(:id=>histories.collect{|i|i.exampoint_id}).select('id,title')
+    list = list.map do |i|
+      attrs = i.attributes
+      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').count()
+      attrs
+    end
+    render :json=>list
   end
 
   def mistake_eps_by_epmenu
-    histories = History.where(:epmenu_id=>params[:epmenu_id])
-    render :json=>Exampoint.where(:id=>histories.collect{|i|i.exampoint_id}).select('id,title')
+    histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
+    list = Exampoint.where(:id=>histories.collect{|i|i.exampoint_id}).select('id,title')
+    list = list.map do |i|
+      attrs = i.attributes
+      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').count()
+      attrs
+    end
+    render :json=>list
   end
 
   def mistake_questions_by_ep
-    histories = History.where(:exampoint_id=>params[:exampoint_id])
+    histories = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>params[:exampoint_id])
+    render :json=>Question.where(:id=>histories.collect{|i|i.question_id})
+  end
+
+  def mistake_questions_by_epmenu
+    histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
     render :json=>Question.where(:id=>histories.collect{|i|i.question_id})
   end
 end

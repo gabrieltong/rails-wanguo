@@ -53,9 +53,6 @@ GEM
       bcrypt-ruby
       email_validator (~> 1.4)
       rails (>= 3.1)
-    clearance_http_auth (0.3.0)
-      clearance (> 0.11)
-      rack (> 1.2)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.1)
@@ -179,7 +176,6 @@ DEPENDENCIES
   ancestry
   better_errors
   clearance
-  clearance_http_auth
   coffee-rails (~> 3.2.1)
   jquery-rails
   less-rails

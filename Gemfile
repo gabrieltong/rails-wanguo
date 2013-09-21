@@ -48,7 +48,6 @@ gem 'roo'
 gem "paperclip", "= 3.0.4"
 
 gem 'clearance'
-gem 'clearance_http_auth'
 
 gem 'randumb'
 gem 'rest-client'

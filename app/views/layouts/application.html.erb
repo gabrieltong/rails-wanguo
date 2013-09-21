@@ -52,6 +52,7 @@
               <ul class="nav nav-list">
                 <li class="nav-header">Sidebar</li>
                 <% if signed_in? %>
+                <% p current_user%>
                 <li><%= link_to 'Sign out', sign_out_path, method: :delete %></li>
                 <% else %>
                 <li><%= link_to 'Sign in', sign_in_path%></li>

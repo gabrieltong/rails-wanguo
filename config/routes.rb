@@ -8,7 +8,11 @@ RailsWanguo::Application.routes.draw do
 
   get 'api/mistake_epmenus'
 
+  get 'api/mistake_eps'
+
   match 'api/answer_question/:question_id/:answer'=>'api#answer_question',:as=>'api_answer_question'
+
+  match 'api/mistake_questions_by_epmenu/:epmenu_id'=>'api#mistake_questions_by_epmenu',:as=>'api_mistake_questions_by_epmenu'
 
   match 'api/mistake_questions_by_ep/:exampoint_id'=>'api#mistake_questions_by_ep',:as=>'api_mistake_questions_by_ep'
 

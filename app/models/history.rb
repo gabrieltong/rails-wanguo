@@ -7,17 +7,17 @@ class History < ActiveRecord::Base
   belongs_to :exampoint
   belongs_to :epmenu
 
-  # state_machine :state,:initial=>:wrong  do
-  # 	state :wrong do
-  # 	end
+  state_machine :state,:initial=>:wrong  do
+  	state :wrong do
+  	end
   	
-  # 	state :right do
-  # 	end
+  	state :right do
+  	end
+  end
 
-  # 	state [:wrong,:right] do
-
-  # 	end
-  # end
+  state_machine.states.map do |state|
+    scope state.name, :conditions => { :state => state.name.to_s }
+  end
 
   def self.log(user_id,question_id,answer)
   	answer.upcase!
@@ -25,20 +25,21 @@ class History < ActiveRecord::Base
   	question = Question.find(question_id)		
   	exampoints = []
   	(question.answer.split('') | answer.split('')).each do |i|
-			exampoints = exampoints | question.send("#{i.downcase}_eps")  		
+			exampoints = exampoints | question.send("#{i.downcase}_eps") 		
   	end
 
-  	epmenu = exampoints.first.epmenus.roots.first
-
-  	exampoints.each do |ep|
-  		history = History.new()
-  		history.user = user
-  		history.question = question
-  		history.exampoint = ep
-  		history.answer = answer
-  		history.epmenu = epmenu
-  		history.state = (question.answer == answer ? :right : :wrong)
-  		history.save
-  	end
+  	unless exampoints.blank?
+	  	epmenu = exampoints.first.epmenus.roots.first
+	  	exampoints.each do |ep|
+	  		history = History.new()
+	  		history.user = user
+	  		history.question = question
+	  		history.exampoint = ep
+	  		history.answer = answer
+	  		history.epmenu = epmenu
+	  		history.state = (question.answer == answer ? :right : :wrong)
+	  		history.save
+	  	end
+	  end
 	end
 end
