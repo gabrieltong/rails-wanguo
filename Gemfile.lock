@@ -1,8 +1,15 @@
 GIT
-  remote: git://github.com/046569/qq.git
+  remote: http://github.com/046569/qq.git
   revision: 5beb1f241c7cfd4639cb872db2139685560c9a5b
   specs:
     qq (0.0.5)
+
+GIT
+  remote: http://github.com/gabrieltong/acts_as_collectable.git
+  revision: 09fdaf746c26f146f8b939e94bb495f71419dd6a
+  specs:
+    acts_as_collectable (0.0.1)
+      rails (~> 3.2.13)
 
 GEM
   remote: http://ruby.taobao.org/
@@ -168,6 +175,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_collectable!
   ancestry
   better_errors
   clearance
