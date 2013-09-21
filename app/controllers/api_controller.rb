@@ -63,9 +63,10 @@ class ApiController < ApplicationController
     end
   end
 
-  def answer_question()
-    History.log(current_user,params[:question_id],params[:answer])
+  def answer_question
+    History.log(User.find(1),params[:question_id],params[:answer])
+    render_success
   end
 
-
+  # def 
 end

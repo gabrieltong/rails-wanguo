@@ -23,11 +23,11 @@ class History < ActiveRecord::Base
   	answer.upcase!
   	user = User.find(user_id)
   	question = Question.find(question_id)		
-  	if answer == question.answer
-  		exampoints = question.send("#{answer.downcase}_eps")
-  	else
-  		exampoints = question.send("#{answer.downcase}_eps") | question.send("#{question.answer.downcase}_eps")
+  	exampoints = []
+  	(question.answer.split('') | answer.split('')).each do |i|
+			exampoints = exampoints | question.send("#{i.downcase}_eps")  		
   	end
+
   	epmenu = exampoints.first.epmenus.first
 
   	exampoints.each do |ep|
