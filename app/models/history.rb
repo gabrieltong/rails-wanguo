@@ -28,7 +28,7 @@ class History < ActiveRecord::Base
 			exampoints = exampoints | question.send("#{i.downcase}_eps")  		
   	end
 
-  	epmenu = exampoints.first.epmenus.first
+  	epmenu = exampoints.first.epmenus.roots.first
 
   	exampoints.each do |ep|
   		history = History.new()

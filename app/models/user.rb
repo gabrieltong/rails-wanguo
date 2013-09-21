@@ -2,6 +2,9 @@ class User < ActiveRecord::Base
 	has_many :collects
 
 	has_many :histories
+
+	has_many :epmenus,:through=>:histories,:uniq=>true
+
   include Clearance::User
 
   def email_optional?

@@ -6,8 +6,14 @@ RailsWanguo::Application.routes.draw do
 
   get 'api/epmenus'
 
+  get 'api/mistake_epmenus'
+
   match 'api/answer_question/:question_id/:answer'=>'api#answer_question',:as=>'api_answer_question'
-  
+
+  match 'api/mistake_questions_by_ep/:exampoint_id'=>'api#mistake_questions_by_ep',:as=>'api_mistake_questions_by_ep'
+
+  match 'api/mistake_eps_by_epmenu/:epmenu_id'=>'api#mistake_eps_by_epmenu',:as=>'api_mistake_eps_by_epmenu'
+
   match "api/epmenu_questions/:id(/:limit)"=>"api#epmenu_questions",:as=>"api_epmenu_questions",:defaults=>{:limit=>15}
 
   match "api/rapid_questions/:volumn(/:limit)"=>"api#rapid_questions",:as=>"api_rapid_questions",:defaults=>{:limit=>15}

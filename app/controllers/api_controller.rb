@@ -68,5 +68,17 @@ class ApiController < ApplicationController
     render_success
   end
 
-  # def 
+  def mistake_epmenus
+    render :json=>User.find(1).epmenus
+  end
+
+  def mistake_eps_by_epmenu
+    histories = History.where(:epmenu_id=>params[:epmenu_id])
+    render :json=>Exampoint.where(:id=>histories.collect{|i|i.exampoint_id}).select('id,title')
+  end
+
+  def mistake_questions_by_ep
+    histories = History.where(:exampoint_id=>params[:exampoint_id])
+    render :json=>Question.where(:id=>histories.collect{|i|i.question_id})
+  end
 end
