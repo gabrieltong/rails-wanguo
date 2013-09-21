@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130921071421) do
+ActiveRecord::Schema.define(:version => 20130921125505) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(:version => 20130921071421) do
     t.string   "category"
     t.text     "blanks"
     t.integer  "ancestry_depth", :default => 0
+    t.integer  "score"
   end
 
   add_index "laws", ["ancestry"], :name => "index_laws_on_ancestry"

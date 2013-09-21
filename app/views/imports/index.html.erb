@@ -12,6 +12,7 @@ $(function(){
   <li><a href="#laws"><%=t :laws%></a></li>
   <li><a href="#questions"><%=t :questions%></a></li>
   <li><a href="#eps"><%=t :eps%></a></li>
+  <li><a href="#laws_zip"><%=t :laws_zip%></a></li>
 </ul>
  
 <div class="tab-content">
@@ -19,13 +20,16 @@ $(function(){
     <%= render 'list',:collection=>Import.freelaws.order('id asc'),:title=>t(:freelaws)%>
   </div>
   <div class="tab-pane" id="laws">.
-<%= render 'list',:collection=>Import.laws.order('id asc'),:title=>t(:laws)%>
+    <%= render 'list',:collection=>Import.laws.order('id asc'),:title=>t(:laws)%>
   </div>
   <div class="tab-pane" id="questions">.
-<%= render 'list',:collection=>Import.questions.order('id asc'),:title=>t(:questions)%>
+    <%= render 'list',:collection=>Import.questions.order('id asc'),:title=>t(:questions)%>
   </div>
   <div class="tab-pane" id="eps">.
-<%= render 'list',:collection=>Import.eps.order('id asc'),:title=>t(:eps)%>
+    <%= render 'list',:collection=>Import.eps.order('id asc'),:title=>t(:eps)%>
+  </div>
+  <div class="tab-pane" id="laws_zip">.
+    <%= render 'list',:collection=>Import.laws_zip.order('id asc'),:title=>t(:eps)%>
   </div>
 </div>
 

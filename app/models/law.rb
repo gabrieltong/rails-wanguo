@@ -1,5 +1,5 @@
 class Law < ActiveRecord::Base
-  attr_accessible :ancestry, :content, :title
+  attr_accessible :ancestry, :content, :title, :score
   has_ancestry :cache_depth=>true
 	serialize :blanks
   has_many :annexes
@@ -10,5 +10,6 @@ class Law < ActiveRecord::Base
   	instance.brief = '' if instance.brief == nil
   	instance.category = '' if instance.category == nil
   	instance.state = '' if instance.state == nil
+    instance.score = 0 if instance.state == nil
   end
 end

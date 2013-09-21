@@ -6,6 +6,8 @@ RailsWanguo::Application.routes.draw do
 
   get 'api/epmenus'
 
+  match 'api/answer_question/:question_id/:answer'=>'api#answer_question',:as=>'api_answer_question'
+  
   match "api/epmenu_questions/:id(/:limit)"=>"api#epmenu_questions",:as=>"api_epmenu_questions",:defaults=>{:limit=>15}
 
   match "api/rapid_questions/:volumn(/:limit)"=>"api#rapid_questions",:as=>"api_rapid_questions",:defaults=>{:limit=>15}
