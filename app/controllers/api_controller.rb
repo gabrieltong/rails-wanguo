@@ -22,7 +22,16 @@ class ApiController < ApplicationController
 
 # 根据法条返回知识点
   def law_eps
-  	render :json=> Law.find(params[:id]).exampoints.select('id,title')
+    law = Law.find(params[:id])
+    exampoints = []
+    if law.ancestry_depth == 3
+      exampoints = law.exampoints.select('id,title')
+    else
+      law.subtree.each do |i|
+        exampoints = exampoints | i.exampoints.select('id,title')
+      end
+    end
+  	render :json=>exampoints
   end
 
 # 根据知识点返回问题
