@@ -41,16 +41,11 @@ class ApiController < ApplicationController
 
 # 返回知识点菜单结构
   def epmenus
-  	arr = []
-  	Epmenu.roots.select(%w(id title ancestry)).each do |root|
-			root_arr = root.attributes
-			root_arr[:children] = []
-			root.children.select(%w(id title)).each do |child|
-				root_arr[:children].push child.attributes
-			end
-  		arr.push root_arr
-  	end
-  	render :json=>arr
+    if params[:epmenu_id] == nil
+    	render :json=>Epmenu.roots.select(%w(id title))
+    else
+      render :json=>Epmenu.find(params[:epmenu_id]).children.select(%w(id title))
+    end
   end
 
   # 根据知识点菜单结构随机返回题
