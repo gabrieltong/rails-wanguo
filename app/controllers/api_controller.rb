@@ -36,7 +36,13 @@ class ApiController < ApplicationController
 
 # 根据知识点返回问题
   def ep_questions
-  	render :json=> Exampoint.find(params[:id]).questions
+  	render :json=> Exampoint.find(params[:id]).questions.to_json(:include=>{
+      :eps=>{:only=>[:id,:title]},
+      # :b_eps=>{:only=>[:id,:title]},
+      # :c_eps=>{:only=>[:id,:title]},
+      # :d_eps=>{:only=>[:id,:title]},
+      # :global_eps=>{:only=>[:id,:title]},
+    })
   end
 
 # 返回知识点菜单结构
