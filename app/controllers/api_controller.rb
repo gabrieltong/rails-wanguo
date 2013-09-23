@@ -20,6 +20,19 @@ class ApiController < ApplicationController
   	render :json=>relation.select(%w(id title brief category))
   end
 
+  def law_blanks
+    render :json=>Law.find(params[:id]).blanks
+    # law = 
+    # blanks = []
+    # if law.ancestry_depth == 3
+    #   blanks = law.blanks
+    # else
+    #   law.subtree.each do |i|
+    #     blanks = blanks | i.blanks
+    #   end
+    # end
+    
+  end
 # 根据法条返回知识点
   def law_eps
     law = Law.find(params[:id])

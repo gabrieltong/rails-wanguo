@@ -30,6 +30,9 @@ RailsWanguo::Application.routes.draw do
 
   match "api/law_eps/:id"=>"api#law_eps",:as=>"api_law_eps"
 
+  match "api/law_blanks/:id"=>"api#law_blanks",:as=>"api_law_blanks"
+  
+
   match "api/law(/:id)"=>"api#law",:as=>"api_law",:defaults=>{:id=>nil}
 
   match "api/freelaw(/:id)"=>"api#freelaw",:as=>"api_freelaw",:defaults=>{:id=>nil}
