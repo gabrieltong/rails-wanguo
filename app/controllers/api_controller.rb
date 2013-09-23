@@ -6,7 +6,7 @@ class ApiController < ApplicationController
   	else
   		relation = Law.find(params[:id]).children
   	end
-  	render :json=>relation.select(%w(id title brief category))
+  	render :json=>relation.select(%w(id title brief category blanks sound))
   end
 
 

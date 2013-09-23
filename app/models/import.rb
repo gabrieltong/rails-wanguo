@@ -248,6 +248,7 @@ class Import < ActiveRecord::Base
                   three_title = '第一章' if three_title.blank?
                   three = two.children.find_or_create_by_title three_title
                   four = three.children.find_or_create_by_title row[3]
+                  four.sound = row[4]
                   four.brief = row[2]
                   four.exampoints = []
                   row[7].to_s.split(/[，,、]/).each do |ep|
@@ -266,7 +267,7 @@ class Import < ActiveRecord::Base
                     relation = relation.where("`title` like ?","%#{line}%")
                   end
                   relation.limit(1).each do |four|
-                    four.blanks = row[3..-1]
+                    four.blanks = row[3..-1].delete_if{|i|i.blank?}
                     four.score = row[2]
                     four.save
                   end
