@@ -38,10 +38,6 @@ class ApiController < ApplicationController
   def ep_questions
   	render :json=> Exampoint.find(params[:id]).questions.to_json(:include=>{
       :eps=>{:only=>[:id,:title]},
-      # :b_eps=>{:only=>[:id,:title]},
-      # :c_eps=>{:only=>[:id,:title]},
-      # :d_eps=>{:only=>[:id,:title]},
-      # :global_eps=>{:only=>[:id,:title]},
     })
   end
 
@@ -56,12 +52,18 @@ class ApiController < ApplicationController
 
   # 根据知识点菜单结构随机返回题
   def epmenu_questions
-  	render :json=>R.new.rand_questions_by_epm(Epmenu.find(params[:id]),params[:limit].to_i)
+    questions = R.new.rand_questions_by_epm(Epmenu.find(params[:id]),params[:limit].to_i)
+  	render :json=>Question.where(:id=>questions.collect{|i|i.id}).to_json(:include=>{
+      :eps=>{:only=>[:id,:title]},
+    })
   end
 
   # 随机输入  
   def rapid_questions
-    render :json=>R.new.rand_questions_by_epms(Epmenu.roots.where('volumn'=>params[:volumn]),params[:limit].to_i)
+    questions = R.new.rand_questions_by_epms(Epmenu.roots.where('volumn'=>params[:volumn]),params[:limit].to_i)
+    render :json=>Question.where(:id=>questions.collect{|i|i.id}).to_json(:include=>{
+      :eps=>{:only=>[:id,:title]},
+    })
   end
 
   #登录 api
@@ -75,6 +77,13 @@ class ApiController < ApplicationController
 
   def answer_question
     History.log(current_user.id,params[:question_id],params[:answer])
+    render_success
+  end
+
+  def answer_questions    
+    params[:questions_id].each_with_index do |id,index|
+      History.log(current_user.id,id,params[:answers][index])
+    end
     render_success
   end
 
