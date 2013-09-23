@@ -94,7 +94,7 @@ class ApiController < ApplicationController
   end
 
   def answer_questions    
-    if params[:data].class = Array
+    if params[:data].class == Array
       params[:data] = Hash[(0...params[:data].size).zip params[:data]]
     end
 
