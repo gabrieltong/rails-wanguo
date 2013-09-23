@@ -3,7 +3,7 @@ class Question < ActiveRecord::Base
   serialize :choices
 
   has_many :ep_questions
-  act_as_collectable
+  acts_as_collectable
   has_many :eps,:through=>:ep_questions,:source => :exampoint,:uniq=>true
   has_many :global_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>''},:source => :exampoint,:uniq=>true
   has_many :a_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>'A'},:source => :exampoint,:uniq=>true

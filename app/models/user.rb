@@ -15,4 +15,5 @@ class User < ActiveRecord::Base
     return nil  unless user = find_by_username(username)
     return user if     user.authenticated?(password)
   end
+
 end

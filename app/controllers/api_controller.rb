@@ -1,4 +1,20 @@
 class ApiController < ApplicationController
+  def collect_question
+    Collect.add(current_user,Question.find(params[:id]))
+  end
+
+  def collect_freelaw
+    Collect.add(current_user,Freelaw.find(params[:id]))
+  end
+
+  def uncollect_question
+    Collect.remove(current_user,Question.find(params[:id]))
+  end
+
+  def uncollect_freelaw
+    Collect.remove(current_user,Freelaw.find(params[:id]))
+  end
+
 #法条班法条  
   def law
   	if params[:id] == nil

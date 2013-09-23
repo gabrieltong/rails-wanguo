@@ -12,6 +12,14 @@ RailsWanguo::Application.routes.draw do
 
   match 'api/answer_questions'
 
+  match 'api/collect_question(/:id)'=>'api#collect_question',:as=>'api_collect_question'
+
+  match 'api/collect_freelaw(/:id)'=>'api#collect_freelaw',:as=>'api_collect_freelaw'
+
+  match 'api/uncollect_question(/:id)'=>'api#uncollect_question',:as=>'api_uncollect_question'
+
+  match 'api/uncollect_freelaw(/:id)'=>'api#uncollect_freelaw',:as=>'api_uncollect_freelaw'
+
   match 'api/epmenus(/:epmenu_id)'=>'api#epmenus',:as=>'api_epmenus'
 
   match 'api/answer_question/:question_id/:answer'=>'api#answer_question',:as=>'api_answer_question'
