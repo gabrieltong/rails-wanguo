@@ -81,9 +81,12 @@ class ApiController < ApplicationController
   end
 
   def answer_questions    
-    params[:questions_id].each_with_index do |id,index|
-      History.log(current_user.id,id,params[:answers][index])
+    params[:answers].each_pair do |key,value|
+      History.log(current_user.id,key,value)
     end
+    # params[:questions_id].each_with_index do |id,index|
+      
+    # end
     render_success
   end
 
