@@ -94,7 +94,11 @@ class ApiController < ApplicationController
   end
 
   def answer_questions    
-    params[:data].each do |item|
+    if params[:data].class = Array
+      params[:data] = Hash[(0...params[:data].size).zip params[:data]]
+    end
+
+    params[:data].each_pair do |_,item|
       History.log(current_user.id,item[:id],item[:myAnswer])
     end
     render_success
