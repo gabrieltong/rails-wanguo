@@ -1,34 +1,45 @@
 class ApiController < ApplicationController
+
+  def current_user
+    User.first
+  end  
+  # 收藏真题
   def collect_question
     Collect.add(current_user,Question.find(params[:id]))
     render_success
   end
 
+  # 收藏免费法条
   def collect_freelaw
     Collect.add(current_user,Freelaw.find(params[:id]))
     render_success
   end
 
+  #收藏法条
   def collect_law
     Collect.add(current_user,Law.find(params[:id]))
     render_success
   end
 
+  # 取消收藏真题
   def uncollect_question
     Collect.remove(current_user,Question.find(params[:id]))
     render_success
   end
 
+  # 取消收藏免费法条
   def uncollect_freelaw
     Collect.remove(current_user,Freelaw.find(params[:id]))
     render_success
   end
 
+  # 取消收藏法条
   def uncollect_law
     Collect.remove(current_user,Law.find(params[:id]))
     render_success
   end
 
+  # 已收藏法条
   def collected_law
     if params[:id] == nil
       relation = Collect.roots current_user, Law
@@ -38,15 +49,12 @@ class ApiController < ApplicationController
     render :json=>relation.select(%w(id title brief category blanks sound))
   end
 
-  def current_user
-    User.first
-  end
-  
+  # 已收藏免费法条
   def collected_freelaw
 
   end
 
-#法条班法条  
+  #法条班法条  
   def law
   	if params[:id] == nil
   		relation = Law.roots
@@ -57,7 +65,7 @@ class ApiController < ApplicationController
   end
 
 
-# 免费法条
+  # 免费法条
   def freelaw
   	if params[:id] == nil
   		relation = Law.roots
@@ -80,7 +88,7 @@ class ApiController < ApplicationController
     # end
     
   end
-# 根据法条返回知识点
+  # 根据法条返回知识点
   def law_eps
     law = Law.find(params[:id])
     exampoints = []
@@ -94,14 +102,14 @@ class ApiController < ApplicationController
   	render :json=>exampoints
   end
 
-# 根据知识点返回问题
+  # 根据知识点返回问题
   def ep_questions
   	render :json=> Exampoint.find(params[:id]).questions.to_json(:include=>{
       :eps=>{:only=>[:id,:title]},
     })
   end
 
-# 返回知识点菜单结构
+  # 返回知识点菜单结构
   def epmenus
     if params[:epmenu_id] == nil
     	render :json=>Epmenu.roots.select(%w(id title))
