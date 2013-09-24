@@ -4,6 +4,7 @@
   questions: '真题'
   eps: '知识点'
   laws_zip: '法条压缩包'
+  freelaws_zip: '免费法条压缩包'
   imports:
     index:
       title: '导入'

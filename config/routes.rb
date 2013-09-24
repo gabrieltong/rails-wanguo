@@ -5,6 +5,8 @@ RailsWanguo::Application.routes.draw do
   get "entrance/callback"
 
   post 'api/search_law'
+
+  post 'api/search_freelaw'  
   
   get 'api/epmenus'
 

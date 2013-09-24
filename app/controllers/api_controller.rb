@@ -232,5 +232,18 @@ class ApiController < ApplicationController
 
     render :json=>Search.search(who,action,searchable,keyword)
   end
+
+  def search_freelaw
+    who = current_user
+    action = :validate_freelaw_roots
+    if params[:id]
+      searchable = Freelaw.find(params[:id]) 
+    else
+      searchable = Freelaw
+    end
+    keyword = params[:keyword]
+
+    render :json=>Search.search(who,action,searchable,keyword)
+  end
 end
 

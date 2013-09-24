@@ -9,7 +9,7 @@ class Import < ActiveRecord::Base
 
   validates_attachment :file, :presence => true
   
-  State = %w(laws freelaws questions eps laws_zip)
+  State = %w(laws freelaws questions eps laws_zip freelaws_zip)
 
   def self.import_all
     Import.freelaws.each {|i|i.import}
@@ -316,6 +316,45 @@ class Import < ActiveRecord::Base
                   end
                 end
                 
+              end
+            end
+          end
+        end
+      end
+    end
+
+    state :freelaws_zip do 
+      def import 
+        base = 'tmp'
+        name = File.basename(file.path).split('.')[0]
+        dir = File.dirname(file.path)
+        tmp = "#{dir}/tmp"
+        target = "#{tmp}/#{name}"
+        `
+        rm -rf #{tmp} &&
+        mkdir #{tmp} &&
+        cd #{tmp} &&
+        unzip #{file.path}
+        `
+
+        one = Freelaw.find_or_create_by_title name
+        Dir.entries(target).delete_if {|i|i=='.'||i=='..'}.each do |two|
+          two_path = "#{target}/#{two}"
+          if File.directory? two_path
+            Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
+              data = open("#{two_path}/#{other}",'application/vnd.ms-excel',1)
+
+              if data[0][0..3] == %w(法条编号 章 节 法条内容)
+                two = one.children.find_or_create_by_title other.split('.')[0]
+                three_title = ''
+                data[1..-1].each do |row|
+                  three_title = row[1] unless row[1].blank? 
+                  three_title = '第一章' if three_title.blank?
+                  three = two.children.find_or_create_by_title three_title
+                  four = three.children.find_or_create_by_title row[3]
+                  four.brief = row[2]
+                  four.save
+                end
               end
             end
           end

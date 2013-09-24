@@ -15,6 +15,13 @@ class Search < ActiveRecord::Base
   	result
   end
 
+  def self.validate_freelaw_roots keyword,parents=Freelaw.roots
+  	result = parents.select do |item|
+  		!item.subtree.where("title like ?", "%#{keyword}%").limit(1).blank?
+  	end
+  	result
+  end
+  
   def self.search who,action,searchable,keyword
   	# cache = get_cache who,action,searchable,keyword
   	# return cache if cache
@@ -25,6 +32,12 @@ class Search < ActiveRecord::Base
 				  			validate_law_roots keyword,searchable.roots
 				  		else
 				  			validate_law_roots keyword,searchable.children
+				  		end
+				  	when :validate_freelaw_roots
+				  		if searchable == Freelaw
+				  			validate_freelaw_roots keyword,searchable.roots
+				  		else
+				  			validate_freelaw_roots keyword,searchable.children
 				  		end
 				  	end
 
