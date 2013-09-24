@@ -1,18 +1,49 @@
 class ApiController < ApplicationController
   def collect_question
     Collect.add(current_user,Question.find(params[:id]))
+    render_success
   end
 
   def collect_freelaw
     Collect.add(current_user,Freelaw.find(params[:id]))
+    render_success
+  end
+
+  def collect_law
+    Collect.add(current_user,Law.find(params[:id]))
+    render_success
   end
 
   def uncollect_question
     Collect.remove(current_user,Question.find(params[:id]))
+    render_success
   end
 
   def uncollect_freelaw
     Collect.remove(current_user,Freelaw.find(params[:id]))
+    render_success
+  end
+
+  def uncollect_law
+    Collect.remove(current_user,Law.find(params[:id]))
+    render_success
+  end
+
+  def collected_law
+    if params[:id] == nil
+      relation = Collect.roots current_user, Law
+    else
+      relation = Collect.children current_user , Law.find(params[:id])
+    end
+    render :json=>relation.select(%w(id title brief category blanks sound))
+  end
+
+  def current_user
+    User.first
+  end
+  
+  def collected_freelaw
+
   end
 
 #法条班法条  
@@ -120,6 +151,10 @@ class ApiController < ApplicationController
     render_success
   end
 
+  def collected_epmenus
+    collects = Collect.where(:user_id=>current_user.id,:collectable_type=>Question.to_s)
+  end
+
   def mistake_epmenus
     histories = History.wrong.where(:user_id=>current_user.id)
     list = Epmenu.where(:id=>histories.collect{|i|i.epmenu_id}).select('id,title')
@@ -163,4 +198,5 @@ class ApiController < ApplicationController
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
     render :json=>Question.where(:id=>histories.collect{|i|i.question_id})
   end
+
 end

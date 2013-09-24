@@ -18,4 +18,5 @@ class Collect < ActiveRecord::Base
 			collect.destroy
 		end
 	end
+
 end

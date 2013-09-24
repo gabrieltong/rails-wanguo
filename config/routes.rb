@@ -45,6 +45,10 @@ RailsWanguo::Application.routes.draw do
 
   match "api/freelaw(/:id)"=>"api#freelaw",:as=>"api_freelaw",:defaults=>{:id=>nil}
 
+  match "api/collected_law(/:id)"=>"api#collected_law",:as=>"api_collected_law",:defaults=>{:id=>nil}
+
+  match "api/collected_freelaw(/:id)"=>"api#collected_freelaw",:as=>"api_collected_freelaw",:defaults=>{:id=>nil}
+
   resources :questions
 
 
