@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130921125505) do
+ActiveRecord::Schema.define(:version => 20130924151348) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -27,10 +27,15 @@ ActiveRecord::Schema.define(:version => 20130921125505) do
     t.integer  "user_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.integer  "key1_id"
+    t.integer  "key2_id"
+    t.integer  "key3_id"
   end
 
   add_index "collects", ["collectable_id"], :name => "index_collects_on_collectable_id"
   add_index "collects", ["collectable_type"], :name => "index_collects_on_collectable_type"
+  add_index "collects", ["key1_id"], :name => "index_collects_on_key1_id"
+  add_index "collects", ["key2_id"], :name => "index_collects_on_key2_id"
   add_index "collects", ["user_id"], :name => "index_collects_on_user_id"
 
   create_table "ep_questions", :force => true do |t|
@@ -135,14 +140,15 @@ ActiveRecord::Schema.define(:version => 20130921125505) do
     t.text     "title"
     t.text     "content"
     t.string   "ancestry"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.string   "state"
     t.string   "brief"
     t.string   "category"
     t.text     "blanks"
     t.integer  "ancestry_depth", :default => 0
     t.integer  "score"
+    t.string   "sound",          :default => ""
   end
 
   add_index "laws", ["ancestry"], :name => "index_laws_on_ancestry"
@@ -162,6 +168,21 @@ ActiveRecord::Schema.define(:version => 20130921125505) do
   end
 
   add_index "questions", ["num"], :name => "index_questions_on_num"
+
+  create_table "searches", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "searchable"
+    t.integer  "level"
+    t.string   "keyword"
+    t.text     "result"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "searches", ["keyword"], :name => "index_searches_on_keyword"
+  add_index "searches", ["level"], :name => "index_searches_on_level"
+  add_index "searches", ["searchable"], :name => "index_searches_on_searchable"
+  add_index "searches", ["user_id"], :name => "index_searches_on_user_id"
 
   create_table "users", :force => true do |t|
     t.datetime "created_at",                        :null => false

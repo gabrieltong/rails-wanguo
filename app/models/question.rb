@@ -4,6 +4,7 @@ class Question < ActiveRecord::Base
 
   has_many :ep_questions
   acts_as_collectable
+  
   has_many :eps,:through=>:ep_questions,:source => :exampoint,:uniq=>true
   has_many :global_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>''},:source => :exampoint,:uniq=>true
   has_many :a_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>'A'},:source => :exampoint,:uniq=>true

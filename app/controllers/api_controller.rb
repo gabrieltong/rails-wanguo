@@ -49,10 +49,6 @@ class ApiController < ApplicationController
     render :json=>relation.select(%w(id title brief category blanks sound))
   end
 
-  # 已收藏免费法条
-  def collected_freelaw
-
-  end
 
   #法条班法条  
   def law
@@ -159,10 +155,6 @@ class ApiController < ApplicationController
     render_success
   end
 
-  def collected_epmenus
-    collects = Collect.where(:user_id=>current_user.id,:collectable_type=>Question.to_s)
-  end
-
   def mistake_epmenus
     histories = History.wrong.where(:user_id=>current_user.id)
     list = Epmenu.where(:id=>histories.collect{|i|i.epmenu_id}).select('id,title')
@@ -207,4 +199,23 @@ class ApiController < ApplicationController
     render :json=>Question.where(:id=>histories.collect{|i|i.question_id})
   end
 
+  # 基于收藏真题查找收藏部门法
+  def collected_epmenus
+    render :json=>Collect.roots(current_user,'Question').select(%w(id title))
+  end
+
+  # 通过收藏部门法查找考点
+  def collected_eps_by_epmenu
+    render :json=>Collect.children(current_user,Epmenu.find(params[:id])).select(%w(id title))
+  end
+
+  # 通过收藏考点查找真题
+  def collected_questions_by_ep
+    render :json=>Collect.children(current_user,Exampoint.find(params[:id])).select(%w(id title))
+  end
+
+  # 基于收藏真题查找收藏知识点
+  def collected_eps
+    render :json=>Collect.roots(current_user,'QuestionEp').select(%w(id title))
+  end  
 end

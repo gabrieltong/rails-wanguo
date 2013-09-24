@@ -5,8 +5,7 @@ class Law < ActiveRecord::Base
   has_many :annexes
   has_and_belongs_to_many :exampoints,:uniq=>true
 
-  acts_as_collectable
-  
+  acts_as_collectable  
   before_save do |instance|
   	instance.content = '' if instance.content == nil
   	instance.brief = '' if instance.brief == nil

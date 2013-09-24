@@ -20,6 +20,21 @@ RailsWanguo::Application.routes.draw do
 
   match 'api/uncollect_freelaw(/:id)'=>'api#uncollect_freelaw',:as=>'api_uncollect_freelaw'
 
+  match "api/collected_law(/:id)"=>"api#collected_law",:as=>"api_collected_law",:defaults=>{:id=>nil}
+
+  match "api/collected_freelaw(/:id)"=>"api#collected_freelaw",:as=>"api_collected_freelaw",:defaults=>{:id=>nil}
+
+  match "api/collected_law(/:id)"=>"api#collected_law",:as=>"api_collected_law",:defaults=>{:id=>nil}    
+
+  match 'api/collected_epmenus'=>'api#collected_epmenus',:as=>'api_collected_epmenus'
+
+  match 'api/collected_eps_by_epmenu/:id'=>'api#collected_eps_by_epmenu',:as=>'api_collected_eps_by_epmenu'
+
+  match 'api/collected_questions_by_ep/:id'=>'api#collected_questions_by_ep',:as=>'api_collected_questions_by_ep'
+
+  match 'api/collected_eps'=>'api#collected_eps',:as=>'api_collected_eps'
+
+
   match 'api/epmenus(/:epmenu_id)'=>'api#epmenus',:as=>'api_epmenus'
 
   match 'api/answer_question/:question_id/:answer'=>'api#answer_question',:as=>'api_answer_question'
@@ -44,10 +59,6 @@ RailsWanguo::Application.routes.draw do
   match "api/law(/:id)"=>"api#law",:as=>"api_law",:defaults=>{:id=>nil}
 
   match "api/freelaw(/:id)"=>"api#freelaw",:as=>"api_freelaw",:defaults=>{:id=>nil}
-
-  match "api/collected_law(/:id)"=>"api#collected_law",:as=>"api_collected_law",:defaults=>{:id=>nil}
-
-  match "api/collected_freelaw(/:id)"=>"api#collected_freelaw",:as=>"api_collected_freelaw",:defaults=>{:id=>nil}
 
   resources :questions
 
