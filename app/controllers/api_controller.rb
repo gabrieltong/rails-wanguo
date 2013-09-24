@@ -245,5 +245,20 @@ class ApiController < ApplicationController
 
     render :json=>Search.search(who,action,searchable,keyword)
   end
+
+  def heartbeat_start
+    Heartbeat.start(current_user)
+    render :json=>{:interval=>Heartbeat::Interval}
+  end
+
+  def heartbeat_beat
+    Heartbeat.beat(current_user)
+    render :json=>{:interval=>Heartbeat::Interval}
+  end
+
+  def heartbeat_stop
+    Heartbeat.stop(current_user)
+    render :json=>{:interval=>Heartbeat::Interval}
+  end
 end
 

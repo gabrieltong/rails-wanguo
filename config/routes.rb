@@ -1,5 +1,8 @@
 RailsWanguo::Application.routes.draw do
 
+  resources :heartbeats
+
+
   get 'imports/import_all'
   
   get "entrance/callback"
@@ -13,6 +16,10 @@ RailsWanguo::Application.routes.draw do
   get 'api/mistake_epmenus'
 
   get 'api/mistake_eps'
+
+  get 'api/heartbeat_start'
+  get 'api/heartbeat_beat'
+  get 'api/heartbeat_stop'
 
   match 'api/answer_questions'
 

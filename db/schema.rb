@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924191105) do
+ActiveRecord::Schema.define(:version => 20130924203412) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -105,6 +105,16 @@ ActiveRecord::Schema.define(:version => 20130924191105) do
 
   add_index "freelaws", ["ancestry"], :name => "index_freelaws_on_ancestry"
   add_index "freelaws", ["ancestry_depth"], :name => "index_freelaws_on_ancestry_depth"
+
+  create_table "heartbeats", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "state"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "heartbeats", ["state"], :name => "index_heartbeats_on_state"
+  add_index "heartbeats", ["user_id"], :name => "index_heartbeats_on_user_id"
 
   create_table "histories", :force => true do |t|
     t.integer  "user_id"
