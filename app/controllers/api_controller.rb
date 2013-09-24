@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class ApiController < ApplicationController
 
   def current_user
@@ -218,4 +219,18 @@ class ApiController < ApplicationController
   def collected_eps
     render :json=>Collect.roots(current_user,'QuestionEp').select(%w(id title))
   end  
+
+  def search_law
+    who = current_user
+    action = :validate_law_roots
+    if params[:id]
+      searchable = Law.find(params[:id]) 
+    else
+      searchable = Law
+    end
+    keyword = params[:keyword]
+
+    render :json=>Search.search(who,action,searchable,keyword)
+  end
 end
+

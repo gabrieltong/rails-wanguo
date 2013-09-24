@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924151348) do
+ActiveRecord::Schema.define(:version => 20130924191105) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -171,17 +171,19 @@ ActiveRecord::Schema.define(:version => 20130924151348) do
 
   create_table "searches", :force => true do |t|
     t.integer  "user_id"
-    t.string   "searchable"
-    t.integer  "level"
+    t.string   "searchable_type"
     t.string   "keyword"
     t.text     "result"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "action"
+    t.integer  "searchable_id"
   end
 
+  add_index "searches", ["action"], :name => "index_searches_on_action"
   add_index "searches", ["keyword"], :name => "index_searches_on_keyword"
-  add_index "searches", ["level"], :name => "index_searches_on_level"
-  add_index "searches", ["searchable"], :name => "index_searches_on_searchable"
+  add_index "searches", ["searchable_id"], :name => "index_searches_on_searchable_id"
+  add_index "searches", ["searchable_type"], :name => "index_searches_on_searchable"
   add_index "searches", ["user_id"], :name => "index_searches_on_user_id"
 
   create_table "users", :force => true do |t|
