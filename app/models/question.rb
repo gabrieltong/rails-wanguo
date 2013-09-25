@@ -21,10 +21,6 @@ class Question < ActiveRecord::Base
     Collect.is_collected(User.first,self)
   end
 
-  def me
-    [1,2,3]
-  end
-
   class NoCurrentUser < StandardError
   end
 end

@@ -47,7 +47,7 @@ class ApiController < ApplicationController
     else
       relation = Collect.children current_user , Law.find(params[:id])
     end
-    render :json=>relation.select(%w(id title brief category blanks sound))
+    render :json=>laws_to_json(relation)
   end
 
 
@@ -58,7 +58,7 @@ class ApiController < ApplicationController
   	else
   		relation = Law.find(params[:id]).children
   	end
-  	render :json=>relation.select(%w(id title brief category blanks sound))
+  	render :json=>laws_to_json(relation)
   end
 
 
@@ -69,7 +69,7 @@ class ApiController < ApplicationController
   	else
   		relation = Law.find(params[:id]).children
   	end
-  	render :json=>relation.select(%w(id title brief category))
+  	render :json=>freelaws_to_json(relation)
   end
 
   def law_blanks
@@ -234,7 +234,7 @@ class ApiController < ApplicationController
     end
     keyword = params[:keyword]
 
-    render :json=>Search.search(who,action,searchable,keyword)
+    render :json=>laws_to_json(Search.search(who,action,searchable,keyword))
   end
 
   #搜索免费法条
@@ -248,7 +248,7 @@ class ApiController < ApplicationController
     end
     keyword = params[:keyword]
 
-    render :json=>Search.search(who,action,searchable,keyword)
+    render :json=>freelaws_to_json(Search.search(who,action,searchable,keyword))
   end
 
   # 发送开始心跳
@@ -284,7 +284,11 @@ class ApiController < ApplicationController
   end
 
   def laws_to_json(laws)
-    
+    relation.select(%w(id title brief category blanks sound))
+  end
+
+  def freelaws_to_json(freelaws)
+    relation.select(%w(id title brief category))
   end
 end
 
