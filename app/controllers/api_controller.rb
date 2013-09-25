@@ -220,7 +220,11 @@ class ApiController < ApplicationController
   end  
 
   def collected_questions_by_epmenu
-
+    eps =  Collect.children(current_user,Epmenu.find(params[:id]))
+    questions = eps.collect do |ep|
+      Collect.children(current_user,ep)
+    end.flatten.uniq
+    render :json=>questions_to_json(questions)
   end
 
   # 搜索法条
@@ -285,7 +289,7 @@ class ApiController < ApplicationController
 
   def laws_to_json(laws)
     laws = laws.select(%w(id title brief category blanks sound))
-    
+
     laws.each do |law|
       law.current_user = current_user
     end

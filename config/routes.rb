@@ -48,7 +48,10 @@ RailsWanguo::Application.routes.draw do
 
   match 'api/collected_questions_by_ep/:id'=>'api#collected_questions_by_ep',:as=>'api_collected_questions_by_ep'
 
+  match 'api/collected_questions_by_epmenu/:id'=>'api#collected_questions_by_epmenu',:as=>'api_collected_questions_by_epmenu'
+
   match 'api/collected_eps'=>'api#collected_eps',:as=>'api_collected_eps'
+
 
 
   match 'api/epmenus(/:epmenu_id)'=>'api#epmenus',:as=>'api_epmenus'
