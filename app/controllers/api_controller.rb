@@ -41,7 +41,7 @@ class ApiController < ApplicationController
   end
 
   # 已收藏法条
-  def collected_law
+  def collected_laws
     if params[:id] == nil
       relation = Collect.roots current_user, Law
     else
@@ -52,7 +52,7 @@ class ApiController < ApplicationController
 
 
   #法条班法条  
-  def law
+  def laws
   	if params[:id] == nil
   		relation = Law.roots
   	else
@@ -63,7 +63,7 @@ class ApiController < ApplicationController
 
 
   # 免费法条
-  def freelaw
+  def freelaws
   	if params[:id] == nil
   		relation = Law.roots
   	else
@@ -219,7 +219,12 @@ class ApiController < ApplicationController
     render :json=>Collect.roots(current_user,'QuestionEp').select(%w(id title))
   end  
 
-  def search_law
+  def collected_questions_by_epmenu
+
+  end
+
+  # 搜索法条
+  def search_laws
     who = current_user
     action = :validate_law_roots
     if params[:id]
@@ -232,7 +237,8 @@ class ApiController < ApplicationController
     render :json=>Search.search(who,action,searchable,keyword)
   end
 
-  def search_freelaw
+  #搜索免费法条
+  def search_freelaws
     who = current_user
     action = :validate_freelaw_roots
     if params[:id]
@@ -245,16 +251,19 @@ class ApiController < ApplicationController
     render :json=>Search.search(who,action,searchable,keyword)
   end
 
+  # 发送开始心跳
   def heartbeat_start
     Heartbeat.start(current_user)
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
+  # 发送心跳
   def heartbeat_beat
     Heartbeat.beat(current_user)
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
+  # 发送停止心跳
   def heartbeat_stop
     Heartbeat.stop(current_user)
     render :json=>{:interval=>Heartbeat::Interval}
@@ -272,6 +281,10 @@ class ApiController < ApplicationController
       },
       :methods=>[:is_collected]
     )
+  end
+
+  def laws_to_json(laws)
+    
   end
 end
 
