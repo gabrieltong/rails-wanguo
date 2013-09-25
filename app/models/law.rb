@@ -1,4 +1,6 @@
 class Law < ActiveRecord::Base
+  include IsCollected
+  
   attr_accessible :ancestry, :content, :title, :score
   has_ancestry :cache_depth=>true
 	serialize :blanks

@@ -284,11 +284,27 @@ class ApiController < ApplicationController
   end
 
   def laws_to_json(laws)
-    relation.select(%w(id title brief category blanks sound))
+    laws = laws.select(%w(id title brief category blanks sound))
+    
+    laws.each do |law|
+      law.current_user = current_user
+    end
+
+    laws.to_json(
+      :methods=>[:is_collected]
+    )
   end
 
   def freelaws_to_json(freelaws)
-    relation.select(%w(id title brief category))
+    freelaws = freelaws.select(%w(id title brief category))
+
+    freelaws.each do |freelaw|
+      freelaw.current_user = current_user
+    end
+
+    freelaws.to_json(
+      :methods=>[:is_collected]
+    )
   end
 end
 

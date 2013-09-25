@@ -1,4 +1,6 @@
 class Freelaw < ActiveRecord::Base
+  include IsCollected
+  
   attr_accessible :ancestry, :content, :title
   has_ancestry :cache_depth=>true
 
