@@ -288,7 +288,9 @@ class ApiController < ApplicationController
   end
 
   def laws_to_json(laws)
-    laws = laws.select(%w(id title brief category blanks sound))
+    if laws.is_a ActiveRecord::Relation
+      laws = laws.select(%w(id title brief category blanks sound))
+    end
 
     laws.each do |law|
       law.current_user = current_user
@@ -300,7 +302,9 @@ class ApiController < ApplicationController
   end
 
   def freelaws_to_json(freelaws)
-    freelaws = freelaws.select(%w(id title brief category))
+    if freelaws.is_a? ActiveRecord::Relation
+      freelaws = freelaws.select(%w(id title brief category))
+    end
 
     freelaws.each do |freelaw|
       freelaw.current_user = current_user
