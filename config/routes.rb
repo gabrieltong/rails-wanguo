@@ -7,9 +7,9 @@ RailsWanguo::Application.routes.draw do
   
   get "entrance/callback"
 
-  post 'api/search_law'
+  post 'api/search_laws'
 
-  post 'api/search_freelaw'  
+  post 'api/search_freelaws'  
   
   get 'api/epmenus'
 
@@ -18,7 +18,9 @@ RailsWanguo::Application.routes.draw do
   get 'api/mistake_eps'
 
   get 'api/heartbeat_start'
+
   get 'api/heartbeat_beat'
+
   get 'api/heartbeat_stop'
 
   match 'api/answer_questions'
@@ -35,11 +37,10 @@ RailsWanguo::Application.routes.draw do
 
   match 'api/uncollect_freelaw(/:id)'=>'api#uncollect_freelaw',:as=>'api_uncollect_freelaw'
 
-  match "api/collected_law(/:id)"=>"api#collected_law",:as=>"api_collected_law",:defaults=>{:id=>nil}
+  match "api/collected_laws(/:id)"=>"api#collected_laws",:as=>"api_collected_laws",:defaults=>{:id=>nil}
 
-  match "api/collected_freelaw(/:id)"=>"api#collected_freelaw",:as=>"api_collected_freelaw",:defaults=>{:id=>nil}
+  match "api/collected_freelaws(/:id)"=>"api#collected_freelaws",:as=>"api_collected_freelaws",:defaults=>{:id=>nil}
 
-  match "api/collected_law(/:id)"=>"api#collected_law",:as=>"api_collected_law",:defaults=>{:id=>nil}    
 
   match 'api/collected_epmenus'=>'api#collected_epmenus',:as=>'api_collected_epmenus'
 
@@ -71,9 +72,9 @@ RailsWanguo::Application.routes.draw do
   match "api/law_blanks/:id"=>"api#law_blanks",:as=>"api_law_blanks"
   
 
-  match "api/law(/:id)"=>"api#law",:as=>"api_law",:defaults=>{:id=>nil}
+  match "api/laws(/:id)"=>"api#laws",:as=>"api_laws",:defaults=>{:id=>nil}
 
-  match "api/freelaw(/:id)"=>"api#freelaw",:as=>"api_freelaw",:defaults=>{:id=>nil}
+  match "api/freelaws(/:id)"=>"api#freelaws",:as=>"api_freelaws",:defaults=>{:id=>nil}
 
   resources :questions
 
