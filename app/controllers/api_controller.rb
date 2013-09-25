@@ -101,9 +101,7 @@ class ApiController < ApplicationController
 
   # 根据知识点返回问题
   def ep_questions
-  	render :json=> Exampoint.find(params[:id]).questions.to_json(:include=>{
-      :eps=>{:only=>[:id,:title]},
-    })
+  	render :json=> questions_to_json(Exampoint.find(params[:id]).questions)
   end
 
   # 返回知识点菜单结构
@@ -118,17 +116,15 @@ class ApiController < ApplicationController
   # 根据知识点菜单结构随机返回题
   def epmenu_questions
     questions = R.new.rand_questions_by_epm(Epmenu.find(params[:id]),params[:limit].to_i)
-  	render :json=>Question.where(:id=>questions.collect{|i|i.id}).to_json(:include=>{
-      :eps=>{:only=>[:id,:title]},
-    })
+    questions = Question.where(:id=>questions.collect{|i|i.id})
+  	render :json=>questions_to_json(questions)
   end
 
   # 随机输入  
   def rapid_questions
     questions = R.new.rand_questions_by_epms(Epmenu.roots.where('volumn'=>params[:volumn]),params[:limit].to_i)
-    render :json=>Question.where(:id=>questions.collect{|i|i.id}).to_json(:include=>{
-      :eps=>{:only=>[:id,:title]},
-    })
+    questions = Question.where(:id=>questions.collect{|i|i.id})
+    render :json=>questions_to_json(questions)
   end
 
   #登录 api
@@ -192,12 +188,14 @@ class ApiController < ApplicationController
 
   def mistake_questions_by_ep
     histories = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>params[:exampoint_id])
-    render :json=>Question.where(:id=>histories.collect{|i|i.question_id})
+    questions = Question.where(:id=>histories.collect{|i|i.question_id})
+    render :json=>questions_to_json(questions)
   end
 
   def mistake_questions_by_epmenu
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
-    render :json=>Question.where(:id=>histories.collect{|i|i.question_id})
+    questions = Question.where(:id=>histories.collect{|i|i.question_id})
+    render :json=>questions_to_json(questions)
   end
 
   # 基于收藏真题查找收藏部门法
@@ -212,7 +210,8 @@ class ApiController < ApplicationController
 
   # 通过收藏考点查找真题
   def collected_questions_by_ep
-    render :json=>Collect.children(current_user,Exampoint.find(params[:id])).select(%w(id title))
+    questions = Collect.children(current_user,Exampoint.find(params[:id]))
+    render :json=>questions_to_json(questions)
   end
 
   # 基于收藏真题查找收藏知识点
@@ -259,6 +258,20 @@ class ApiController < ApplicationController
   def heartbeat_stop
     Heartbeat.stop(current_user)
     render :json=>{:interval=>Heartbeat::Interval}
+  end
+
+  private
+
+  def questions_to_json(questions)
+    questions.each do |question|
+      question.current_user = current_user
+    end
+    questions.to_json(
+      :include=>{
+        :eps=>{:only=>[:id,:title]},
+      },
+      :methods=>[:is_collected]
+    )
   end
 end
 

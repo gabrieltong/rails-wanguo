@@ -23,6 +23,8 @@ RailsWanguo::Application.routes.draw do
 
   match 'api/answer_questions'
 
+  match 'api/collect_law(/:id)'=>'api#collect_law',:as=>'api_collect_law'
+
   match 'api/collect_question(/:id)'=>'api#collect_question',:as=>'api_collect_question'
 
   match 'api/collect_freelaw(/:id)'=>'api#collect_freelaw',:as=>'api_collect_freelaw'

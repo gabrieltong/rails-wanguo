@@ -19,4 +19,10 @@ class Collect < ActiveRecord::Base
 		end
 	end
 
+	def self.is_collected(user,collectable)
+		Collect.where(:user_id=>user.id,:collectable_type=>collectable.class,:collectable_id=>collectable.id).count()>0
+	end
 end
+
+WgCollectAdapter
+Collect.setup
