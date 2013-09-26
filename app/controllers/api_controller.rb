@@ -200,12 +200,39 @@ class ApiController < ApplicationController
 
   # 基于收藏真题查找收藏部门法
   def collected_epmenus
-    render :json=>Collect.roots(current_user,'Question').select(%w(id title))
+    epmenus = Collect.roots(current_user,'Question').select(%w(id title))
+    epmenus = epmenus.map do |i|
+      attrs = i.attributes
+      attrs[:questions_count] = Collect.where(
+        :user_id=>current_user.id,
+        :collectable_type=>Question.to_s,
+        :key1_id=>i.id
+      ).select('distinct `collectable_id`').count()
+
+      attrs[:eps_count] = Collect.where(
+        :user_id=>current_user.id,
+        :collectable_type=>Question.to_s,
+        :key1_id=>i.id
+      ).select('distinct `key2_id`').count()
+
+      attrs
+    end
+    render :json=>epmenus
   end
 
   # 通过收藏部门法查找考点
   def collected_eps_by_epmenu
-    render :json=>Collect.children(current_user,Epmenu.find(params[:id])).select(%w(id title))
+    eps = Collect.children(current_user,Epmenu.find(params[:id])).select(%w(id title))
+    eps = eps.map do |i|
+      attrs = i.attributes
+      attrs[:questions_count] = Collect.where(
+        :user_id=>current_user.id,
+        :collectable_type=>Question.to_s,
+        :key2_id=>i.id
+      ).select('distinct `collectable_id`').count()
+      attrs
+    end
+    render :json=>eps
   end
 
   # 通过收藏考点查找真题
@@ -288,7 +315,7 @@ class ApiController < ApplicationController
   end
 
   def laws_to_json(laws)
-    if laws.is_a ActiveRecord::Relation
+    if laws.is_a? ActiveRecord::Relation
       laws = laws.select(%w(id title brief category blanks sound))
     end
 
