@@ -26,13 +26,14 @@ class Heartbeat < ActiveRecord::Base
   	hb.save
   end
 
+#得到用户的心跳对象在某段时间的心跳区间
   def self.status(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
     base = Heartbeat.where(
       :beatable_type=>beatable.class,
       :beatable_id=>beatable.id,
       :user_id=>user.id
     )
-
+    #得到该段时间内的完整心跳区间 , 包括最后一个不完整区间
     pairs = base.where(:state=>:start,:created_at=>from..to).map {|start|{:start=>start,:end=>nil}}
 
     pairs.each_with_index do |pair,index|
@@ -45,6 +46,7 @@ class Heartbeat < ActiveRecord::Base
       pair[:end] = base.where(:state=>[:stop,:beat],:created_at=>_from.._to).order('`created_at` desc').limit(1).first
     end
     
+    #得到第一个不完整心跳区间
     _from = from
     if pairs.first
       _to = pairs.first[:start].created_at
