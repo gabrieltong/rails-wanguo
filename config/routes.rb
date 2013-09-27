@@ -17,11 +17,11 @@ RailsWanguo::Application.routes.draw do
 
   get 'api/mistake_eps'
 
-  get 'api/heartbeat_start'
+  post 'api/heartbeat_start'
 
-  get 'api/heartbeat_beat'
+  post 'api/heartbeat_beat'
 
-  get 'api/heartbeat_stop'
+  post 'api/heartbeat_stop'
 
   match 'api/answer_questions'
 
