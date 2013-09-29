@@ -19,25 +19,30 @@ class Istudy
 
   # 取得用户部门法学习情况
   def self.summary(user,type)
-    setting = self.setting(type)
-    return nil unless setting
-    return nil unless Law.find_by_title(type)
-    
+    type = Map.collect{|i|i[:title]} if type == nil
+    law_radio(user,type)+question_radio(user,type)
   end
 
   # 取得用户某部门法的法条学习情况
   def self.law_radio(user,type)
     setting = self.setting(type)
-    heatbeats = Heartbeat.summary(user,Law.find_by_title(type)
-    seconds =  heatbeats.inject(0) {|sum,i|sum+i[:duration]}
+    heatbeats = Heartbeat.summary(user,Law.find_by_title(type))
+    seconds =  heatbeats.inject(0){|sum,i|sum+i[:duration]}
     law_radio = [(seconds/60/setting[:law_cost]).to_i/100.0,setting[:law_radio]].min
     law_radio
+  end
+
+  # 得到某部门法的真题学习情况
+  def self.question_radio(user,type)
+    setting = self.setting(type)
+    epmenu = Epmenu.find_by_title(type)
+    right_count = History.right_count(user,epmenu)
+    question_radio = [(right_count/setting[:question_cost]).to_i/100.0,(1-setting[:law_radio])].min
+    question_radio
   end
 
   # 取得某部门法的设置
   def self.setting(type)
     Istudy::Map.detect {|i|i[:title]==type}
   end
-
-
 end

@@ -19,6 +19,35 @@ class History < ActiveRecord::Base
     scope state.name, :conditions => { :state => state.name.to_s }
   end
 
+  def self.wrong_count(user,epmenu,distinct=true)
+    relation = History.where(
+      :user_id=>user.id,
+      :epmenu_id=>epmenu.id,
+      :state=>:wrong
+    )
+    relation = relation.select('distinct `question_id`') if distinct
+    relation.count()
+  end
+
+  def self.right_count(user,epmenu,distinct=true)
+    relation = History.where(
+      :user_id=>user.id,
+      :epmenu_id=>epmenu.id,
+      :state=>:right
+    )
+    relation = relation.select('distinct `question_id`') if distinct
+    relation.count()
+  end
+
+  def self.total_count(user,epmenu,distinct=true)
+    relation = History.where(
+      :user_id=>user.id,
+      :epmenu_id=>epmenu.id
+    )
+    relation = relation.select('distinct `question_id`') if distinct
+    relation.count()
+  end
+
   def self.log(user_id,question_id,answer)
   	answer.upcase!
   	user = User.find(user_id)
