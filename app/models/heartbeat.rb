@@ -27,12 +27,21 @@ class Heartbeat < ActiveRecord::Base
   end
 
 #得到用户的心跳对象在某段时间的心跳区间
-  def self.status(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
+  def self.ranges(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
     base = Heartbeat.where(
-      :beatable_type=>beatable.class,
-      :beatable_id=>beatable.id,
       :user_id=>user.id
     )
+
+    if beatable.is_a? Class
+      base = base.where(
+        :beatable_type=>beatable.to_s
+      )
+    else
+      base = base.where(
+        :beatable_type=>beatable.class,
+        :beatable_id=>beatable.id,
+      )
+    end
     #得到该段时间内的完整心跳区间 , 包括最后一个不完整区间
     pairs = base.where(:state=>:start,:created_at=>from..to).map {|start|{:start=>start,:end=>nil}}
 
@@ -60,7 +69,28 @@ class Heartbeat < ActiveRecord::Base
       pairs.insert(0,{:start=>_start,:end=>_end})
     end
 
-    pairs.collect {|pair|{:start=>pair[:start].created_at,:end=>pair[:end].created_at}}
+    pairs.collect do |pair|
+      {
+        :start=>pair[:start].created_at,
+        :end=>pair[:end].created_at,
+        :beatable=>pair[:start].beatable
+      }
+    end
+  end
+
+  def self.durations(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
+    result = []
+
+    rangeses = self.ranges(user,beatable,from,to).group_by {|range|range[:beatable]}
+    
+    rangeses.each_pair do |beatable,ranges|
+      item = {
+        :beatable=>beatable,
+        :duration=>(ranges.inject(0) {|sum,range|sum+(range[:end]-range[:start])})
+      }
+      result.push item
+    end
+    result
   end
 
   module HasManyRelation
@@ -69,7 +99,7 @@ class Heartbeat < ActiveRecord::Base
         has_many :beatable
       end
     end
-  end 
+  end
 end
 
 Law.send(:include,Heartbeat::HasManyRelation)

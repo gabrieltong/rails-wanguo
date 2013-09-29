@@ -152,6 +152,37 @@ class ApiController < ApplicationController
     render_success
   end
 
+  def answer_status_by_epmenu
+    base = History.where(
+      :user_id=>current_user.id,
+      :epmenu_id=>params[:id]
+    )
+    render :json=>{
+      :total=>base.count(),
+      :right=>base.where(:state=>:right).count(),
+      :wrong=>base.where(:state=>:wrong).count(),
+    }
+  end
+
+  def answer_status_by_epmenu_eps
+    epmenu = Epmenu.find(params[:id])
+    eps = epmenu.exampoints.select(%w(id title))
+
+    base = History.where(
+      :user_id=>current_user.id,
+      :epmenu_id=>params[:id],
+    )
+
+    status = eps.collect do |ep|
+      attributes = ep.attributes
+      attributes[:total]= base.where(:exampoint_id=>ep.id).count()
+      attributes[:right]= base.where(:exampoint_id=>ep.id,:state=>:right).count()
+      attributes[:wrong]= base.where(:exampoint_id=>ep.id,:state=>:wrong).count()
+      attributes
+    end
+    render :json=>status
+  end
+
   def mistake_epmenus
     histories = History.wrong.where(:user_id=>current_user.id)
     list = Epmenu.where(:id=>histories.collect{|i|i.epmenu_id}).select('id,title')
@@ -300,7 +331,7 @@ class ApiController < ApplicationController
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
-  def heartbeat_status
+  def heartbeat_durations
     if params[:from]
       from = Time.zone.parse(params[:from])
     else
@@ -313,9 +344,9 @@ class ApiController < ApplicationController
       to = Time.zone.parse('3000-01-01 01:00:00')
     end
 
-    render :json=>Heartbeat.status(current_user,Law.find(params[:id]),from,to)
+    render :json=>Heartbeat.durations(current_user,Law.find(params[:id]),from,to)
   end
-  
+
   private
 
   def questions_to_json(questions)

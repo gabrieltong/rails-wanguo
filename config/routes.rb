@@ -23,9 +23,7 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/heartbeat_stop'
 
-  post 'api/heartbeat_status'
-
-  match 'api/answer_questions'
+  post 'api/heartbeat_durations'
 
   match 'api/collect_law(/:id)'=>'api#collect_law',:as=>'api_collect_law'
 
@@ -54,9 +52,13 @@ RailsWanguo::Application.routes.draw do
 
   match 'api/collected_eps'=>'api#collected_eps',:as=>'api_collected_eps'
 
-
-
   match 'api/epmenus(/:epmenu_id)'=>'api#epmenus',:as=>'api_epmenus'
+
+  post 'api/answer_status_by_epmenu'
+
+  post 'api/answer_status_by_epmenu_eps'  
+
+  match 'api/answer_questions'
 
   match 'api/answer_question/:question_id/:answer'=>'api#answer_question',:as=>'api_answer_question'
 
@@ -82,7 +84,6 @@ RailsWanguo::Application.routes.draw do
   match "api/freelaws(/:id)"=>"api#freelaws",:as=>"api_freelaws",:defaults=>{:id=>nil}
 
   resources :questions
-
 
   resources :imports
 
