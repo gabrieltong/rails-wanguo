@@ -300,6 +300,22 @@ class ApiController < ApplicationController
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
+  def heartbeat_status
+    if params[:from]
+      from = Time.zone.parse(params[:from])
+    else
+      from = Time.zone.parse('2000-01-01 01:00:00')
+    end
+
+    if params[:to]
+      to = Time.zone.parse(params[:to])
+    else
+      to = Time.zone.parse('3000-01-01 01:00:00')
+    end
+
+    render :json=>Heartbeat.status(current_user,Law.find(params[:id]),from,to)
+  end
+  
   private
 
   def questions_to_json(questions)
