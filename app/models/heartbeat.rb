@@ -78,7 +78,8 @@ class Heartbeat < ActiveRecord::Base
     end
   end
 
-  def self.durations(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
+#根据ranges的结果计算花费在每个beatable上的时间 , 单位秒
+  def self.summary(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
     result = []
 
     rangeses = self.ranges(user,beatable,from,to).group_by {|range|range[:beatable]}
@@ -86,7 +87,8 @@ class Heartbeat < ActiveRecord::Base
     rangeses.each_pair do |beatable,ranges|
       item = {
         :beatable=>beatable,
-        :duration=>(ranges.inject(0) {|sum,range|sum+(range[:end]-range[:start])})
+        :duration=>(ranges.inject(0) {|sum,range|sum+(range[:end]-range[:start])}),
+        :days=>(ranges.collect {|range|[range[:start].to_s[0..9],range[:end].to_s[0..9]]}).flatten.uniq
       }
       result.push item
     end

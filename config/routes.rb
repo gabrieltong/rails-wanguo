@@ -23,7 +23,7 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/heartbeat_stop'
 
-  post 'api/heartbeat_durations'
+  post 'api/heartbeat_summary'
 
   match 'api/collect_law(/:id)'=>'api#collect_law',:as=>'api_collect_law'
 

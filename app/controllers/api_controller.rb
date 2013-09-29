@@ -331,7 +331,13 @@ class ApiController < ApplicationController
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
-  def heartbeat_durations
+  def heartbeat_summary
+    if params[:id]
+      beatable = Law.find(params[:id])
+    else
+      beatable = Law
+    end
+
     if params[:from]
       from = Time.zone.parse(params[:from])
     else
@@ -344,7 +350,11 @@ class ApiController < ApplicationController
       to = Time.zone.parse('3000-01-01 01:00:00')
     end
 
-    render :json=>Heartbeat.durations(current_user,Law.find(params[:id]),from,to)
+    render :json=>Heartbeat.summary(current_user,beatable,from,to)
+  end
+
+  def istudy_summary
+    
   end
 
   private
