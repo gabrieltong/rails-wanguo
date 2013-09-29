@@ -17,10 +17,29 @@ class Istudy
     {:title=>'国际经济法',:radio=>0.03,:law_radio=>0.8,:law_cost=>18,:question_cost=>15}
   ]
 
+  
+  # 学霸指数
+  def self.xueba(user)
+    summary = Heartbeat.summary(user,Law)
+    summary.
+  end
+
   # 取得用户部门法学习情况
   def self.summary(user,type)
     type = Map.collect{|i|i[:title]} if type == nil
-    law_radio(user,type)+question_radio(user,type)
+    lr = law_radio(user,type)
+    qr = question_radio(user,type)
+    {
+      :law_radio=>lr,
+      :question_radio=>qr,
+      :radio=>lr+qr
+    }
+  end
+
+  def self.summaries(user)
+    Map.collect{|i|i[:title]}.collect do |type|
+      [type,summary(user,type)]
+    end
   end
 
   # 取得用户某部门法的法条学习情况

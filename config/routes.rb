@@ -2,7 +2,8 @@ RailsWanguo::Application.routes.draw do
 
   resources :heartbeats
 
-
+  post 'api/istudy_summary'
+  
   get 'imports/import_all'
   
   get "entrance/callback"

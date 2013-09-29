@@ -354,7 +354,7 @@ class ApiController < ApplicationController
   end
 
   def istudy_summary
-    
+    render :json=>Istudy.summary(current_user,params[:type])
   end
 
   private

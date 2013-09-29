@@ -1,4 +1,5 @@
 class Heartbeat < ActiveRecord::Base
+  Precision = false
 	Interval = 5.minutes
   attr_accessible :user_id,:state
   belongs_to :user
@@ -26,7 +27,7 @@ class Heartbeat < ActiveRecord::Base
   	hb.save
   end
 
-#得到用户的心跳对象在某段时间的心跳区间
+  #得到用户的心跳对象在某段时间的心跳区间
   def self.ranges(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
     base = Heartbeat.where(
       :user_id=>user.id
@@ -78,7 +79,7 @@ class Heartbeat < ActiveRecord::Base
     end
   end
 
-#根据ranges的结果计算花费在每个beatable上的时间 , 单位秒
+  #根据ranges的结果计算花费在每个beatable上的时间 , 单位秒
   def self.summary(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
     result = []
 
@@ -87,12 +88,20 @@ class Heartbeat < ActiveRecord::Base
     rangeses.each_pair do |beatable,ranges|
       item = {
         :beatable=>beatable,
-        :duration=>(ranges.inject(0) {|sum,range|sum+(range[:end]-range[:start])}),
-        :days=>(ranges.collect {|range|[range[:start].to_s[0..9],range[:end].to_s[0..9]]}).flatten.uniq
+        :duration=>duration(ranges),
+        :days=>days(ranges)
       }
       result.push item
     end
     result
+  end
+
+  def self.duration(ranges)
+    (ranges.inject(0) {|sum,range|sum+(range[:end]-range[:start])})
+  end
+
+  def self.days(ranges)
+    (ranges.collect {|range|[range[:start].to_s[0..9],range[:end].to_s[0..9]]}).flatten.uniq
   end
 
   module HasManyRelation
