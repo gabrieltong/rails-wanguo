@@ -4,6 +4,76 @@ class ApiController < ApplicationController
   def current_user
     User.first
   end  
+  # 每个部门法的累计学习时间
+  def istudy_epmenu_time
+    if params[:id]
+      beatable = Law.find(params[:id])
+    else
+      beatable = Law
+    end
+
+    if params[:from]
+      from = Time.zone.parse(params[:from])
+    else
+      from = Time.zone.parse('2000-01-01 01:00:00')
+    end
+
+    if params[:to]
+      to = Time.zone.parse(params[:to])
+    else
+      to = Time.zone.parse('3000-01-01 01:00:00')
+    end
+
+    render :json=>Heartbeat.summary(current_user,beatable,from,to)
+  end
+
+  # 每个部门法的真题训练情况（总题数，答对，答错）
+  def istudy_epmenu_questions_summary
+    epmenu = Epmenu.find(params[:id])
+    render :json=>{
+      :total=>History.total_count(current_user,epmenu),
+      :right=>History.right_count(current_user,epmenu)
+      :wrong=>History.wrong_count(current_user,epmenu)
+    }
+  end
+
+  # 每个部门法的整体学习进度（计算方法详见istudy中的表格）
+  def istudy_epmenu_schedule
+    render :json=>Istudy.epmenu_schedule(current_user,params[:type])
+  end
+  # 用户累计使用软件的时间和天数
+  # 学霸指数（根据用户平均每天使用时间来定）
+  def istudy_index
+    render :json=>Istudy.index(current_user)
+  end
+  # 整体的真题训练情况（总题数，答对，答错）
+  def istudy_questions_summary
+    render :json=>{
+      :total=>History.total_count(current_user,nil),
+      :right=>History.right_count(current_user,nil)
+      :wrong=>History.wrong_count(current_user,nil)
+    }
+  end
+  # 每个部门法对应知识点的真题训练情况（总题数，答对，答错）
+  def istudy_epmenu_questions_summary_by_eps
+    epmenu = Epmenu.find(params[:id])
+    eps = epmenu.exampoints.select(%w(id title))
+
+    base = History.where(
+      :user_id=>current_user.id,
+      :epmenu_id=>params[:id],
+    )
+
+    status = eps.collect do |ep|
+      attributes = ep.attributes
+      attributes[:total]= base.where(:exampoint_id=>ep.id).count()
+      attributes[:right]= base.where(:exampoint_id=>ep.id,:state=>:right).count()
+      attributes[:wrong]= base.where(:exampoint_id=>ep.id,:state=>:wrong).count()
+      attributes
+    end
+    render :json=>status
+  end
+  
   # 收藏真题
   def collect_question
     Collect.add(current_user,Question.find(params[:id]))
@@ -150,37 +220,6 @@ class ApiController < ApplicationController
       History.log(current_user.id,item[:id],item[:myAnswer])
     end
     render_success
-  end
-
-  def answer_status_by_epmenu
-    base = History.where(
-      :user_id=>current_user.id,
-      :epmenu_id=>params[:id]
-    )
-    render :json=>{
-      :total=>base.count(),
-      :right=>base.where(:state=>:right).count(),
-      :wrong=>base.where(:state=>:wrong).count(),
-    }
-  end
-
-  def answer_status_by_epmenu_eps
-    epmenu = Epmenu.find(params[:id])
-    eps = epmenu.exampoints.select(%w(id title))
-
-    base = History.where(
-      :user_id=>current_user.id,
-      :epmenu_id=>params[:id],
-    )
-
-    status = eps.collect do |ep|
-      attributes = ep.attributes
-      attributes[:total]= base.where(:exampoint_id=>ep.id).count()
-      attributes[:right]= base.where(:exampoint_id=>ep.id,:state=>:right).count()
-      attributes[:wrong]= base.where(:exampoint_id=>ep.id,:state=>:wrong).count()
-      attributes
-    end
-    render :json=>status
   end
 
   def mistake_epmenus
@@ -331,30 +370,8 @@ class ApiController < ApplicationController
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
-  def heartbeat_summary
-    if params[:id]
-      beatable = Law.find(params[:id])
-    else
-      beatable = Law
-    end
+  def rapid_avg_right
 
-    if params[:from]
-      from = Time.zone.parse(params[:from])
-    else
-      from = Time.zone.parse('2000-01-01 01:00:00')
-    end
-
-    if params[:to]
-      to = Time.zone.parse(params[:to])
-    else
-      to = Time.zone.parse('3000-01-01 01:00:00')
-    end
-
-    render :json=>Heartbeat.summary(current_user,beatable,from,to)
-  end
-
-  def istudy_summary
-    render :json=>Istudy.summary(current_user,params[:type])
   end
 
   private

@@ -19,13 +19,21 @@ class Istudy
 
   
   # 学霸指数
-  def self.xueba(user)
-    summary = Heartbeat.summary(user,Law)
-    summary.
+  def self.index(user)
+    ranges = Heartbeat.ranges(user,Law)
+    duration = Heartbeat.duration(ranges)
+    # p duration
+    days = Heartbeat.days(ranges)
+    {
+      # :duration=>(Time.parse('2000-1-1 00:00:00') + duration.seconds).strftime("%H:%M:%S"),
+      :duration=>duration,
+      :days=>days,
+      :index=>(duration/60.0/3.0/days.size * 0.1).to_i
+    }
   end
 
-  # 取得用户部门法学习情况
-  def self.summary(user,type)
+  # 每个部门法的整体学习进度（计算方法详见istudy中的表格）
+  def self.epmenu_schedule(user,type)
     type = Map.collect{|i|i[:title]} if type == nil
     lr = law_radio(user,type)
     qr = question_radio(user,type)
@@ -36,13 +44,13 @@ class Istudy
     }
   end
 
-  def self.summaries(user)
+  def self.epmenu_schedules(user)
     Map.collect{|i|i[:title]}.collect do |type|
       [type,summary(user,type)]
     end
   end
 
-  # 取得用户某部门法的法条学习情况
+  # 每个部门法的整体学习进度 法条部分
   def self.law_radio(user,type)
     setting = self.setting(type)
     heatbeats = Heartbeat.summary(user,Law.find_by_title(type))
@@ -51,7 +59,7 @@ class Istudy
     law_radio
   end
 
-  # 得到某部门法的真题学习情况
+  # 每个部门法的整体学习进度 真题部分
   def self.question_radio(user,type)
     setting = self.setting(type)
     epmenu = Epmenu.find_by_title(type)

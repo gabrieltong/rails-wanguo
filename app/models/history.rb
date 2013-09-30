@@ -20,33 +20,40 @@ class History < ActiveRecord::Base
   end
 
   def self.wrong_count(user,epmenu,distinct=true)
-    relation = History.where(
-      :user_id=>user.id,
-      :epmenu_id=>epmenu.id,
-      :state=>:wrong
-    )
-    relation = relation.select('distinct `question_id`') if distinct
-    relation.count()
+    state_count(user,epmenu,distinct,:wrong)
   end
 
   def self.right_count(user,epmenu,distinct=true)
+    state_count(user,epmenu,distinct,:right)
+  end
+
+  def self.total_count(user,epmenu,distinct=true)
+    state_count(user,epmenu,distinct,nil)
+  end
+
+  def self.state_count(user,epmenu,distinct=true,state)
     relation = History.where(
       :user_id=>user.id,
-      :epmenu_id=>epmenu.id,
-      :state=>:right
     )
+    relation = relation.where(:state=>state) if state
+    relation = relation.where(:epmenu_id=>epmenu.id) if epmenu
     relation = relation.select('distinct `question_id`') if distinct
     relation.count()
   end
 
-  def self.total_count(user,epmenu,distinct=true)
-    relation = History.where(
-      :user_id=>user.id,
-      :epmenu_id=>epmenu.id
-    )
-    relation = relation.select('distinct `question_id`') if distinct
-    relation.count()
+  def self.rapid_avg(user,volumn)
+    epmenus = Epmenu.roots.where(:volumn=>volumn).select('id')
+    total = History.where(:user_id=>user.id,:epmenu_id=>epmenus.collect{|i|i.id}).count()
+    right = History.where(:user_id=>user.id,:epmenu_id=>epmenus.collect{|i|i.id},:state=>:right).count()
+    right*1.0/total
   end
+
+  # def self.rapid_avg(user,volumn)
+  #   epmenus = Epmenu.roots.where(:volumn=>volumn).select('id')
+  #   total = History.where(:user_id=>user.id,:epmenu_id=>epmenus.collect{|i|i.id}).count()
+  #   right = History.where(:user_id=>user.id,:epmenu_id=>epmenus.collect{|i|i.id},:state=>:right).count()
+  #   right*1.0/total
+  # end
 
   def self.log(user_id,question_id,answer)
   	answer.upcase!
