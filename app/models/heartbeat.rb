@@ -96,10 +96,13 @@ class Heartbeat < ActiveRecord::Base
     result
   end
 
-  def self.duration(ranges)
+  # 输入一段时间序列 ,求时间序列的时间综合
+  # 返回值 秒
+  def self.duration(ranges,type=:seconds)
     (ranges.inject(0) {|sum,range|sum+(range[:end]-range[:start])})
   end
 
+  # 输入一段时间序列 , 求时间序列的日期并集
   def self.days(ranges)
     (ranges.collect {|range|[range[:start].to_s[0..9],range[:end].to_s[0..9]]}).flatten.uniq
   end

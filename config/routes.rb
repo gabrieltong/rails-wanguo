@@ -1,6 +1,7 @@
 RailsWanguo::Application.routes.draw do
 
   resources :heartbeats
+# <<<<<<< HEAD
 
   post 'api/istudy_epmenu_summary'
 
@@ -21,6 +22,22 @@ RailsWanguo::Application.routes.draw do
   post 'api/history_total_avg_by_epmenu'
 
   post 'api/history_total_avg_by_epmenu_eps'
+# =======
+#   # 每个部门法的累计学习时间
+#   post 'api/istudy_epmenu_time'
+#   # 每个部门法的真题训练情况（总题数，答对，答错）
+#   post 'api/istudy_epmenu_questions_summary'
+#   # 每个部门法的整体学习进度（计算方法详见istudy中的表格）
+#   post 'api/istudy_epmenu_schedule'
+#   # 每个部门法的真题训练情况（总题数，答对，答错）
+#   post 'api/answer_status_by_epmenu'
+#   # 每个部门法对应知识点的真题训练情况（总题数，答对，答错）
+#   post 'api/istudy_epmenu_questions_summary_by_eps'  
+#   # 学霸指数（根据用户平均每天使用时间来定）
+#   get 'api/istudy_index'
+#   # 整体的真题训练情况（总题数，答对，答错）
+#   post 'api/istudy_questions_summary'
+# >>>>>>> 11ce8f762cd17ac07fac6f32dd8751ce9dd0e9ba
   
   get 'imports/import_all'
   
@@ -42,8 +59,6 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/heartbeat_stop'
 
-  post 'api/heartbeat_summary'
-
   match 'api/collect_law(/:id)'=>'api#collect_law',:as=>'api_collect_law'
 
   match 'api/uncollect_law(/:id)'=>'api#uncollect_law',:as=>'api_collect_law'
@@ -59,7 +74,6 @@ RailsWanguo::Application.routes.draw do
   match "api/collected_laws(/:id)"=>"api#collected_laws",:as=>"api_collected_laws",:defaults=>{:id=>nil}
 
   match "api/collected_freelaws(/:id)"=>"api#collected_freelaws",:as=>"api_collected_freelaws",:defaults=>{:id=>nil}
-
 
   match 'api/collected_epmenus'=>'api#collected_epmenus',:as=>'api_collected_epmenus'
 
