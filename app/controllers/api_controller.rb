@@ -152,37 +152,6 @@ class ApiController < ApplicationController
     render_success
   end
 
-  def answer_status_by_epmenu
-    base = History.where(
-      :user_id=>current_user.id,
-      :epmenu_id=>params[:id]
-    )
-    render :json=>{
-      :total=>base.count(),
-      :right=>base.where(:state=>:right).count(),
-      :wrong=>base.where(:state=>:wrong).count(),
-    }
-  end
-
-  def answer_status_by_epmenu_eps
-    epmenu = Epmenu.find(params[:id])
-    eps = epmenu.exampoints.select(%w(id title))
-
-    base = History.where(
-      :user_id=>current_user.id,
-      :epmenu_id=>params[:id],
-    )
-
-    status = eps.collect do |ep|
-      attributes = ep.attributes
-      attributes[:total]= base.where(:exampoint_id=>ep.id).count()
-      attributes[:right]= base.where(:exampoint_id=>ep.id,:state=>:right).count()
-      attributes[:wrong]= base.where(:exampoint_id=>ep.id,:state=>:wrong).count()
-      attributes
-    end
-    render :json=>status
-  end
-
   def mistake_epmenus
     histories = History.wrong.where(:user_id=>current_user.id)
     list = Epmenu.where(:id=>histories.collect{|i|i.epmenu_id}).select('id,title')
@@ -353,8 +322,94 @@ class ApiController < ApplicationController
     render :json=>Heartbeat.summary(current_user,beatable,from,to)
   end
 
-  def istudy_summary
-    render :json=>Istudy.summary(current_user,params[:type])
+  def istudy_epmenu_summary
+    render :json=>Istudy.epmenu_summary(current_user,params[:type])
+  end
+
+  def istudy_epmenus_summaries
+    render :json=>Istudy.epmenus_summaries(current_user)
+  end
+
+  def istudy_xueba
+    render :json=>{:value=>Istudy.xueba(current_user)}
+  end
+
+  def istudy_complex
+    render :json=>{:value=>Istudy.complex(current_user)}
+  end
+
+  def istudy_evaluate
+    render :json=>{:value=>Istudy.evaluate(current_user)}
+  end
+
+  def history
+    render :json=>{
+      :total=>History.by_user(current_user).count(),
+      :right=>History.by_user(current_user).right.count(),
+      :wrong=>History.by_user(current_user).wrong.count(),
+    }
+  end
+
+  def history_by_epmenu
+    base = History.where(
+      :user_id=>current_user.id,
+      :epmenu_id=>params[:id]
+    )
+    render :json=>{
+      :total=>base.count(),
+      :right=>base.where(:state=>:right).count(),
+      :wrong=>base.where(:state=>:wrong).count(),
+    }
+  end
+
+  def history_by_epmenu_eps
+    epmenu = Epmenu.find(params[:id])
+    eps = epmenu.exampoints.select(%w(id title))
+
+    base = History.where(
+      :user_id=>current_user.id,
+      :epmenu_id=>params[:id],
+    )
+
+    status = eps.collect do |ep|
+      attributes = ep.attributes
+      attributes[:total]= base.where(:exampoint_id=>ep.id).count()
+      attributes[:right]= base.where(:exampoint_id=>ep.id,:state=>:right).count()
+      attributes[:wrong]= base.where(:exampoint_id=>ep.id,:state=>:wrong).count()
+      attributes
+    end
+    render :json=>status
+  end
+
+  def history_total_avg_by_epmenu
+    base = History.where(
+      :epmenu_id=>params[:id]
+    )
+
+    total = base.count()
+    right = base.where(:state=>:right).count()
+
+    render :json=>{:value=>right*1.0/total*15}
+  end
+
+  def history_total_avg_by_epmenu_eps
+    epmenu = Epmenu.find(params[:id])
+
+    eps = epmenu.exampoints.select(%w(id title))
+
+    base = History.where(
+      :epmenu_id=>params[:id],
+    )
+
+    status = eps.collect do |ep|
+      attributes = ep.attributes
+      total = base.where(:exampoint_id=>ep.id).count()
+      right = base.where(:exampoint_id=>ep.id,:state=>:right).count()
+      attributes[:value] = right*1.0/total*15
+      attributes[:value] = 0 if attributes[:value].nan?
+      attributes
+    end
+    render :json=>status
   end
 
   private

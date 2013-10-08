@@ -7,6 +7,9 @@ class History < ActiveRecord::Base
   belongs_to :exampoint
   belongs_to :epmenu
 
+  scope :by_epmenu, lambda {|epmenu|where(:epmenu_id=>epmenu.id)}
+  scope :by_user, lambda {|user|where(:user_id=>user.id)}
+
   state_machine :state,:initial=>:wrong  do
   	state :wrong do
   	end
@@ -17,35 +20,6 @@ class History < ActiveRecord::Base
 
   state_machine.states.map do |state|
     scope state.name, :conditions => { :state => state.name.to_s }
-  end
-
-  def self.wrong_count(user,epmenu,distinct=true)
-    relation = History.where(
-      :user_id=>user.id,
-      :epmenu_id=>epmenu.id,
-      :state=>:wrong
-    )
-    relation = relation.select('distinct `question_id`') if distinct
-    relation.count()
-  end
-
-  def self.right_count(user,epmenu,distinct=true)
-    relation = History.where(
-      :user_id=>user.id,
-      :epmenu_id=>epmenu.id,
-      :state=>:right
-    )
-    relation = relation.select('distinct `question_id`') if distinct
-    relation.count()
-  end
-
-  def self.total_count(user,epmenu,distinct=true)
-    relation = History.where(
-      :user_id=>user.id,
-      :epmenu_id=>epmenu.id
-    )
-    relation = relation.select('distinct `question_id`') if distinct
-    relation.count()
   end
 
   def self.log(user_id,question_id,answer)
@@ -71,4 +45,10 @@ class History < ActiveRecord::Base
 	  	end
 	  end
 	end
+
+  def self.correct_rate(user)
+    right_count = History.by_user(user).right.count()
+    wrong_count = History.by_user(user).wrong.count()
+    right_count*1.0/(right_count+wrong_count)
+  end
 end

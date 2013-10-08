@@ -2,7 +2,25 @@ RailsWanguo::Application.routes.draw do
 
   resources :heartbeats
 
-  post 'api/istudy_summary'
+  post 'api/istudy_epmenu_summary'
+
+  post 'api/istudy_epmenus_summaries'
+
+  post 'api/istudy_xueba'
+
+  post 'api/istudy_complex'
+
+  post 'api/istudy_evaluate'
+
+  post 'api/history'
+
+  post 'api/history_by_epmenu'
+
+  post 'api/history_by_epmenu_eps'    
+
+  post 'api/history_total_avg_by_epmenu'
+
+  post 'api/history_total_avg_by_epmenu_eps'
   
   get 'imports/import_all'
   
@@ -54,10 +72,6 @@ RailsWanguo::Application.routes.draw do
   match 'api/collected_eps'=>'api#collected_eps',:as=>'api_collected_eps'
 
   match 'api/epmenus(/:epmenu_id)'=>'api#epmenus',:as=>'api_epmenus'
-
-  post 'api/answer_status_by_epmenu'
-
-  post 'api/answer_status_by_epmenu_eps'  
 
   match 'api/answer_questions'
 
