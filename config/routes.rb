@@ -3,6 +3,8 @@ RailsWanguo::Application.routes.draw do
   resources :heartbeats
 # <<<<<<< HEAD
 
+  post 'api/mix'
+
   post 'api/istudy_epmenu_summary'
 
   post 'api/istudy_epmenus_summaries'
