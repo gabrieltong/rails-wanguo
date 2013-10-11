@@ -293,19 +293,34 @@ class ApiController < ApplicationController
 
   # 发送开始心跳
   def heartbeat_start
-    Heartbeat.start(current_user,Law.find(params[:id]))
+    if params[:id]
+      beatable = Law.find(params[:id])
+    else
+      beatable = current_user
+    end
+    Heartbeat.start(current_user,beatable)
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
   # 发送心跳
   def heartbeat_beat
-    Heartbeat.beat(current_user,Law.find(params[:id]))
+    if params[:id]
+      beatable = Law.find(params[:id])
+    else
+      beatable = current_user
+    end
+    Heartbeat.beat(current_user,beatable)
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
   # 发送停止心跳
   def heartbeat_stop
-    Heartbeat.stop(current_user,Law.find(params[:id]))
+    if params[:id]
+      beatable = Law.find(params[:id])
+    else
+      beatable = current_user
+    end
+    Heartbeat.stop(current_user,beatable)
     render :json=>{:interval=>Heartbeat::Interval}
   end
 

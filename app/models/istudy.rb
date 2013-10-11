@@ -51,7 +51,7 @@ class Istudy
 
   # 学霸指数
   def self.xueba(user)
-    (Heartbeat.duration(Heartbeat.ranges(user,Law))*1.0/60/3).to_i*0.1
+    (Heartbeat.duration(Heartbeat.ranges(user,user))*1.0/60/3).to_i*0.1
   end
 
   # 取得用户部门法学习情况

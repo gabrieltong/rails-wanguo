@@ -117,4 +117,5 @@ class Heartbeat < ActiveRecord::Base
 end
 
 Law.send(:include,Heartbeat::HasManyRelation)
+User.send(:include,Heartbeat::HasManyRelation)
 # Epmenu.send(:include,Heartbeat::HasManyRelation)
