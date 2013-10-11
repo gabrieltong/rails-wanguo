@@ -49,7 +49,6 @@ class Istudy
     self.epmenus_summaries(user)[:total]*summary_ratio
   end
 
-
   # 学霸指数
   def self.xueba(user)
     (Heartbeat.duration(Heartbeat.ranges(user,Law))*1.0/60/3).to_i*0.1
@@ -58,11 +57,24 @@ class Istudy
   # 取得用户部门法学习情况
   def self.epmenu_summary(user,type)
     lr = law_ratio(user,type)
-    qr = question_ratio(user,type)
+
+    setting = self.setting(type)
+
+    epmenu = Epmenu.find_by_title(type)
+
+    mastered_status = History.mastered_status(epmenu,user)      
+    
+    p '.'*100
+    p setting
+    p mastered_status
+
+    question_ratio = [(mastered_status[:mastered].size/setting[:question_cost]).to_i/100.0,(1-setting[:law_ratio])].min
+
     {
       :law_ratio=>lr,
-      :question_ratio=>qr,
-      :ratio=>lr+qr
+      :question_ratio=>question_ratio,
+      :mastered_status=>mastered_status,
+      :ratio=>lr+question_ratio
     }
   end
 
@@ -94,18 +106,11 @@ class Istudy
     end      
   end
 
-  # 得到某部门法的真题学习情况
-  def self.question_ratio(user,type)
-    setting = self.setting(type)
-    epmenu = Epmenu.find_by_title(type)
-    if epmenu
-      right_count = History.by_epmenu(epmenu).by_user(user).right.count()
-      question_ratio = [(right_count/setting[:question_cost]).to_i/100.0,(1-setting[:law_ratio])].min
-      question_ratio
-    else
-      0
-    end
-  end
+
+  # # 得到某部门法的真题学习情况
+  # def self.question_ratio(user,type)
+    
+  # end
 
   # 取得某部门法的设置
   def self.setting(type)

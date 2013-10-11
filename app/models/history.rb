@@ -51,4 +51,34 @@ class History < ActiveRecord::Base
     wrong_count = History.by_user(user).wrong.count()
     right_count*1.0/(right_count+wrong_count)
   end
+
+  def self.mastered_status(epmenu,user)
+    unless epmenu
+      return {
+        :mastered=>0,
+        :unmastered=>0,
+        :total=>1,
+      }
+    end
+
+    pass_ratio = 0.8
+    mastered = []
+    unmastered = []
+
+    histories = History.by_epmenu(epmenu).by_user(user).group('question_id').select("question_id")
+    histories.each do |history|
+      right_count = History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).right.count()
+      wrong_count = History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).wrong.count()
+      if right_count*1.0/(right_count+wrong_count) > pass_ratio
+        mastered.push history.question_id
+      else
+        unmastered.push history.question_id
+      end
+    end
+    {
+      :mastered=>mastered,
+      :unmastered=>unmastered,
+      :total=>epmenu.questions.count()
+    }
+  end
 end
