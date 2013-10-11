@@ -57,3 +57,5 @@ gem 'acts_as_collectable',:git=>'http://github.com/gabrieltong/acts_as_collectab
 group :development,:gabriellocal do 
 	gem 'better_errors'
 end
+
+gem 'whenever', :require => false

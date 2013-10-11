@@ -347,6 +347,10 @@ class ApiController < ApplicationController
     render :json=>{:value=>Istudy.complex(current_user)}
   end
 
+  def istudy_complex_rank
+    render :json=>Istudy.complex_rank(current_user)
+  end
+
   def istudy_evaluate
     render :json=>{:value=>Istudy.evaluate(current_user)}
   end

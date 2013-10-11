@@ -13,6 +13,8 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/istudy_complex'
 
+  post 'api/istudy_complex_rank'
+
   post 'api/istudy_evaluate'
 
   post 'api/history'

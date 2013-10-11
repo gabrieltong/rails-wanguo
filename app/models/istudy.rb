@@ -17,12 +17,24 @@ class Istudy
     {:title=>'国际经济法',:ratio=>0.03,:law_ratio=>0.8,:law_cost=>18,:question_cost=>15}
   ]
 
+  def self.cache_complex
+    User.all.each do |user|
+      user.complex = Istudy.complex(user)
+      user.save :validate=>false
+    end
+  end
+
   # 根据现在的能力预测考试通过率
   def self.evaluate(user)
     self.complex(user)
   end
 
-  # 综合能力
+  # 综合实力排名
+  def self.complex_rank(user)
+    {:total=>User.count(),:rank=>User.where("complex > ?",user.complex).count(),:value=>user.complex}
+  end
+
+  # 综合能力数值
   def self.complex(user)
     correct_rate_ratio = 0.5
     xueba_ratio = 0.3
