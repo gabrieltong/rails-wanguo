@@ -63,10 +63,6 @@ class Istudy
     epmenu = Epmenu.find_by_title(type)
 
     mastered_status = History.mastered_status(epmenu,user)      
-    
-    p '.'*100
-    p setting
-    p mastered_status
 
     question_ratio = [(mastered_status[:mastered].size/setting[:question_cost]).to_i/100.0,(1-setting[:law_ratio])].min
 

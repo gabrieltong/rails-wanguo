@@ -76,8 +76,8 @@ class History < ActiveRecord::Base
       end
     end
     {
-      :mastered=>mastered,
-      :unmastered=>unmastered,
+      :mastered=>mastered.size,
+      :unmastered=>unmastered.size,
       :total=>epmenu.questions.count()
     }
   end
