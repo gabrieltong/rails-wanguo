@@ -70,7 +70,7 @@ class Heartbeat < ActiveRecord::Base
       pairs.insert(0,{:start=>_start,:end=>_end})
     end
 
-    pairs.collect do |pair|
+    pairs.select{|pair|pair[:start]!=nil && pair[:end]!=nil}.collect do |pair|
       {
         :start=>pair[:start].created_at,
         :end=>pair[:end].created_at,
