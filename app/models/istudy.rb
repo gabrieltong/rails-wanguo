@@ -31,7 +31,7 @@ class Istudy
 
   # 综合实力排名
   def self.complex_rank(user)
-    {:total=>User.count(),:rank=>User.where("complex > ?",user.complex).count(),:value=>user.complex}
+    {:total=>User.count(),:rank=>User.where("complex > ?",user.complex).count()+1,:value=>user.complex}
   end
 
   # 综合能力数值
