@@ -7,7 +7,8 @@ class ApiController < ApplicationController
       # :istudy_complex=>Istudy.complex(current_user),
       :istudy_complex_rank=>Istudy.complex_rank(current_user),
       :istudy_xueba=>Istudy.xueba(current_user),      
-      :istudy_evaluate=>Istudy.evaluate(current_user)
+      :istudy_evaluate=>Istudy.evaluate(current_user),
+      :istudy_time=>Heartbeat.duration(Heartbeat.ranges(current_user,current_user)
     }    
   end
 
