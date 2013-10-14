@@ -70,6 +70,7 @@ class ImportsController < ApplicationController
 
     respond_to do |format|
       if @import.update_attributes(params[:import])
+        @import.import
         format.html { redirect_to @import, notice: 'Import was successfully updated.' }
         format.json { head :no_content }
       else
