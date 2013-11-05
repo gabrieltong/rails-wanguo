@@ -3,6 +3,7 @@ class Question < ActiveRecord::Base
   
   attr_accessible :answer, :choices, :description, :num, :score, :state, :title
   serialize :choices
+  serialize :choices_description  
   
   has_many :ep_questions
   acts_as_collectable

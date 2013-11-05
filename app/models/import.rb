@@ -238,7 +238,7 @@ class Import < ActiveRecord::Base
           if File.directory? two_path
             Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
               data = open("#{two_path}/#{other}",'application/vnd.ms-excel',1)
-
+              # 导入法条班
               if data[0][0..7] == %w(法条编号 章 节 法条内容 音频讲解文件 真题和选项编号 填空题编号 知识点)
                 two = one.children.find_or_create_by_title other.split('.')[0]
                 three_title = ''
@@ -256,7 +256,20 @@ class Import < ActiveRecord::Base
                   four.save
                 end
               end
-
+              # 导入免费法条
+              if data[0][0..3] == %w(法条编号 章 节 法条内容)
+                two = Freelaw.find_or_create_by_title(name).children.find_or_create_by_title other.split('.')[0]
+                three_title = ''
+                data[1..-1].each do |row|
+                  three_title = row[1] unless row[1].blank? 
+                  three_title = '第一章' if three_title.blank?
+                  three = two.children.find_or_create_by_title three_title
+                  four = three.children.find_or_create_by_title row[3]
+                  four.brief = row[2]
+                  four.save
+                end
+              end
+              # 导入填空题
               if data[0][0..5] == %w(填空题编号 题目 分值 填空内容A 填空内容B 填空内容C)
                 data[1..-1].each do |row|
                   relation = Law
@@ -275,7 +288,8 @@ class Import < ActiveRecord::Base
             end
           else
             data = open("#{two_path}",'application/vnd.ms-excel',0)
-            if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析 选项A 选项B 选项C 选项D)
+            # 导入真题
+            if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 选项A解析 选项B 选项B解析 选项C 选项C解析 选项D 选项D解析)
               data[1..-1].each do |row|
                 q = Question.find_or_create_by_title row[1]
                 q.state = row[2]
@@ -284,11 +298,20 @@ class Import < ActiveRecord::Base
                 q.title = row[1]
                 q.answer = row[4]
                 q.description = row[5]
-                q.choices = row[6..-1]
+                q.description3 = row[6]
+                q.choices = []
+                q.choices_description = []
+                row[7..-1].each_with_index do |cell,index|
+                  if(index%2 == 0)
+                    q.choices.push cell
+                  else
+                    q.choices_description.push cell
+                  end
+                end
                 q.save
               end
             end
-
+            # 导入知识点
             if data && data[0][0..4] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
               data[1..-1].each do |row|
                 menu = Epmenu.find_or_create_by_title(row[0])
