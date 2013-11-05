@@ -218,6 +218,13 @@ class ApiController < ApplicationController
     render :json=>@collection
   end
 
+  def mistake_questions_by_epmenu
+    histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
+    @relation = Question.where(:id=>histories.collect{|i|i.question_id})
+    paginate
+    render :json=>wrap_questions(@collection)
+  end
+
   def mistake_questions_by_ep
     histories = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>params[:exampoint_id])
     @relation = Question.where(:id=>histories.collect{|i|i.question_id})
@@ -489,16 +496,23 @@ class ApiController < ApplicationController
 
   def laws_to_json(laws)
     if laws.is_a? ActiveRecord::Relation
-      laws = laws.select(%w(id title brief category blanks sound))
+      laws = laws.select(%w(id title brief category blanks sound ancestry_depth))
     end
 
     laws.each do |law|
       law.current_user = current_user
     end
 
-    laws.to_json(
-      :methods=>[:is_collected]
-    )
+    if laws.first && laws.first.ancestry_depth == 3
+      laws.to_json(
+        :include=>{:exampoints=>{}},
+        :methods=>[:is_collected]
+      )
+    else
+      laws.to_json(
+        :methods=>[:is_collected]
+      )
+    end
   end
 
   def freelaws_to_json(freelaws)

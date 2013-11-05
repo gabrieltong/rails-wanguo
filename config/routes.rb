@@ -51,11 +51,11 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/search_freelaws'  
   
-  get 'api/epmenus'
+  post 'api/epmenus'
 
-  get 'api/mistake_epmenus'
+  post 'api/mistake_epmenus'
 
-  get 'api/mistake_eps'
+  post 'api/mistake_eps'
 
   post 'api/heartbeat_start'
 
@@ -109,6 +109,8 @@ RailsWanguo::Application.routes.draw do
 
   match "api/law_eps/:id"=>"api#law_eps",:as=>"api_law_eps"
 
+  match "api/law_questions/:id"=>"api#law_questions",:as=>"api_law_questions"
+
   match "api/law_blanks/:id"=>"api#law_blanks",:as=>"api_law_blanks"
   
 
@@ -150,7 +152,7 @@ RailsWanguo::Application.routes.draw do
   # Sample resource route with options:
   #   resources :products do
   #     member do
-  #       get 'short'
+  #       post 'short'
   #       post 'toggle'
   #     end
   #
