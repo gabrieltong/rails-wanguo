@@ -119,7 +119,9 @@ class ApiController < ApplicationController
 
   # 根据知识点返回问题
   def ep_questions
-  	render :json=> wrap_questions(Exampoint.find(params[:id]).questions)
+    @relation = Exampoint.find(params[:id]).questions
+    paginate
+  	render :json=> wrap_questions(@collection)
   end
 
   # 返回知识点菜单结构
