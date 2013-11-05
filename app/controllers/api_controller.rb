@@ -112,7 +112,9 @@ class ApiController < ApplicationController
         exampoints = exampoints | i.exampoints.select('id,title')
       end
     end
-  	render :json=>exampoints
+    @relation = Exampoint.where(:id=>exampoints.collect{|ep|ep.id})
+    paginate
+  	render :json=>@collection
   end
 
   # 根据知识点返回问题
