@@ -184,44 +184,52 @@ class ApiController < ApplicationController
     render :json=>list
   end
 
+
   def mistake_eps
     histories = History.wrong.where(:user_id=>current_user.id)
-    list = Exampoint.where(:id=>histories.collect{|i|i.exampoint_id}).select('id,title')
-    list = list.map do |i|
+    @relation = Exampoint.where(:id=>histories.collect{|i|i.exampoint_id}).select('id,title')
+
+    paginate
+
+    @collection = @collection.map do |i|
       attrs = i.attributes
       attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').count()
       attrs
     end
-    render :json=>list
+    render :json=>@collection
   end
 
   def mistake_eps_by_epmenu
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
-    list = Exampoint.where(:id=>histories.collect{|i|i.exampoint_id}).select('id,title')
-    list = list.map do |i|
+    @relation = Exampoint.where(:id=>histories.collect{|i|i.exampoint_id}).select('id,title')
+    paginate
+    @collection = @collection.map do |i|
       attrs = i.attributes
       attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').count()
       attrs
     end
-    render :json=>list
+    render :json=>@collection
   end
 
   def mistake_questions_by_ep
     histories = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>params[:exampoint_id])
-    questions = Question.where(:id=>histories.collect{|i|i.question_id})
-    render :json=>wrap_questions(questions)
+    @relation = Question.where(:id=>histories.collect{|i|i.question_id})
+    paginate
+    render :json=>wrap_questions(@collection)
   end
 
   def mistake_questions_by_epmenu
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
-    questions = Question.where(:id=>histories.collect{|i|i.question_id})
+    @relation = Question.where(:id=>histories.collect{|i|i.question_id})
+    paginate
     render :json=>wrap_questions(questions)
   end
 
   # 基于收藏真题查找收藏部门法
   def collected_epmenus
-    epmenus = Collect.roots(current_user,'Question').select(%w(id title))
-    epmenus = epmenus.map do |i|
+    @relation = Collect.roots(current_user,'Question').select(%w(id title))
+    paginate
+    @collection = @collection.map do |i|
       attrs = i.attributes
       attrs[:questions_count] = Collect.where(
         :user_id=>current_user.id,
@@ -237,13 +245,14 @@ class ApiController < ApplicationController
 
       attrs
     end
-    render :json=>epmenus
+    render :json=>@collection
   end
 
   # 通过收藏部门法查找考点
   def collected_eps_by_epmenu
-    eps = Collect.children(current_user,Epmenu.find(params[:id])).select(%w(id title))
-    eps = eps.map do |i|
+    @relation = Collect.children(current_user,Epmenu.find(params[:id])).select(%w(id title))
+    paginate
+    @collection = @collection.map do |i|
       attrs = i.attributes
       attrs[:questions_count] = Collect.where(
         :user_id=>current_user.id,
@@ -252,18 +261,21 @@ class ApiController < ApplicationController
       ).select('distinct `collectable_id`').count()
       attrs
     end
-    render :json=>eps
+    render :json=>@collection
   end
 
   # 通过收藏考点查找真题
   def collected_questions_by_ep
-    questions = Collect.children(current_user,Exampoint.find(params[:id]))
-    render :json=>wrap_questions(questions)
+    @relation = Collect.children(current_user,Exampoint.find(params[:id]))
+    paginate
+    render :json=>wrap_questions(@collection)
   end
 
   # 基于收藏真题查找收藏知识点
   def collected_eps
-    render :json=>Collect.roots(current_user,'QuestionEp').select(%w(id title))
+    @relation = Collect.roots(current_user,'QuestionEp').select(%w(id title))
+    paginate
+    render :json=>@relation
   end  
 
   def collected_questions_by_epmenu
@@ -271,7 +283,9 @@ class ApiController < ApplicationController
     questions = eps.collect do |ep|
       Collect.children(current_user,ep)
     end.flatten.uniq
-    render :json=>wrap_questions(questions)
+    @relation = Question.where(:id=>questions.collect{|i|i.id})
+    paginate
+    render :json=>wrap_questions(@collection)
   end
 
   # 搜索法条
