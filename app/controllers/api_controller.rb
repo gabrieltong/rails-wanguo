@@ -124,6 +124,13 @@ class ApiController < ApplicationController
   	render :json=> wrap_questions(@collection)
   end
 
+  # 根据法条返回问题
+  def law_questions
+    @relation = Law.find(params[:id]).questions
+    paginate
+    render :json=>wrap_questions(@collection)
+  end
+
   # 返回知识点菜单结构
   def epmenus
     if params[:epmenu_id] == nil
