@@ -6,7 +6,7 @@ class Law < ActiveRecord::Base
 	serialize :blanks
   has_many :annexes
   has_and_belongs_to_many :exampoints,:uniq=>true
-  has_many :questions,:through=>:exampoints
+  has_many :questions,:through=>:exampoints,:uniq => true
   acts_as_collectable  
   before_save do |instance|
   	instance.content = '' if instance.content == nil
