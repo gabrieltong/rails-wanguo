@@ -1,5 +1,6 @@
 # encoding: UTF-8
 class ApiController < ApplicationController
+  before_filter :paginate_params
 
   def mix
     render :json=>{
@@ -9,7 +10,7 @@ class ApiController < ApplicationController
       :istudy_xueba=>Istudy.xueba(current_user),      
       :istudy_evaluate=>Istudy.evaluate(current_user),
       :istudy_time=>Heartbeat.duration(Heartbeat.ranges(current_user,current_user))
-    }    
+    }
   end
 
   def current_user
@@ -65,22 +66,24 @@ class ApiController < ApplicationController
   #法条班法条  
   def laws
   	if params[:id] == nil
-  		relation = Law.roots
+  		@relation = Law.roots
   	else
-  		relation = Law.find(params[:id]).children
+  		@relation = Law.find(params[:id]).children
   	end
-  	render :json=>laws_to_json(relation)
+    paginate
+  	render :json=>laws_to_json(@collection)
   end
 
 
   # 免费法条
   def freelaws
   	if params[:id] == nil
-  		relation = Law.roots
+  		@relation = Law.roots
   	else
-  		relation = Law.find(params[:id]).children
+  		@relation = Law.find(params[:id]).children
   	end
-  	render :json=>freelaws_to_json(relation)
+    paginate
+  	render :json=>freelaws_to_json(@relation)
   end
 
   def law_blanks
@@ -97,6 +100,8 @@ class ApiController < ApplicationController
     
   end
   # 根据法条返回知识点
+  # 如果法条是叶子节点 ， 返回改叶子节点的知识点
+  # 如果法条不是叶子节点 ， 返回所有子节点的知识点
   def law_eps
     law = Law.find(params[:id])
     exampoints = []
@@ -112,7 +117,7 @@ class ApiController < ApplicationController
 
   # 根据知识点返回问题
   def ep_questions
-  	render :json=> questions_to_json(Exampoint.find(params[:id]).questions)
+  	render :json=> wrap_questions(Exampoint.find(params[:id]).questions)
   end
 
   # 返回知识点菜单结构
@@ -128,14 +133,14 @@ class ApiController < ApplicationController
   def epmenu_questions
     questions = R.new.rand_questions_by_epm(Epmenu.find(params[:id]),params[:limit].to_i)
     questions = Question.where(:id=>questions.collect{|i|i.id})
-  	render :json=>questions_to_json(questions)
+  	render :json=>wrap_questions(questions)
   end
 
   # 随机输入  
   def rapid_questions
     questions = R.new.rand_questions_by_epms(Epmenu.roots.where('volumn'=>params[:volumn]),params[:limit].to_i)
     questions = Question.where(:id=>questions.collect{|i|i.id})
-    render :json=>questions_to_json(questions)
+    render :json=>wrap_questions(questions)
   end
 
   #登录 api
@@ -200,13 +205,13 @@ class ApiController < ApplicationController
   def mistake_questions_by_ep
     histories = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>params[:exampoint_id])
     questions = Question.where(:id=>histories.collect{|i|i.question_id})
-    render :json=>questions_to_json(questions)
+    render :json=>wrap_questions(questions)
   end
 
   def mistake_questions_by_epmenu
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
     questions = Question.where(:id=>histories.collect{|i|i.question_id})
-    render :json=>questions_to_json(questions)
+    render :json=>wrap_questions(questions)
   end
 
   # 基于收藏真题查找收藏部门法
@@ -249,7 +254,7 @@ class ApiController < ApplicationController
   # 通过收藏考点查找真题
   def collected_questions_by_ep
     questions = Collect.children(current_user,Exampoint.find(params[:id]))
-    render :json=>questions_to_json(questions)
+    render :json=>wrap_questions(questions)
   end
 
   # 基于收藏真题查找收藏知识点
@@ -262,7 +267,7 @@ class ApiController < ApplicationController
     questions = eps.collect do |ep|
       Collect.children(current_user,ep)
     end.flatten.uniq
-    render :json=>questions_to_json(questions)
+    render :json=>wrap_questions(questions)
   end
 
   # 搜索法条
@@ -444,7 +449,8 @@ class ApiController < ApplicationController
 
   private
 
-  def questions_to_json(questions)
+  # 为问题增加一些属性 ， 例如用户是否收藏，
+  def wrap_questions(questions)
     questions.each do |question|
       question.current_user = current_user
     end
@@ -482,6 +488,22 @@ class ApiController < ApplicationController
     freelaws.to_json(
       :methods=>[:is_collected]
     )
+  end
+
+  private 
+  # 在返回集合的api上设置分页的页数和分页大小
+  # 结果：设置好 @page 和 @per_page
+  def paginate_params
+    @page = params[:page] || 1 
+    @per_page = params[:per_page] || 3
+  end
+
+  # 根据分页的数量
+  # require @page
+  # require @per_page
+  # set @collection
+  def paginate
+    @collection = @relation.paginate(:page=>@page,:per_page=>@per_page)
   end
 end
 

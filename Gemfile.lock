@@ -49,6 +49,7 @@ GEM
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
     builder (3.0.4)
+    chronic (0.10.2)
     clearance (1.0.1)
       bcrypt-ruby
       email_validator (~> 1.4)
@@ -167,6 +168,10 @@ GEM
     uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    whenever (0.8.4)
+      activesupport (>= 2.3.4)
+      chronic (>= 0.6.3)
+    will_paginate (3.0.4)
 
 PLATFORMS
   ruby
@@ -192,3 +197,5 @@ DEPENDENCIES
   therubyracer
   twitter-bootstrap-rails
   uglifier (>= 1.0.3)
+  whenever
+  will_paginate (~> 3.0)

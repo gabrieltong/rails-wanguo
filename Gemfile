@@ -59,3 +59,5 @@ group :development,:gabriellocal do
 end
 
 gem 'whenever', :require => false
+
+gem 'will_paginate', '~> 3.0'
