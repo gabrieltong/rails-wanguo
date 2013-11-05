@@ -106,7 +106,6 @@ class Import < ActiveRecord::Base
 
   def import_laws
   	s = open
-    p s
   	if s[0][0..6] == %w(学科 文件名称 分类 法条章 法条节 内容 关联考点)
 	  	s[1..-1].each do |row|
 	  		one = Law.find_or_create_by_title row[0]
@@ -240,7 +239,7 @@ class Import < ActiveRecord::Base
             Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
               data = open("#{two_path}/#{other}",'application/vnd.ms-excel',1)
 
-              if data[0] == %w(法条编号 章 节 法条内容 音频讲解文件 真题和选项编号 填空题编号 知识点)
+              if data[0][0..7] == %w(法条编号 章 节 法条内容 音频讲解文件 真题和选项编号 填空题编号 知识点)
                 two = one.children.find_or_create_by_title other.split('.')[0]
                 three_title = ''
                 data[1..-1].each do |row|
@@ -258,7 +257,7 @@ class Import < ActiveRecord::Base
                 end
               end
 
-              if data[0] == %w(填空题编号 题目 分值 填空内容A 填空内容B 填空内容C)
+              if data[0][0..5] == %w(填空题编号 题目 分值 填空内容A 填空内容B 填空内容C)
                 data[1..-1].each do |row|
                   relation = Law
                   lines = row[1].split("\n")
@@ -290,7 +289,7 @@ class Import < ActiveRecord::Base
               end
             end
 
-            if data && data[0] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
+            if data && data[0][0..4] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
               data[1..-1].each do |row|
                 menu = Epmenu.find_or_create_by_title(row[0])
                 sub = menu.children.find_or_create_by_title(row[1])
