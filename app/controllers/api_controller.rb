@@ -229,7 +229,7 @@ class ApiController < ApplicationController
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
     @relation = Question.where(:id=>histories.collect{|i|i.question_id})
     paginate
-    render :json=>wrap_questions(questions)
+    render :json=>wrap_questions(@collection)
   end
 
   # 基于收藏真题查找收藏部门法
@@ -282,7 +282,7 @@ class ApiController < ApplicationController
   def collected_eps
     @relation = Collect.roots(current_user,'QuestionEp').select(%w(id title))
     paginate
-    render :json=>@relation
+    render :json=>@collection
   end  
 
   def collected_questions_by_epmenu
