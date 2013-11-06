@@ -534,7 +534,7 @@ class ApiController < ApplicationController
   # 结果：设置好 @page 和 @per_page
   def paginate_params
     @page = params[:page] || 1 
-    @per_page = params[:per_page] || 50
+    @per_page = params[:per_page] || 1000
   end
 
   # 根据分页的数量
