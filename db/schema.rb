@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924203412) do
+ActiveRecord::Schema.define(:version => 20131118135905) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -109,8 +109,10 @@ ActiveRecord::Schema.define(:version => 20130924203412) do
   create_table "heartbeats", :force => true do |t|
     t.integer  "user_id"
     t.string   "state"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "beatable_type"
+    t.integer  "beatable_id"
   end
 
   add_index "heartbeats", ["state"], :name => "index_heartbeats_on_state"
@@ -150,15 +152,18 @@ ActiveRecord::Schema.define(:version => 20130924203412) do
     t.text     "title"
     t.text     "content"
     t.string   "ancestry"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.string   "state"
     t.string   "brief"
     t.string   "category"
     t.text     "blanks"
-    t.integer  "ancestry_depth", :default => 0
+    t.integer  "ancestry_depth",     :default => 0
     t.integer  "score"
-    t.string   "sound",          :default => ""
+    t.string   "sound_file_name"
+    t.string   "sound_content_type"
+    t.integer  "sound_file_size"
+    t.datetime "sound_updated_at"
   end
 
   add_index "laws", ["ancestry"], :name => "index_laws_on_ancestry"
@@ -166,15 +171,17 @@ ActiveRecord::Schema.define(:version => 20130924203412) do
   add_index "laws", ["state"], :name => "index_laws_on_state"
 
   create_table "questions", :force => true do |t|
-    t.string   "title"
+    t.text     "title"
     t.integer  "score"
     t.integer  "num"
     t.string   "state"
     t.text     "description"
     t.string   "answer"
     t.text     "choices"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.text     "description3"
+    t.text     "choices_description"
   end
 
   add_index "questions", ["num"], :name => "index_questions_on_num"
@@ -205,8 +212,10 @@ ActiveRecord::Schema.define(:version => 20130924203412) do
     t.string   "remember_token",     :limit => 128, :null => false
     t.text     "dec"
     t.string   "username"
+    t.float    "complex"
   end
 
+  add_index "users", ["complex"], :name => "index_users_on_complex"
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
 

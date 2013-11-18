@@ -1,4 +1,4 @@
-<%= form_for(@law) do |f| %>
+<%= simple_form_for(@law,:html => {:class => 'form-horizontal' }) do |f| %>
   <% if @law.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@law.errors.count, "error") %> prohibited this law from being saved:</h2>
@@ -11,19 +11,8 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :content %><br />
-    <%= f.text_area :content %>
-  </div>
-  <div class="field">
-    <%= f.label :ancestry %><br />
-    <%= f.text_field :ancestry %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <%= f.input :title,:as=>:string %>
+    <%= f.input :content,:as=>:string %>
+    <%= f.input :sound,:as=>:file%>
+    <%= f.button :submit %>
 <% end %>

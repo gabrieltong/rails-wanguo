@@ -1,7 +1,7 @@
 class Law < ActiveRecord::Base
   include IsCollected
-  
-  attr_accessible :ancestry, :content, :title, :score
+  has_attached_file :sound  
+  attr_accessible :ancestry, :content, :title, :score,:sound
   has_ancestry :cache_depth=>true
 	serialize :blanks
   has_many :annexes
@@ -14,5 +14,13 @@ class Law < ActiveRecord::Base
   	instance.category = '' if instance.category == nil
   	instance.state = '' if instance.state == nil
     instance.score = 0 if instance.state == nil
+  end
+
+  def as_json(options={})
+    super({:methods=>[:sound_url]}.merge options)
+  end
+
+  def sound_url
+    sound.url
   end
 end
