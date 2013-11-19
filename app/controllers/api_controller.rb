@@ -496,7 +496,7 @@ class ApiController < ApplicationController
 
   def laws_to_json(laws)
     if laws.is_a? ActiveRecord::Relation
-      laws = laws.select(%w(id title brief category blanks sound ancestry_depth))
+      laws = laws.select(%w(id title brief category blanks ancestry_depth))
     end
 
     laws.each do |law|
