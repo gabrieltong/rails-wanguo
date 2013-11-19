@@ -535,6 +535,7 @@ class ApiController < ApplicationController
   def paginate_params
     @page = params[:page] || 1 
     @per_page = params[:per_page] || 1000
+    @random = params[:random].to_i || 0
   end
 
   # 根据分页的数量
@@ -542,7 +543,12 @@ class ApiController < ApplicationController
   # require @per_page
   # set @collection
   def paginate
-    @collection = @relation.paginate(:page=>@page,:per_page=>@per_page)
+    ppp @random
+    if @random == 0
+      @collection = @relation.paginate(:page=>@page,:per_page=>@per_page)
+    else
+      @collection = @relation.random(@per_page)
+    end
   end
 end
 
