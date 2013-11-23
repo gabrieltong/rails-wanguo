@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   include Clearance::Controller
   # include Clearance::HttpAuth
-  protect_from_forgery
+  # protect_from_forgery
   
   def authenticate(params)
     User.authenticate(params[:session][:username],
