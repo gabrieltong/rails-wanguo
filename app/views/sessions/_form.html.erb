@@ -1,20 +1,11 @@
-<%= form_for :session, :url => session_path do |form| %>
-  <div class='text-field'>
-    <%= form.label :email %>
-    <%= form.text_field :email, :type => 'email' %>
-  </div>
-
-  <div class='password-field'>
-    <%= form.label :password %>
-    <%= form.password_field :password %>
-  </div>
-
-  <div class='submit-field'>
-    <%= form.submit %>
-  </div>
-
-  <div class='other-links'>
-    <%= link_to t('.sign_up'), sign_up_path %>
-    <%= link_to t('.forgot_password'), new_password_path %>
+<%= simple_form_for(:session, :url => session_path,:html => {:class => 'form-horizontal' }) do |form| %>
+  <%= form.input :username%>
+  <%= form.input :password%>
+  <div class="control-group">
+    <div class="controls">
+  <%= form.button :submit%>
+  <%= link_to t('.sign_up'), sign_up_path ,:class=>'btn'%>
+  <%= link_to t('.forgot_password'), new_password_path ,:class=>'btn'%>
+    </div>
   </div>
 <% end %>

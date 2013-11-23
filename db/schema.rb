@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131118135905) do
+ActiveRecord::Schema.define(:version => 20131123010322) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -213,6 +213,9 @@ ActiveRecord::Schema.define(:version => 20131118135905) do
     t.text     "dec"
     t.string   "username"
     t.float    "complex"
+    t.integer  "qq"
+    t.integer  "phone"
+    t.text     "signature"
   end
 
   add_index "users", ["complex"], :name => "index_users_on_complex"

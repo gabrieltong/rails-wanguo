@@ -1,9 +1,14 @@
 class User < ActiveRecord::Base
+  attr_accessible :username, :phone, :qq,:signature
+
 	has_many :collects
 
 	has_many :histories
 
 	has_many :epmenus,:through=>:histories,:uniq=>true
+
+  validates :username,:email,:phone,:presence=>true
+  validates :username, :length => { :minimum => 3 }
 
   include Clearance::User
 
