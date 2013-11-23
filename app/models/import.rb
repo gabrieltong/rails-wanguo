@@ -55,160 +55,30 @@ class Import < ActiveRecord::Base
   end
 
 
-  def open(path = file.path,type = file_content_type, sheet=0)
-
+  def open(options={})
+    options = {:path=>file.path,:type => file_content_type, :sheet=>0}.merge(options)
     s = nil
     begin
-      s = Roo::Excel.new(path)
+      s = Roo::Excel.new(options[:path])
     rescue
     end if s == nil
 
     begin
-      s = Roo::Excelx.new(path)
+      s = Roo::Excelx.new(options[:path])
     rescue
     end if s == nil
 
     if s
-      s.default_sheet = s.sheets[sheet]
+      s.sheets.each_with_index do |sheet,index|
+        s.default_sheet = s.sheets[index]
+        data = s.to_a
+        return data if data[0].size > 3
+      end
+      s.default_sheet = s.sheets[options[:sheet]]
       s.to_a
     else
       s
     end
-  end
-
-  def import_law_zip_v2
-    Zip::ZipFile.open(file.path) do |zipfile|
-      zipfile.each do |file|
-        # do something with file
-      end
-    end
-  end
-
-  def import_questions_v2
-    s = open
-    if s[0][0..5] == %w(真题题号 标题 类型 分值 答案 解析)
-      s[1..-1].each do |row|
-        q = Question.new
-        q.state = row[2]
-        q.score = row[3]
-        q.num = row[0].to_i
-        q.title = row[1]
-        q.answer = row[4]
-        q.description = row[5]
-        q.choices = row[6..-1]
-        q.save
-      end
-      return true
-    else
-      :wrong_excel
-    end
-  end
-
-  def import_laws
-  	s = open
-  	if s[0][0..6] == %w(学科 文件名称 分类 法条章 法条节 内容 关联考点)
-	  	s[1..-1].each do |row|
-	  		one = Law.find_or_create_by_title row[0]
-	  		one.category = row[2]
-	  		one.save 
-
-	  		two = one.children.find_or_create_by_title row[1]
-
-	  		three = two.children.find_or_create_by_title row[3]
-
-	  		four = three.children.find_or_create_by_title row[5]
-
-	  		four.exampoints = []
-	  		row[6].to_s.split(/[，,]/).each do |ep|
-	  			four.exampoints << Exampoint.find_or_create_by_title(ep)
-	  		end
-	  		four.brief = row[4]
-	  		four.blanks = row[7..-1]
-	  		four.save
-	  	end
-	  	return true
-	  else
-	  	:wrong_excel
-	  end
-  end
-
-  def import_freelaws
-  	s = open
-  	if s[0][0..5] == %w(学科 文件名称 分类 法条章 法条节 内容)
-	  	s[1..-1].each do |row|
-	  		one = Freelaw.find_or_create_by_title row[0]
-	  		one.category = row[2]
-	  		one.save 
-
-	  		two = one.children.find_or_create_by_title row[1]
-
-	  		three = two.children.find_or_create_by_title row[3]
-
-	  		four = three.children.find_or_create_by_title row[5]
-
-	  		four.exampoints = []
-	  		four.brief = row[4]
-	  		four.save
-	  	end
-	  	return true
-	  else
-	  	:wrong_excel
-	  end
-  end
-
-  def import_questions
-  	s = open
-  	if s[0][0..5] == %w(类型 分值 真题题号 题干 正确答案 解析)
-  		s[1..-1].each do |row|
-  			q = Question.new
-  			q.state = row[0]
-  			q.score = row[1]
-  			q.num = row[2].to_i
-  			q.title = row[3]
-  			q.answer = row[4]
-  			q.description = row[5]
-  			q.choices = row[6..-1]
-  			q.save
-  		end
-  		return true
-  	else
-  		:wrong_excel
-  	end
-  end
-
-  def import_eps
-  	s = open
-  	if s[0][0..5] = %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
-  		s[1..-1].each do |row|
-  			menu = Epmenu.find_or_create_by_title(row[0])
-  			sub = menu.children.find_or_create_by_title(row[1])
-  			ep = Exampoint.find_or_create_by_title(row[2])
-  			menu.exampoints << ep
-  			sub.exampoints << ep
-
-  			if row[3]
-	  			row[3].split(',').each do |q|
-	  				question_num = q.match(/\d+/).to_s
-	  				
-	  				question = Question.find_by_num(question_num)
-	  				if question 
-	  					choices = q.match(/[ABCDEFGH]+/).to_s
-	  					if !choices.blank?
-			  				choices.split('').each do |choice|
-			  					ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,choice)
-			  				end
-			  			else
-			  				ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,'')
-			  			end
-		  			end
-	  			end
-	  		end
-  			
-  		end
-  		return true
-  	else
-  		:wrong_excel
-  	end
   end
 
   state_machine :state,:initial=>:freelaws do 
@@ -237,57 +107,93 @@ class Import < ActiveRecord::Base
           two_path = "#{target}/#{two}"
           if File.directory? two_path
             Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
-              data = open("#{two_path}/#{other}",'application/vnd.ms-excel',1)
-              # 导入法条班
-              if data[0][0..7] == %w(法条编号 章 节 法条内容 音频讲解文件 真题和选项编号 填空题编号 知识点)
-                two = one.children.find_or_create_by_title other.split('.')[0]
-                three_title = ''
+              data = open(:path=>"#{two_path}/#{other}",:type=>'application/vnd.ms-excel',:sheet=>1)
+
+              # 导入法条与免费法条
+              if data[0][0..4] == %w(法条编号 编 章 节 法条内容)
+                one = Law.find_or_create_by_title name
                 data[1..-1].each do |row|
-                  three_title = row[1] unless row[1].blank? 
-                  three_title = '第一章' if three_title.blank?
-                  three = two.children.find_or_create_by_title three_title
-                  four = three.children.find_or_create_by_title row[3]
-                  four.sound = row[4]
-                  four.brief = row[2]
-                  four.exampoints = []
-                  row[7].to_s.split(/[，,、]/).each do |ep|
-                    four.exampoints << Exampoint.find_or_create_by_title(ep)
+                  last = one.children.find_or_create_by_title other.split('.')[0]
+                  if row[1]
+                    last = last.children.find_or_initialize_by_title row[1]
+                    last.state = 'bian'
+                    last.save
                   end
-                  four.save
-                end
-              end
-              # 导入免费法条
-              if data[0][0..3] == %w(法条编号 章 节 法条内容)
-                two = Freelaw.find_or_create_by_title(name).children.find_or_create_by_title other.split('.')[0]
-                three_title = ''
-                data[1..-1].each do |row|
-                  three_title = row[1] unless row[1].blank? 
-                  three_title = '第一章' if three_title.blank?
-                  three = two.children.find_or_create_by_title three_title
-                  four = three.children.find_or_create_by_title row[3]
-                  four.brief = row[2]
-                  four.save
-                end
-              end
-              # 导入填空题
-              if data[0][0..5] == %w(填空题编号 题目 分值 填空内容A 填空内容B 填空内容C)
-                data[1..-1].each do |row|
-                  relation = Law
-                  lines = row[1].split("\n")
-                  lines.each do |line|
-                    line = line.gsub(/^[　 ]/,'')
-                    relation = relation.where("`title` like ?","%#{line}%")
+
+                  if row[2]
+                    last = last.children.find_or_initialize_by_title row[2]
+                    last.state = 'zhang'
+                    last.save
                   end
-                  relation.limit(1).each do |four|
-                    four.blanks = row[3..-1].delete_if{|i|i.blank?}
-                    four.score = row[2]
-                    four.save
+
+                  if row[3]
+                    last = last.children.find_or_initialize_by_title row[3]
+                    last.state = 'jie'
+                    last.save
+                  end
+
+                  if row[4]
+                    last = last.children.find_or_initialize_by_title row[4]
+                    last.number = row[0]
+                    last.state = 'node'
+                    last.save
+                  end
+                end
+
+                one = Freelaw.find_or_create_by_title name
+                data[1..-1].each do |row|
+                  last = one.children.find_or_create_by_title other.split('.')[0]
+                  if row[1]
+                    last = last.children.find_or_initialize_by_title row[1]
+                    last.state = 'bian'
+                    last.save
+                  end
+
+                  if row[2]
+                    last = last.children.find_or_initialize_by_title row[2]
+                    last.state = 'zhang'
+                    last.save
+                  end
+
+                  if row[3]
+                    last = last.children.find_or_initialize_by_title row[3]
+                    last.state = 'jie'
+                    last.save
+                  end
+
+                  if row[4]
+                    last = last.children.find_or_initialize_by_title row[4]
+                    last.number = row[0]
+                    last.state = 'node'
+                    last.save
                   end
                 end
               end
             end
           else
-            data = open("#{two_path}",'application/vnd.ms-excel',0)
+            data = open :path=>"#{two_path}",:type=>'application/vnd.ms-excel',:sheet=>1
+            next unless data
+            # 更新法条班
+            if data[0][0..3] == %w(法条编号 音频讲解文件 真题编号 知识点)
+              data[1..-1].each do |row|
+                node = Law.find_by_number(row[0])
+                node.sound = row[1]
+                node.exampoints = []
+                row[3].to_s.split(/[，,、]/).each do |ep|
+                  node.exampoints << Exampoint.find_or_create_by_title(ep)
+                end
+
+                node.questions_number = []
+
+                row[2].to_s.split(/[，,、]/).each do |number|
+                  node.questions_number.push number
+                end
+
+                node.blanks = row[4..-1].delete_if{|i|i.blank?}
+                node.score = 1
+                node.save
+              end
+            end
             # 导入真题
             if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 选项A解析 选项B 选项B解析 选项C 选项C解析 选项D 选项D解析)
               data[1..-1].each do |row|
@@ -374,7 +280,6 @@ class Import < ActiveRecord::Base
                   three_title = '第一章' if three_title.blank?
                   three = two.children.find_or_create_by_title three_title
                   four = three.children.find_or_create_by_title row[3]
-                  four.brief = row[2]
                   four.save
                 end
               end

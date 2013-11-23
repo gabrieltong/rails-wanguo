@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131123010322) do
+ActiveRecord::Schema.define(:version => 20131123043806) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -98,9 +98,9 @@ ActiveRecord::Schema.define(:version => 20131123010322) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.string   "state"
-    t.string   "brief"
     t.string   "category"
     t.integer  "ancestry_depth", :default => 0
+    t.integer  "number"
   end
 
   add_index "freelaws", ["ancestry"], :name => "index_freelaws_on_ancestry"
@@ -155,7 +155,6 @@ ActiveRecord::Schema.define(:version => 20131123010322) do
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
     t.string   "state"
-    t.string   "brief"
     t.string   "category"
     t.text     "blanks"
     t.integer  "ancestry_depth",     :default => 0
@@ -164,6 +163,8 @@ ActiveRecord::Schema.define(:version => 20131123010322) do
     t.string   "sound_content_type"
     t.integer  "sound_file_size"
     t.datetime "sound_updated_at"
+    t.integer  "number"
+    t.text     "questions_number"
   end
 
   add_index "laws", ["ancestry"], :name => "index_laws_on_ancestry"

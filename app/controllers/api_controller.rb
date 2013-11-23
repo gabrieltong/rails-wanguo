@@ -15,7 +15,7 @@ class ApiController < ApplicationController
 
   def current_user
     User.first
-  end  
+  end
   # 收藏真题
   def collect_question
     Collect.add(current_user,Question.find(params[:id]))

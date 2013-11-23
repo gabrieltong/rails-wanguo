@@ -1,4 +1,18 @@
 'zh-CN': 
+  simple_form:
+    labels:
+      password:
+        password: '密码'
+      session:
+        username: '用户名'
+        password: '密码'
+      user:
+        username: '用户名'
+        phone: '手机号'
+        qq: 'QQ号码'
+        email: '邮箱'
+        password: '密码'
+        signature: '个性签名'
   laws: '收费法条' 
   freelaws: '免费法条' 
   questions: '真题'
@@ -41,6 +55,18 @@
       create: "创建%{model}"
       update: "更新%{model}"
   activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            username:
+              blank: '用户名不能为空'
+            phone:
+              blank: '手机号不能为空'
+            email:
+              blank: '邮箱不能为空'
+            password:
+              blank: '密码不能为空'
     models:
       import: '导入'
     attributes:
