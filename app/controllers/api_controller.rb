@@ -496,7 +496,7 @@ class ApiController < ApplicationController
 
   def laws_to_json(laws)
     if laws.is_a? ActiveRecord::Relation
-      laws = laws.select(%w(id title brief category blanks sound ancestry_depth))
+      laws = laws.select(%w(id title brief category blanks ancestry_depth sound_file_name sound_content_type sound_file_size sound_updated_at))
     end
 
     laws.each do |law|
@@ -506,11 +506,11 @@ class ApiController < ApplicationController
     if laws.first && laws.first.ancestry_depth == 3
       laws.to_json(
         :include=>{:exampoints=>{}},
-        :methods=>[:is_collected]
+        :methods=>[:is_collected,:sound_url]
       )
     else
       laws.to_json(
-        :methods=>[:is_collected]
+        :methods=>[:is_collected,:sound_url]
       )
     end
   end
