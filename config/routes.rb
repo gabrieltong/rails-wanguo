@@ -5,6 +5,8 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/login'
 
+  post 'api/edit_profile'
+
   post 'api/logout'
 
   post 'api/signup'
