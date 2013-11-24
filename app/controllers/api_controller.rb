@@ -16,7 +16,7 @@ class ApiController < ApplicationController
 
   def edit_profile
     if @user.update_attributes(params[:user])
-      render_success
+      render :json=>{:success=>true}
     else
       render :json=>{:success=>false,:errors=>@user.errors.full_messages}
     end
