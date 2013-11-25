@@ -160,7 +160,7 @@ class ApiController < ApplicationController
     end
     @relation = Exampoint.where(:id=>exampoints.collect{|ep|ep.id})
     paginate
-  	render :json=>@collection
+  	render :json=>eps_to_json(@collection)
   end
 
   # 根据知识点返回问题
@@ -249,7 +249,7 @@ class ApiController < ApplicationController
       attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').count()
       attrs
     end
-    render :json=>@collection
+    render :json=>eps_to_json(@collection)
   end
 
   def mistake_eps_by_epmenu
@@ -261,7 +261,7 @@ class ApiController < ApplicationController
       attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').count()
       attrs
     end
-    render :json=>@collection
+    render :json=>eps_to_json(@collection)
   end
 
   def mistake_questions_by_epmenu
@@ -321,7 +321,7 @@ class ApiController < ApplicationController
       ).select('distinct `collectable_id`').count()
       attrs
     end
-    render :json=>@collection
+    render :json=>eps_to_json(@collection)
   end
 
   # 通过收藏考点查找真题
@@ -335,7 +335,7 @@ class ApiController < ApplicationController
   def collected_eps
     @relation = Collect.roots(current_user,'QuestionEp').select(%w(id title))
     paginate
-    render :json=>@collection
+    render :json=>eps_to_json(@collection)
   end  
 
   def collected_questions_by_epmenu
@@ -575,6 +575,14 @@ class ApiController < ApplicationController
     )
   end
 
+  def eps_to_json(eps)
+    eps.collect do |ep|
+      attributes = ep.attributes
+      attributes[:complex] = 0.1
+      attributes
+    end
+  end
+  
   private 
   # 在返回集合的api上设置分页的页数和分页大小
   # 结果：设置好 @page 和 @per_page
