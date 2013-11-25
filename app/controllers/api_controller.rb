@@ -563,7 +563,7 @@ class ApiController < ApplicationController
 
   def freelaws_to_json(freelaws)
     if freelaws.is_a? ActiveRecord::Relation
-      freelaws = freelaws.select(%w(id title category))
+      freelaws = freelaws.select(%w(id title category ancestry_depth))
     end
 
     freelaws.each do |freelaw|
