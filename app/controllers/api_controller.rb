@@ -1,6 +1,52 @@
 # encoding: UTF-8
 class ApiController < ApplicationController
+  # include Clearance::Controller
+
   before_filter :paginate_params
+  before_filter :authorize_token,:except=>[:login,:signup]
+
+  def authorize_token
+    @user = User.find_by_remember_token(params[:session][:token])
+    render :json=>{:success=>false} unless @user
+  end
+
+  def current_user
+    @user
+  end
+
+  def edit_profile
+    if @user.update_attributes(params[:user])
+      render :json=>{:success=>true}
+    else
+      render :json=>{:success=>false,:errors=>@user.errors.full_messages}
+    end
+  end
+
+  def signup
+    @user = user_from_params
+
+    sign_in(@user)
+    if @user
+      render :json=>{:success=>true,:user=>@user}
+    else
+      render :json=>{:success=>false,:errors=>@user.errors.full_messages}
+    end
+  end
+
+  def login
+    @user = User.authenticate params[:session][:username],params[:session][:password]
+    sign_in(@user)
+    if @user
+      render :json=>{:success=>true,:user=>@user}
+    else
+      render :json=>{:success=>false}
+    end
+  end
+
+  def logout
+    
+  end
+
 
   def mix
     render :json=>{
@@ -13,9 +59,9 @@ class ApiController < ApplicationController
     }
   end
 
-  def current_user
-    User.first
-  end  
+  # def current_user
+  #   User.first
+  # end
   # 收藏真题
   def collect_question
     Collect.add(current_user,Question.find(params[:id]))
@@ -154,14 +200,14 @@ class ApiController < ApplicationController
     render :json=>wrap_questions(questions)
   end
 
-  #登录 api
-  def login
-    if User.authenticate params[:email],params[:password]
-      render_success
-    else
-      render_fail
-    end
-  end
+  # #登录 api
+  # def login
+  #   if User.authenticate params[:email],params[:password]
+  #     render_success
+  #   else
+  #     render_fail
+  #   end
+  # end
 
   def answer_question
     History.log(current_user.id,params[:question_id],params[:answer])
@@ -496,7 +542,7 @@ class ApiController < ApplicationController
 
   def laws_to_json(laws)
     if laws.is_a? ActiveRecord::Relation
-      laws = laws.select(%w(id title brief category blanks ancestry_depth sound_file_name sound_content_type sound_file_size sound_updated_at))
+      laws = laws.select(%w(id title category blanks ancestry_depth sound_file_name sound_content_type sound_file_size sound_updated_at))
     end
 
     laws.each do |law|
@@ -517,7 +563,7 @@ class ApiController < ApplicationController
 
   def freelaws_to_json(freelaws)
     if freelaws.is_a? ActiveRecord::Relation
-      freelaws = freelaws.select(%w(id title brief category))
+      freelaws = freelaws.select(%w(id title category))
     end
 
     freelaws.each do |freelaw|
@@ -543,11 +589,21 @@ class ApiController < ApplicationController
   # require @per_page
   # set @collection
   def paginate
-    ppp @random
     if @random == 0
       @collection = @relation.paginate(:page=>@page,:per_page=>@per_page)
     else
       @collection = @relation.random(@per_page)
+    end
+  end
+
+  def user_from_params
+    user_params = params[:user] || Hash.new
+    email = user_params.delete(:email)
+    password = user_params.delete(:password)
+
+    Clearance.configuration.user_model.new(user_params).tap do |user|
+      user.email = email
+      user.password = password
     end
   end
 end

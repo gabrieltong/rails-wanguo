@@ -1,9 +1,6 @@
-<div class='text-field'>
-  <%= form.label :email %>
-  <%= form.text_field :email, :type => 'email' %>
-</div>
-
-<div class='password-field'>
-  <%= form.label :password %>
-  <%= form.password_field :password %>
-</div>
+<%= form.input :username,:required=>true%>
+<%= form.input :phone,:required=>true%>
+<%= form.input :qq,:required=>false%>
+<%= form.input :email,:required=>true%>
+<%= form.input :password,:required=>true%>
+<%= form.input :signature,:input_html=>{:rows=>5}%>

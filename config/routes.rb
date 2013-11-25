@@ -3,6 +3,14 @@ RailsWanguo::Application.routes.draw do
   resources :heartbeats
 # <<<<<<< HEAD
 
+  post 'api/login'
+
+  post 'api/edit_profile'
+
+  post 'api/logout'
+
+  post 'api/signup'
+
   post 'api/mix'
 
   post 'api/istudy_epmenu_summary'
@@ -184,7 +192,7 @@ RailsWanguo::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'welcome#index'
+  root :to => 'entrance#welcome'
 
   # See how all your routes lay out with "rake routes"
 

@@ -2,7 +2,7 @@
 class Freelaw < ActiveRecord::Base
   include IsCollected
   
-  attr_accessible :ancestry, :content, :title
+  attr_accessible :ancestry, :content, :title, :number
   has_ancestry :cache_depth=>true
 
   has_and_belongs_to_many :exampoints
@@ -11,7 +11,6 @@ class Freelaw < ActiveRecord::Base
     
   before_save do |instance|
   	instance.content = '' if instance.content == nil
-  	instance.brief = '' if instance.brief == nil
   	instance.category = '' if instance.category == nil
   	instance.state = '' if instance.state == nil
   end
