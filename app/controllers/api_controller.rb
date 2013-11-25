@@ -542,7 +542,7 @@ class ApiController < ApplicationController
 
   def laws_to_json(laws)
     if laws.is_a? ActiveRecord::Relation
-      laws = laws.select(%w(id state title category blanks ancestry_depth sound_file_name sound_content_type sound_file_size sound_updated_at))
+      laws = laws.select(%w(id state title category blanks ancestry ancestry_depth sound_file_name sound_content_type sound_file_size sound_updated_at))
     end
 
     laws.each do |law|
