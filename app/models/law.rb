@@ -23,4 +23,8 @@ class Law < ActiveRecord::Base
   def sound_url
     sound.url
   end
+
+  def children_state
+    children.first.try(:state)
+  end
 end

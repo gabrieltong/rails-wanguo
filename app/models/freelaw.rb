@@ -1,3 +1,4 @@
+
 class Freelaw < ActiveRecord::Base
   include IsCollected
   
@@ -13,5 +14,9 @@ class Freelaw < ActiveRecord::Base
   	instance.brief = '' if instance.brief == nil
   	instance.category = '' if instance.category == nil
   	instance.state = '' if instance.state == nil
+  end
+
+  def children_state
+    children.first.try(:state)
   end
 end

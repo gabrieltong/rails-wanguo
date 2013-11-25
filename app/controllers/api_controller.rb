@@ -503,14 +503,14 @@ class ApiController < ApplicationController
       law.current_user = current_user
     end
 
-    if laws.first && laws.first.ancestry_depth == 3
+    if laws.first && laws.first.ancestry_depth >= 3
       laws.to_json(
         :include=>{:exampoints=>{}},
-        :methods=>[:is_collected,:sound_url]
+        :methods=>[:is_collected,:sound_url,:children_state]
       )
     else
       laws.to_json(
-        :methods=>[:is_collected,:sound_url]
+        :methods=>[:is_collected,:sound_url,:children_state]
       )
     end
   end
@@ -525,7 +525,7 @@ class ApiController < ApplicationController
     end
 
     freelaws.to_json(
-      :methods=>[:is_collected]
+      :methods=>[:is_collected,:children_state]
     )
   end
 
