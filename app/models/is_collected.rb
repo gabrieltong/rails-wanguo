@@ -6,7 +6,7 @@ module IsCollected
 
   def is_collected
     raise NoCurrentUser unless (current_user.is_a? User)
-    Collect.is_collected(User.first,self)
+    Collect.is_collected(current_user,self)
   end
 
   class NoCurrentUser < StandardError
