@@ -67,7 +67,7 @@ class Istudy
     question_ratio = [(mastered_status[:mastered].size/setting[:question_cost]).to_i/100.0,(1-setting[:law_ratio])].min
 
     {
-      :id=>epmenu.try(:id),
+      :id=>epmenu.try(:id) || 0,
       :law_ratio=>lr,
       :question_ratio=>question_ratio,
       :mastered_status=>mastered_status,
