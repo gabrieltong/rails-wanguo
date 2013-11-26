@@ -49,5 +49,5 @@ gabriellocal:
   pool: 5
   username: root
   password:
-  socket: /tmp/mysql.sock 
-  # socket: /Applications/XAMPP/xamppfiles/var/mysql/mysql.sock
+  # socket: /tmp/mysql.sock 
+  socket: /Applications/XAMPP/xamppfiles/var/mysql/mysql.sock
