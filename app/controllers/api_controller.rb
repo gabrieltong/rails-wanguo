@@ -50,7 +50,6 @@ class ApiController < ApplicationController
 
   def mix
     render :json=>{
-      :assigned_captcha=>current_user.assigned_captcha
       :istudy_epmenus_summaries=>Istudy.epmenus_summaries(current_user),
       # :istudy_complex=>Istudy.complex(current_user),
       :istudy_complex_rank=>Istudy.complex_rank(current_user),
@@ -585,8 +584,14 @@ class ApiController < ApplicationController
   end
   
   def assign_captcha
-    render :json=>Captcha.assign(params[:value],@user)
+    render :json=>Captcha.assign(params[:value],current_user)
   end
+
+  # def active
+  #   render :json=>{
+  #     :assigned_captcha=>current_user.assigned_captcha,
+  #   }
+  # end
 
   private 
   # 在返回集合的api上设置分页的页数和分页大小
