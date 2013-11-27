@@ -587,11 +587,9 @@ class ApiController < ApplicationController
     render :json=>Captcha.assign(params[:value],current_user)
   end
 
-  # def active
-  #   render :json=>{
-  #     :assigned_captcha=>current_user.assigned_captcha,
-  #   }
-  # end
+  def period_of_validity
+    render :json=>current_user.period_of_validity
+  end
 
   private 
   # 在返回集合的api上设置分页的页数和分页大小

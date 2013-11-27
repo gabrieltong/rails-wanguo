@@ -24,7 +24,8 @@ class User < ActiveRecord::Base
     return user if     user.authenticated?(password)
   end
 
-  def assigned_captcha
-    self.captchas.count() > 0
+  def period_of_validity
+    last_valid_captcha = self.captchas.order('expired_at desc').first()
+    last_valid_captcha ? (last_valid_captcha.expired_at - DateTime.now).to_i : 0
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131126030106) do
+ActiveRecord::Schema.define(:version => 20131127135614) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -19,6 +19,17 @@ ActiveRecord::Schema.define(:version => 20131126030106) do
     t.string   "state"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "captchas", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.datetime "valid_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "state"
+    t.datetime "expired_at"
+    t.datetime "assigned_at"
   end
 
   create_table "collects", :force => true do |t|
