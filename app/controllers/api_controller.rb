@@ -50,6 +50,7 @@ class ApiController < ApplicationController
 
   def mix
     render :json=>{
+      :assigned_captcha=>current_user.assigned_captcha
       :istudy_epmenus_summaries=>Istudy.epmenus_summaries(current_user),
       # :istudy_complex=>Istudy.complex(current_user),
       :istudy_complex_rank=>Istudy.complex_rank(current_user),

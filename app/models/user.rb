@@ -24,4 +24,7 @@ class User < ActiveRecord::Base
     return user if     user.authenticated?(password)
   end
 
+  def assigned_captcha
+    self.captchas.count() > 0
+  end
 end
