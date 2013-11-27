@@ -1,7 +1,11 @@
 RailsWanguo::Application.routes.draw do
 
+  resources :captchas
+
+
   resources :heartbeats
 # <<<<<<< HEAD
+  post 'api/assign_captcha'
 
   post 'api/login'
 

@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
 
 	has_many :collects
 
+  has_many :captchas
+
 	has_many :histories
 
 	has_many :epmenus,:through=>:histories,:uniq=>true

@@ -1,0 +1,27 @@
+<h1>Listing captchas</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Title</th>
+    <th>Used at</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @captchas.each do |captcha| %>
+  <tr>
+    <td><%= captcha.user_id %></td>
+    <td><%= captcha.title %></td>
+    <td><%= captcha.used_at %></td>
+    <td><%= link_to 'Show', captcha %></td>
+    <td><%= link_to 'Edit', edit_captcha_path(captcha) %></td>
+    <td><%= link_to 'Destroy', captcha, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Captcha', new_captcha_path %>

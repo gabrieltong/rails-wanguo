@@ -583,6 +583,10 @@ class ApiController < ApplicationController
     end
   end
   
+  def assign_captcha
+    render :json=>Captcha.assign(params[:value],@user)
+  end
+
   private 
   # 在返回集合的api上设置分页的页数和分页大小
   # 结果：设置好 @page 和 @per_page
@@ -614,5 +618,6 @@ class ApiController < ApplicationController
       user.password = password
     end
   end
+
 end
 
