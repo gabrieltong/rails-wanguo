@@ -587,8 +587,8 @@ class ApiController < ApplicationController
     render :json=>Captcha.assign(params[:value],current_user)
   end
 
-  def period_of_validity
-    render :json=>current_user.period_of_validity
+  def user_validity
+    render :json=>current_user.validity
   end
 
   private 

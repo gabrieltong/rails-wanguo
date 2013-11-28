@@ -1,6 +1,6 @@
 class Captcha < ActiveRecord::Base
   Duration = 30.days
-  # attr_accessible :title, :used_at, :user_id
+  attr_accessible :title, :valid_at, :user_id,:assigned_at,:expired_at
   belongs_to :user
 
   scope :valid,:conditions=>["expired_at>?",DateTime.now]

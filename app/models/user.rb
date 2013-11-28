@@ -28,4 +28,11 @@ class User < ActiveRecord::Base
     last_valid_captcha = self.captchas.order('expired_at desc').first()
     last_valid_captcha ? (last_valid_captcha.expired_at - DateTime.now).to_i : 0
   end
+
+  def validity
+    {
+      :active=>self.captchas.count()>0,
+      :seconds=>period_of_validity
+    }
+  end
 end
