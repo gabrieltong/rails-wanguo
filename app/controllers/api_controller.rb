@@ -5,7 +5,8 @@ class ApiController < ApplicationController
   before_filter :authorize_token,:except=>[:login,:signup]
 
   def assign_captcha
-    render :json=>Captcha.assign(params[:value],current_user)
+    Captcha.assign(params[:value],current_user)
+    render :json=>current_user.validity
   end
 
   def user_validity
