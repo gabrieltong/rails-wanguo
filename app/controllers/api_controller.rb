@@ -9,7 +9,7 @@ class ApiController < ApplicationController
   end
 
   def user_validity
-    render :json=>current_user.user_validity
+    render :json=>current_user.validity
   end
 
   def authorize_token
