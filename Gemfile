@@ -60,4 +60,5 @@ end
 
 gem 'whenever', :require => false
 
-gem 'will_paginate', '~> 3.0'
+# gem 'will_paginate', '~> 3.0'
+gem 'will_paginate-bootstrap', '0.2.5'

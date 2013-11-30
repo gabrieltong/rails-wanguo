@@ -2,7 +2,6 @@
 class ApiController < ApplicationController
   # include Clearance::Controller
 
-  before_filter :paginate_params
   before_filter :authorize_token,:except=>[:login,:signup]
 
   def authorize_token
@@ -592,25 +591,25 @@ class ApiController < ApplicationController
   end
 
   private 
-  # 在返回集合的api上设置分页的页数和分页大小
-  # 结果：设置好 @page 和 @per_page
-  def paginate_params
-    @page = params[:page] || 1 
-    @per_page = params[:per_page] || 1000
-    @random = params[:random].to_i || 0
-  end
+  # # 在返回集合的api上设置分页的页数和分页大小
+  # # 结果：设置好 @page 和 @per_page
+  # def paginate_params
+  #   @page = params[:page] || 1 
+  #   @per_page = params[:per_page] || 1000
+  #   @random = params[:random].to_i || 0
+  # end
 
-  # 根据分页的数量
-  # require @page
-  # require @per_page
-  # set @collection
-  def paginate
-    if @random == 0
-      @collection = @relation.paginate(:page=>@page,:per_page=>@per_page)
-    else
-      @collection = @relation.random(@per_page)
-    end
-  end
+  # # 根据分页的数量
+  # # require @page
+  # # require @per_page
+  # # set @collection
+  # def paginate
+  #   if @random == 0
+  #     @collection = @relation.paginate(:page=>@page,:per_page=>@per_page)
+  #   else
+  #     @collection = @relation.random(@per_page)
+  #   end
+  # end
 
   def user_from_params
     user_params = params[:user] || Hash.new
@@ -624,7 +623,7 @@ class ApiController < ApplicationController
   end
 
   # def assign_trial_captcha
-    
+
   # end
 end
 

@@ -1,5 +1,11 @@
 RailsWanguo::Application.routes.draw do
 
+  get "captchas/valid"
+
+  get "captchas/expired"
+
+  get "captchas/unused"
+
   resources :captchas
 
 

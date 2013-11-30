@@ -10,6 +10,27 @@ class CaptchasController < ApplicationController
     end
   end
 
+    # GET /captchas
+  # GET /captchas.json
+  def unused
+    @relation = Captcha.unused
+    paginate
+  end
+
+    # GET /captchas
+  # GET /captchas.json
+  def valid
+    @relation = Captcha.valid
+    paginate
+  end
+
+    # GET /captchas
+  # GET /captchas.json
+  def expired
+    @relation = Captcha.expired
+    paginate
+  end
+
   # GET /captchas/1
   # GET /captchas/1.json
   def show

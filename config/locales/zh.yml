@@ -1,4 +1,7 @@
 'zh-CN': 
+  captchas:
+    expired: 
+      title: '已过期验证码'
   simple_form:
     labels:
       password:
@@ -73,6 +76,14 @@
       default:
         state: '审核状态'
         created_at: '添加日期'
+      captcha:
+        title: '验证码'
+        user_id: '用户'
+        valid_at: '生效日期'
+        expired_at: '实效日期'
+        assigned_at: '绑定日期'
+        duration: '持续时间'
+
       import:
         title: '标题'
         file_file_name: '文件名称'
