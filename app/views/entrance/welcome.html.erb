@@ -1,5 +1,5 @@
 <h1>welcome</h1>
 
-<% if can? :valid,Captcha %>
+<% if current_user && can?(:valid,Captcha) %>
 <%=link_to '查看验证码',{:controller=>:captchas,:action=>:valid},:class=>'btn'%>  
 <% end %>
