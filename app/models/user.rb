@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   validates :username,:email,:phone,:presence=>true
   validates :username, :length => { :minimum => 3 }
 
+  after_save :assign_trial_captcha
   # validates :password, :confirmation => true,:unless => Proc.new { |a| a.password.blank? }
   include Clearance::User
 
@@ -34,5 +35,12 @@ class User < ActiveRecord::Base
       :active=>self.captchas.count()>0,
       :seconds=>period_of_validity
     }
+  end
+
+  def assign_trial_captcha
+    if self.captchas.reload && self.captchas.blank?
+      captcha = Captcha.generate(1,1)[0]
+      Captcha.assign captcha.title,self
+    end
   end
 end

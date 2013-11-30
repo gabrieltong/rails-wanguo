@@ -6,8 +6,6 @@ class ApiController < ApplicationController
   before_filter :authorize_token,:except=>[:login,:signup]
 
   def authorize_token
-    p '.'*10
-    p params
     @user = User.find_by_remember_token(params[:session][:token])
     render :json=>{:success=>false} unless @user
   end
@@ -625,5 +623,8 @@ class ApiController < ApplicationController
     end
   end
 
+  # def assign_trial_captcha
+    
+  # end
 end
 

@@ -21,10 +21,12 @@ class Captcha < ActiveRecord::Base
     end
   end
 
-  def self.generate(size=10,days=1)
+  def self.generate(size=10,days=30)
+    captchas = []
     size.times do 
-      Captcha.create :title=>Captcha.random,:duration=>days*24*60
+      captchas.push Captcha.create(:title=>Captcha.random,:duration=>days*24*60)
     end
+    captchas
   end
 
   def self.random
