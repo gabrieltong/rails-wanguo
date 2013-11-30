@@ -14,6 +14,7 @@ class CaptchasController < ApplicationController
   # GET /captchas.json
   def unused
     @relation = Captcha.unused
+    @per_page = 10
     paginate
   end
 
@@ -21,6 +22,7 @@ class CaptchasController < ApplicationController
   # GET /captchas.json
   def valid
     @relation = Captcha.valid
+    @per_page = 10
     paginate
   end
 
@@ -28,6 +30,7 @@ class CaptchasController < ApplicationController
   # GET /captchas.json
   def expired
     @relation = Captcha.expired
+    @per_page = 10
     paginate
   end
 

@@ -28,7 +28,7 @@ private
   # 结果：设置好 @page 和 @per_page
   def paginate_params
     @page = params[:page] || 1 
-    @per_page = params[:per_page] || 5
+    @per_page = params[:per_page] || 1000
     @random = params[:random].to_i || 0
   end
 
