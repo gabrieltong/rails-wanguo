@@ -1,20 +1,33 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Captcha -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
 
-<p>
-  <b>User:</b>
-  <%= @captcha.user_id %>
-</p>
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
+  <dd><%= @captcha.user_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
+  <dd><%= @captcha.title %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:valid_at) %>:</strong></dt>
+  <dd><%= @captcha.valid_at %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:state) %>:</strong></dt>
+  <dd><%= @captcha.state %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:expired_at) %>:</strong></dt>
+  <dd><%= @captcha.expired_at %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:assigned_at) %>:</strong></dt>
+  <dd><%= @captcha.assigned_at %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:duration) %>:</strong></dt>
+  <dd><%= @captcha.duration %></dd>
+</dl>
 
-<p>
-  <b>Title:</b>
-  <%= @captcha.title %>
-</p>
-
-<p>
-  <b>Used at:</b>
-  <%= @captcha.used_at %>
-</p>
-
-
-<%= link_to 'Edit', edit_captcha_path(@captcha) %> |
-<%= link_to 'Back', captchas_path %>
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              captchas_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_captcha_path(@captcha), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              captcha_path(@captcha),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>
