@@ -586,7 +586,7 @@ class ApiController < ApplicationController
     render :json=>Captcha.assign(params[:value],current_user)
   end
 
-  def user_validity
+  def validity
     render :json=>current_user.validity
   end
 

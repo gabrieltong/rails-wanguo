@@ -10,8 +10,8 @@ RailsWanguo::Application.routes.draw do
 
 
   resources :heartbeats
-# <<<<<<< HEAD
-  post 'api/user_validity'
+
+  post 'api/validity'
   
   post 'api/assign_captcha'
 
