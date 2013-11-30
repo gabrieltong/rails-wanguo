@@ -1,10 +1,4 @@
 GIT
-  remote: http://github.com/046569/qq.git
-  revision: 69d5ebb4e92c491e3f44e93c73b67d51b924d919
-  specs:
-    qq (0.1.1)
-
-GIT
   remote: http://github.com/gabrieltong/acts_as_collectable.git
   revision: 09fdaf746c26f146f8b939e94bb495f71419dd6a
   specs:
@@ -133,6 +127,7 @@ GEM
     ref (1.0.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rolify (3.2.0)
     roo (1.12.2)
       nokogiri
       rubyzip
@@ -193,10 +188,10 @@ DEPENDENCIES
   less-rails
   mysql2
   paperclip (= 3.0.4)
-  qq!
   rails (= 3.2.13)
   randumb
   rest-client
+  rolify
   roo
   rubyzip (< 1.0.0)
   sass-rails (~> 3.2.3)

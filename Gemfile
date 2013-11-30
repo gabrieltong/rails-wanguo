@@ -64,3 +64,5 @@ gem 'whenever', :require => false
 gem 'will_paginate-bootstrap', '0.2.5'
 
 gem 'cancan'
+
+gem 'rolify'

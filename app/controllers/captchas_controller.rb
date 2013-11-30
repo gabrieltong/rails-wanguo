@@ -1,4 +1,5 @@
 class CaptchasController < ApplicationController
+  authorize_resource
   # GET /captchas
   # GET /captchas.json
   def index
