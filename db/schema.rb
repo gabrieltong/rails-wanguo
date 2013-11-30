@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131127135614) do
+ActiveRecord::Schema.define(:version => 20131130033203) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20131127135614) do
     t.string   "state"
     t.datetime "expired_at"
     t.datetime "assigned_at"
+    t.integer  "duration"
   end
 
   create_table "collects", :force => true do |t|

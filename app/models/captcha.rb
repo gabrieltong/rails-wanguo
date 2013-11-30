@@ -1,6 +1,5 @@
 class Captcha < ActiveRecord::Base
-  Duration = 30.days
-  attr_accessible :title, :valid_at, :user_id,:assigned_at,:expired_at
+  attr_accessible :title, :valid_at, :user_id,:assigned_at,:expired_at,:duration
   belongs_to :user
 
   scope :valid,:conditions=>["expired_at>?",DateTime.now]
@@ -13,7 +12,7 @@ class Captcha < ActiveRecord::Base
       captchas.each do |c|
         c.assigned_at = DateTime.now
         c.valid_at = user.captchas.valid.last.try(:expired_at) || DateTime.now
-        c.expired_at = c.valid_at + Duration
+        c.expired_at = c.valid_at + c.duration.minutes
         c.user = user
         c.save
       end
@@ -22,9 +21,9 @@ class Captcha < ActiveRecord::Base
     end
   end
 
-  def self.generate(size=10)
+  def self.generate(size=10,days=1)
     size.times do 
-      Captcha.create :title=>Captcha.random
+      Captcha.create :title=>Captcha.random,:duration=>days*24*60
     end
   end
 
