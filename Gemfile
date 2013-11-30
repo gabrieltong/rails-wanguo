@@ -51,7 +51,7 @@ gem 'clearance'
 
 gem 'randumb'
 gem 'rest-client'
-gem 'qq', :git => 'http://github.com/046569/qq.git'
+# gem 'qq', :git => 'http://github.com/046569/qq.git'
 gem 'acts_as_collectable',:git=>'http://github.com/gabrieltong/acts_as_collectable.git'
 
 group :development,:gabriellocal do 
@@ -62,3 +62,5 @@ gem 'whenever', :require => false
 
 # gem 'will_paginate', '~> 3.0'
 gem 'will_paginate-bootstrap', '0.2.5'
+
+gem 'cancan'

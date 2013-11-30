@@ -49,6 +49,7 @@ GEM
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
     builder (3.0.4)
+    cancan (1.6.10)
     chronic (0.10.2)
     clearance (1.1.0)
       bcrypt-ruby
@@ -185,6 +186,7 @@ DEPENDENCIES
   acts_as_collectable!
   ancestry
   better_errors
+  cancan
   clearance
   coffee-rails (~> 3.2.1)
   jquery-rails
