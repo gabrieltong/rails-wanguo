@@ -4,6 +4,14 @@ class ApiController < ApplicationController
 
   before_filter :authorize_token,:except=>[:login,:signup]
 
+  def assign_captcha
+    render :json=>Captcha.assign(params[:value],current_user)
+  end
+
+  def user_validity
+    render :json=>current_user.user_validity
+  end
+
   def authorize_token
     @user = User.find_by_remember_token(params[:session][:token])
     render :json=>{:success=>false} unless @user
@@ -581,16 +589,8 @@ class ApiController < ApplicationController
       attributes
     end
   end
-  
-  def assign_captcha
-    render :json=>Captcha.assign(params[:value],current_user)
-  end
 
-  def validity
-    render :json=>current_user.validity
-  end
-
-  private 
+  # private 
   # # 在返回集合的api上设置分页的页数和分页大小
   # # 结果：设置好 @page 和 @per_page
   # def paginate_params
