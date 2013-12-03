@@ -1,0 +1,74 @@
+'zh-CN':
+  clearance_mailer:
+    change_password:
+      opening:
+        'Someone, hopefully you, requested we send you a link to change your
+         password:'
+      closing:
+        "If you didn't request this, ignore this email. Your password has not
+         been changed."
+  flashes:
+    failure_when_forbidden:
+      '请检查路径后,重新提交.'
+    failure_after_update:
+      "密码不能为空."
+    failure_after_create:
+      '用户名或密码错误,<a href="%{sign_up_path}">注册</a>.'
+  helpers:
+    submit:
+      password:
+        submit:
+          '重置密码'
+      password_reset:
+        submit:
+          '保存密码'
+      session:
+        submit:
+          '登录'
+      user:
+        create:
+          '注册'
+    label:
+      password:
+        email:
+          '邮件地址'
+      password_reset:
+        password:
+          '选择密码'
+  layouts:
+    application:
+      sign_in:
+        '登录'
+      sign_out:
+        '注销'
+  passwords:
+    create:
+      description:
+        '请根据邮件充值密码'
+    edit:
+      description:
+        'Your password has been reset. Choose a new password below.'
+      title:
+        '修改密码'
+    new:
+      description:
+        'To be emailed a link to reset your password, please enter your email
+         address.'
+      title:
+        '充值密码'
+  sessions:
+    form:
+      forgot_password:
+        '忘记密码?'
+      sign_up:
+        '注册'
+    new:
+      title:
+        '登录'
+  users:
+    new:
+      title: '注册'
+      sign_in:
+        '登录'
+      forgot_password:
+        '忘记密码?'

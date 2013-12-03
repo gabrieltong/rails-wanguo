@@ -1,5 +1,5 @@
 <div id='clearance' class='sign-up'>
-  <h2>Sign up</h2>
+  <h2><%= t '.title' %></h2>
 
   <%= simple_form_for(@user,:html => {:class => 'form-horizontal' }) do |form| %>
     <%= render :partial => '/users/form', :object => form %>
