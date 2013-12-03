@@ -6,6 +6,8 @@ RailsWanguo::Application.routes.draw do
 
   get "captchas/unused"
 
+  resources :users
+
   resources :captchas
 
 
