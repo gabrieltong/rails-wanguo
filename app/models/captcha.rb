@@ -13,7 +13,7 @@ class Captcha < ActiveRecord::Base
         c.assigned_at = DateTime.now
         c.valid_at = user.captchas.valid.last.try(:expired_at) || DateTime.now
         c.expired_at = c.valid_at + c.duration.minutes
-        c.user = user
+        c.user = user.reload
         c.save
       end
     else

@@ -5,6 +5,8 @@ class Ability
         can :valid,Captcha
         can :expired,Captcha
         can :unused,Captcha
+
+        can :manage,Import
     end
 
     # Define abilities for the passed in user here. For example:
