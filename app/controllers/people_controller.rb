@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class PeopleController < ApplicationController
   def index
     @relation = User.where('id>0')
     paginate
