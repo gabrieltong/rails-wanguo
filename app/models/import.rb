@@ -68,6 +68,11 @@ class Import < ActiveRecord::Base
     rescue
     end if s == nil
 
+    begin
+      s = Roo::Openoffice.new(options[:path])
+    rescue
+    end if s == nil
+
     if s
       s.sheets.each_with_index do |sheet,index|
         s.default_sheet = s.sheets[index]
@@ -107,9 +112,13 @@ class Import < ActiveRecord::Base
           two_path = "#{target}/#{two}"
           if File.directory? two_path
             Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
-              data = open(:path=>"#{two_path}/#{other}",:type=>'application/vnd.ms-excel',:sheet=>1)
+              path = "#{two_path}/#{other}"
+              data = open(:path=>path,:type=>'application/vnd.ms-excel',:sheet=>1)
 
               # 导入法条与免费法条
+              p path
+              p '>'*20
+              p data
               if data[0][0..4] == %w(法条编号 编 章 节 法条内容)
                 one = Law.find_or_create_by_title name.strip
                 data[1..-1].each do |row|
@@ -178,21 +187,23 @@ class Import < ActiveRecord::Base
                   p '.'*100
                   p row
                   node = Law.find_by_number(row[0])
-                  node.sound = row[1]
-                  node.exampoints = []
-                  row[3].to_s.split(/[，,、]/).each do |ep|
-                    node.exampoints << Exampoint.find_or_create_by_title(ep)
+                  if node
+                    node.sound = row[1]
+                    node.exampoints = []
+                    row[3].to_s.split(/[，,、]/).each do |ep|
+                      node.exampoints << Exampoint.find_or_create_by_title(ep)
+                    end
+
+                    node.questions_number = []
+
+                    row[2].to_s.split(/[，,、]/).each do |number|
+                      node.questions_number.push number
+                    end
+
+                    node.blanks = row[4..-1].delete_if{|i|i.blank?}
+                    node.score = 1
+                    node.save
                   end
-
-                  node.questions_number = []
-
-                  row[2].to_s.split(/[，,、]/).each do |number|
-                    node.questions_number.push number
-                  end
-
-                  node.blanks = row[4..-1].delete_if{|i|i.blank?}
-                  node.score = 1
-                  node.save
                 end
               end
             end

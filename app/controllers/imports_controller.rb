@@ -53,6 +53,7 @@ class ImportsController < ApplicationController
     respond_to do |format|
       if @import.save
         @import.import
+        @import.import
         format.html { redirect_to @import, notice: 'Import was successfully created.' }
         format.json { render json: @import, status: :created, location: @import }
       else
