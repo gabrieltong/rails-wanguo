@@ -58,7 +58,7 @@ class Import < ActiveRecord::Base
 
 
   def open(path)
-    s = nil
+    s , data = nil,nil
     begin
       s = Roo::Excel.new(path)
     rescue
@@ -77,14 +77,15 @@ class Import < ActiveRecord::Base
     if s
       s.sheets.each_with_index do |sheet,index|
         s.default_sheet = s.sheets[index]
-        data = s.to_a
-        return data if data[0].size > 3
+        _data = s.to_a
+        if (_data[0].size > 3)
+          data = _data  
+          break
+        end
       end
-      s.default_sheet = s.sheets[options[:sheet]]
-      s.to_a
-    else
-      s
     end
+    self.import_errors.create :title=>path unless data
+    data
   end
 
   state_machine :state,:initial=>:freelaws do 
@@ -116,105 +117,13 @@ class Import < ActiveRecord::Base
               path = "#{two_path}/#{other}"
               data = open(path)
 
-              # 导入法条与免费法条
-              p two_path
-              p path
-              p '>'*20
-              p data
-              if data[0][0..4] == %w(法条编号 编 章 节 法条内容)
-                one = Law.find_or_create_by_title name.strip
-                data[1..-1].each do |row|
-                  last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
-                  if row[1]
-                    last = last.children.find_or_initialize_by_title row[1].strip
-                    last.state = 'bian'
-                    last.save
-                  end
-
-                  if row[2]
-                    last = last.children.find_or_initialize_by_title row[2].strip
-                    last.state = 'zhang'
-                    last.save
-                  end
-
-                  if row[3]
-                    last = last.children.find_or_initialize_by_title row[3].strip
-                    last.state = 'jie'
-                    last.save
-                  end
-
-                  if row[4]
-                    last = last.children.find_or_initialize_by_title row[4].strip
-                    last.number = row[0]
-                    last.state = 'node'
-                    last.save
-                  end
-                end
-
-                one = Freelaw.find_or_create_by_title name.strip
-                data[1..-1].each do |row|
-                  last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
-                  if row[1]
-                    last = last.children.find_or_initialize_by_title row[1].strip
-                    last.state = 'bian'
-                    last.save
-                  end
-
-                  if row[2]
-                    last = last.children.find_or_initialize_by_title row[2].strip
-                    last.state = 'zhang'
-                    last.save
-                  end
-
-                  if row[3]
-                    last = last.children.find_or_initialize_by_title row[3].strip
-                    last.state = 'jie'
-                    last.save
-                  end
-
-                  if row[4]
-                    last = last.children.find_or_initialize_by_title row[4].strip
-                    last.number = row[0]
-                    last.state = 'node'
-                    last.save
-                  end
-                end
-              end
-              # 更新法条班
-              p '.'*100
-              p data[0]
-              if data[0][0..3] == %w(法条编号 音频 真题 知识点)
-
-                data[1..-1].each do |row|
-                  p '.'*100
-                  p row
-                  node = Law.find_by_number(row[0])
-                  if node
-                    node.sound = row[1]
-                    node.exampoints = []
-                    row[3].to_s.split(/[，,、]/).each do |ep|
-                      node.exampoints << Exampoint.find_or_create_by_title(ep)
-                    end
-
-                    node.questions_number = []
-
-                    row[2].to_s.split(/[，,、]/).each do |number|
-                      node.questions_number.push number
-                    end
-
-                    node.blanks = row[4..-1].delete_if{|i|i.blank?}
-                    node.score = 1
-                    node.save
-                  end
-                end
-              end
+              import_law(name,other,data)
+              import_freelaw(name,other,data)
+              update_law(data)
             end
           else
-            data = open :path=>"#{two_path}",:type=>'application/vnd.ms-excel',:sheet=>1
+            data = open(two_path)
             next unless data
-            # 更新法条班
-            # p '.'*100
-            #   p data[0]
             if data[0][0..3] == %w(法条编号 音频讲解文件 真题编号 知识点)
 
               data[1..-1].each do |row|
@@ -374,5 +283,103 @@ class Import < ActiveRecord::Base
   state_machine.states.map do |state|
     # ppp state.name.to_s
     scope state.name, :conditions => { :state => state.name.to_s }
+  end
+
+  def import_law(name,other,data)
+    # 导入法条与免费法条
+    if data[0][0..4] == %w(法条编号 编 章 节 法条内容)
+      one = Law.find_or_create_by_title name.strip
+      data[1..-1].each do |row|
+        last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
+        if row[1]
+          last = last.children.find_or_initialize_by_title row[1].strip
+          last.state = 'bian'
+          last.save
+        end
+
+        if row[2]
+          last = last.children.find_or_initialize_by_title row[2].strip
+          last.state = 'zhang'
+          last.save
+        end
+
+        if row[3]
+          last = last.children.find_or_initialize_by_title row[3].strip
+          last.state = 'jie'
+          last.save
+        end
+
+        if row[4]
+          last = last.children.find_or_initialize_by_title row[4].strip
+          last.number = row[0]
+          last.state = 'node'
+          last.save
+        end
+      end
+    end
+  end
+
+  def import_freelaw(name,other,data)
+    # 导入法条与免费法条
+    if data[0][0..4] == %w(法条编号 编 章 节 法条内容)
+      one = Freelaw.find_or_create_by_title name.strip
+      data[1..-1].each do |row|
+        last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
+        if row[1]
+          last = last.children.find_or_initialize_by_title row[1].strip
+          last.state = 'bian'
+          last.save
+        end
+
+        if row[2]
+          last = last.children.find_or_initialize_by_title row[2].strip
+          last.state = 'zhang'
+          last.save
+        end
+
+        if row[3]
+          last = last.children.find_or_initialize_by_title row[3].strip
+          last.state = 'jie'
+          last.save
+        end
+
+        if row[4]
+          last = last.children.find_or_initialize_by_title row[4].strip
+          last.number = row[0]
+          last.state = 'node'
+          last.save
+        end
+      end
+    end
+  end
+
+  def update_law(data)
+    # 更新法条班
+    p '.'*100
+    p data[0]
+    if data[0][0..3] == %w(法条编号 音频 真题 知识点)
+      data[1..-1].each do |row|
+        p '.'*100
+        p row
+        node = Law.find_by_number(row[0])
+        if node
+          node.sound = row[1]
+          node.exampoints = []
+          row[3].to_s.split(/[，,、]/).each do |ep|
+            node.exampoints << Exampoint.find_or_create_by_title(ep)
+          end
+
+          node.questions_number = []
+
+          row[2].to_s.split(/[，,、]/).each do |number|
+            node.questions_number.push number
+          end
+
+          node.blanks = row[4..-1].delete_if{|i|i.blank?}
+          node.score = 1
+          node.save
+        end
+      end
+    end
   end
 end

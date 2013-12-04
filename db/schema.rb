@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131130082315) do
+ActiveRecord::Schema.define(:version => 20131204165416) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -146,6 +146,14 @@ ActiveRecord::Schema.define(:version => 20131130082315) do
   add_index "histories", ["exampoint_id"], :name => "index_histories_on_exampoint_id"
   add_index "histories", ["question_id"], :name => "index_histories_on_question_id"
   add_index "histories", ["state"], :name => "index_histories_on_state"
+
+  create_table "import_errors", :force => true do |t|
+    t.string   "title"
+    t.integer  "import_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.text     "details"
+  end
 
   create_table "imports", :force => true do |t|
     t.string   "title"
