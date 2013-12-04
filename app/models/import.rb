@@ -8,6 +8,8 @@ class Import < ActiveRecord::Base
   has_attached_file :file
 
   validates_attachment :file, :presence => true
+
+  has_many :import_errors
   
   State = %w(laws freelaws questions eps laws_zip freelaws_zip)
 
@@ -55,21 +57,20 @@ class Import < ActiveRecord::Base
   end
 
 
-  def open(options={})
-    options = {:path=>file.path,:type => file_content_type, :sheet=>0}.merge(options)
+  def open(path)
     s = nil
     begin
-      s = Roo::Excel.new(options[:path])
+      s = Roo::Excel.new(path)
     rescue
     end if s == nil
 
     begin
-      s = Roo::Excelx.new(options[:path])
+      s = Roo::Excelx.new(path)
     rescue
     end if s == nil
 
     begin
-      s = Roo::Openoffice.new(options[:path])
+      s = Roo::Openoffice.new(path)
     rescue
     end if s == nil
 
@@ -113,9 +114,10 @@ class Import < ActiveRecord::Base
           if File.directory? two_path
             Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
               path = "#{two_path}/#{other}"
-              data = open(:path=>path,:type=>'application/vnd.ms-excel',:sheet=>1)
+              data = open(path)
 
               # 导入法条与免费法条
+              p two_path
               p path
               p '>'*20
               p data
@@ -312,7 +314,8 @@ class Import < ActiveRecord::Base
           two_path = "#{target}/#{two}"
           if File.directory? two_path
             Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
-              data = open("#{two_path}/#{other}",'application/vnd.ms-excel',1)
+              path = "#{two_path}/#{other}"
+              data = open(path)
 
               if data[0][0..3] == %w(法条编号 章 节 法条内容)
                 two = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip

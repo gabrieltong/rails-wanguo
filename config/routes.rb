@@ -1,5 +1,8 @@
 RailsWanguo::Application.routes.draw do
 
+  resources :import_errors
+
+
   get "captchas/valid"
 
   get "captchas/expired"

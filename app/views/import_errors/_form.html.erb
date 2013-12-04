@@ -1,0 +1,9 @@
+<%= simple_form_for @import_error, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :title %>
+  <%= f.input :import_id %>
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                import_errors_path, :class => 'btn' %>
+  </div>
+<% end %>
