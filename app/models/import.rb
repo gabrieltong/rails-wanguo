@@ -169,6 +169,32 @@ class Import < ActiveRecord::Base
                   end
                 end
               end
+              # 更新法条班
+              p '.'*100
+              p data[0]
+              if data[0][0..3] == %w(法条编号 音频 真题 知识点)
+
+                data[1..-1].each do |row|
+                  p '.'*100
+                  p row
+                  node = Law.find_by_number(row[0])
+                  node.sound = row[1]
+                  node.exampoints = []
+                  row[3].to_s.split(/[，,、]/).each do |ep|
+                    node.exampoints << Exampoint.find_or_create_by_title(ep)
+                  end
+
+                  node.questions_number = []
+
+                  row[2].to_s.split(/[，,、]/).each do |number|
+                    node.questions_number.push number
+                  end
+
+                  node.blanks = row[4..-1].delete_if{|i|i.blank?}
+                  node.score = 1
+                  node.save
+                end
+              end
             end
           else
             data = open :path=>"#{two_path}",:type=>'application/vnd.ms-excel',:sheet=>1
@@ -200,7 +226,7 @@ class Import < ActiveRecord::Base
               end
             end
             # 导入真题
-            if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 选项A解析 选项B 选项B解析 选项C 选项C解析 选项D 选项D解析)
+            if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
               data[1..-1].each do |row|
                 q = Question.find_or_create_by_title row[1].strip
                 q.state = row[2]
@@ -223,7 +249,7 @@ class Import < ActiveRecord::Base
               end
             end
             # 导入知识点
-            if data && data[0][0..4] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
+            if data && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
               data[1..-1].each do |row|
                 menu = Epmenu.find_or_create_by_title(row[0].strip)
                 sub = menu.children.find_or_create_by_title(row[1].strip)
