@@ -91,7 +91,7 @@ class Import < ActiveRecord::Base
   # } 
       def import 
         base = 'tmp'
-        name = File.basename(file.path).split('.')[0]
+        name = File.basename(file.path).split('.')[0..-2].join('.').strip
         dir = File.dirname(file.path)
         tmp = "#{dir}/tmp"
         target = "#{tmp}/#{name}"
@@ -102,7 +102,7 @@ class Import < ActiveRecord::Base
         unzip #{file.path}
         `
 
-        one = Law.find_or_create_by_title name
+        one = Law.find_or_create_by_title name.strip
         Dir.entries(target).delete_if {|i|i=='.'||i=='..'}.each do |two|
           two_path = "#{target}/#{two}"
           if File.directory? two_path
@@ -111,58 +111,58 @@ class Import < ActiveRecord::Base
 
               # 导入法条与免费法条
               if data[0][0..4] == %w(法条编号 编 章 节 法条内容)
-                one = Law.find_or_create_by_title name
+                one = Law.find_or_create_by_title name.strip
                 data[1..-1].each do |row|
-                  last = one.children.find_or_create_by_title other.split('.')[0]
+                  last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
                   if row[1]
-                    last = last.children.find_or_initialize_by_title row[1]
+                    last = last.children.find_or_initialize_by_title row[1].strip
                     last.state = 'bian'
                     last.save
                   end
 
                   if row[2]
-                    last = last.children.find_or_initialize_by_title row[2]
+                    last = last.children.find_or_initialize_by_title row[2].strip
                     last.state = 'zhang'
                     last.save
                   end
 
                   if row[3]
-                    last = last.children.find_or_initialize_by_title row[3]
+                    last = last.children.find_or_initialize_by_title row[3].strip
                     last.state = 'jie'
                     last.save
                   end
 
                   if row[4]
-                    last = last.children.find_or_initialize_by_title row[4]
+                    last = last.children.find_or_initialize_by_title row[4].strip
                     last.number = row[0]
                     last.state = 'node'
                     last.save
                   end
                 end
 
-                one = Freelaw.find_or_create_by_title name
+                one = Freelaw.find_or_create_by_title name.strip
                 data[1..-1].each do |row|
-                  last = one.children.find_or_create_by_title other.split('.')[0]
+                  last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
                   if row[1]
-                    last = last.children.find_or_initialize_by_title row[1]
+                    last = last.children.find_or_initialize_by_title row[1].strip
                     last.state = 'bian'
                     last.save
                   end
 
                   if row[2]
-                    last = last.children.find_or_initialize_by_title row[2]
+                    last = last.children.find_or_initialize_by_title row[2].strip
                     last.state = 'zhang'
                     last.save
                   end
 
                   if row[3]
-                    last = last.children.find_or_initialize_by_title row[3]
+                    last = last.children.find_or_initialize_by_title row[3].strip
                     last.state = 'jie'
                     last.save
                   end
 
                   if row[4]
-                    last = last.children.find_or_initialize_by_title row[4]
+                    last = last.children.find_or_initialize_by_title row[4].strip
                     last.number = row[0]
                     last.state = 'node'
                     last.save
@@ -174,8 +174,13 @@ class Import < ActiveRecord::Base
             data = open :path=>"#{two_path}",:type=>'application/vnd.ms-excel',:sheet=>1
             next unless data
             # 更新法条班
+            # p '.'*100
+            #   p data[0]
             if data[0][0..3] == %w(法条编号 音频讲解文件 真题编号 知识点)
+
               data[1..-1].each do |row|
+                p '.'*100
+                p row
                 node = Law.find_by_number(row[0])
                 node.sound = row[1]
                 node.exampoints = []
@@ -197,7 +202,7 @@ class Import < ActiveRecord::Base
             # 导入真题
             if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 选项A解析 选项B 选项B解析 选项C 选项C解析 选项D 选项D解析)
               data[1..-1].each do |row|
-                q = Question.find_or_create_by_title row[1]
+                q = Question.find_or_create_by_title row[1].strip
                 q.state = row[2]
                 q.score = row[3]
                 q.num = row[0].to_i
@@ -220,9 +225,9 @@ class Import < ActiveRecord::Base
             # 导入知识点
             if data && data[0][0..4] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
               data[1..-1].each do |row|
-                menu = Epmenu.find_or_create_by_title(row[0])
-                sub = menu.children.find_or_create_by_title(row[1])
-                ep = Exampoint.find_or_create_by_title(row[2])
+                menu = Epmenu.find_or_create_by_title(row[0].strip)
+                sub = menu.children.find_or_create_by_title(row[1].strip)
+                ep = Exampoint.find_or_create_by_title(row[2].strip)
                 menu.exampoints << ep
                 sub.exampoints << ep
 
@@ -254,7 +259,7 @@ class Import < ActiveRecord::Base
     state :freelaws_zip do 
       def import 
         base = 'tmp'
-        name = File.basename(file.path).split('.')[0]
+        name = File.basename(file.path).split('.')[0..-2].join('.').strip
         dir = File.dirname(file.path)
         tmp = "#{dir}/tmp"
         target = "#{tmp}/#{name}"
@@ -265,7 +270,7 @@ class Import < ActiveRecord::Base
         unzip #{file.path}
         `
 
-        one = Freelaw.find_or_create_by_title name
+        one = Freelaw.find_or_create_by_title name.strip
         Dir.entries(target).delete_if {|i|i=='.'||i=='..'}.each do |two|
           two_path = "#{target}/#{two}"
           if File.directory? two_path
@@ -273,13 +278,13 @@ class Import < ActiveRecord::Base
               data = open("#{two_path}/#{other}",'application/vnd.ms-excel',1)
 
               if data[0][0..3] == %w(法条编号 章 节 法条内容)
-                two = one.children.find_or_create_by_title other.split('.')[0]
+                two = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
                 three_title = ''
                 data[1..-1].each do |row|
                   three_title = row[1] unless row[1].blank? 
                   three_title = '第一章' if three_title.blank?
-                  three = two.children.find_or_create_by_title three_title
-                  four = three.children.find_or_create_by_title row[3]
+                  three = two.children.find_or_create_by_title three_title.strip
+                  four = three.children.find_or_create_by_title row[3].strip
                   four.save
                 end
               end
