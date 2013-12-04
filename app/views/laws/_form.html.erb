@@ -1,18 +1,21 @@
-<%= simple_form_for(@law,:html => {:class => 'form-horizontal' }) do |f| %>
-  <% if @law.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@law.errors.count, "error") %> prohibited this law from being saved:</h2>
-
-      <ul>
-      <% @law.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-    <%= f.input :title,:as=>:string %>
-    <%= f.input :content,:as=>:string %>
-    <%= f.input :sound,:as=>:file%>
-    <%= f.button :submit %>
+<%= simple_form_for @law, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :title %>
+  <%= f.input :content %>
+  <%= f.input :ancestry %>
+  <%= f.input :state %>
+  <%= f.input :category %>
+  <%= f.input :blanks %>
+  <%= f.input :ancestry_depth %>
+  <%= f.input :score %>
+  <%= f.input :sound_file_name %>
+  <%= f.input :sound_content_type %>
+  <%= f.input :sound_file_size %>
+  <%= f.input :sound_updated_at %>
+  <%= f.input :number %>
+  <%= f.input :questions_number %>
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                laws_path, :class => 'btn' %>
+  </div>
 <% end %>

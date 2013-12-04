@@ -12,7 +12,7 @@ RailsWanguo::Application.routes.draw do
 
   resources :users,:only=>[:index,:show,:destroy,:edit,:update] do
     member do
-      get :view
+      get 'collected_laws/(:law_id)',:action=>'collected_laws'
     end
   end
 
