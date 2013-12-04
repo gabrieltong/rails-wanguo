@@ -6,7 +6,16 @@ RailsWanguo::Application.routes.draw do
 
   get "captchas/unused"
 
-  resources :users
+  # get 'users/index'
+
+  # get 'users/:id/view'
+
+  resources :users,:only=>[:index,:show,:destroy,:edit,:update] do
+    member do
+      get :view
+    end
+  end
+
 
   resources :captchas
 
