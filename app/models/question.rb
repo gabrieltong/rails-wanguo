@@ -19,4 +19,16 @@ class Question < ActiveRecord::Base
   has_many :g_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>'G'},:source => :exampoint,:uniq=>true
   has_many :h_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>'H'},:source => :exampoint,:uniq=>true
 
+  def self.zhentis
+    year_first = Question.order('num asc').limit(1).first.num.to_s[0..3].to_i
+    year_last = Question.order('num desc').limit(1).first.num.to_s[0..3].to_i
+    (year_first..year_last).to_a.map do |year|
+      {
+        :year=>year,
+        :count1=>Question.where("`num` like '?01%' ",year).count(),
+        :count2=>Question.where("`num` like '?02%' ",year).count(),
+        :count3=>Question.where("`num` like '?03%' ",year).count()
+      }
+    end
+  end
 end

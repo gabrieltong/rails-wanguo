@@ -4,6 +4,10 @@ class ApiController < ApplicationController
 
   before_filter :authorize_token,:except=>[:login,:signup]
 
+  def zhentis
+    render :json=>Question.zhentis
+  end
+
   def books
     @relation = Book.where('id>0')
     paginate
