@@ -31,6 +31,8 @@ RailsWanguo::Application.routes.draw do
 
   resources :heartbeats
 
+  post 'api/books'
+
   post 'api/user_validity'
   
   post 'api/assign_captcha'
