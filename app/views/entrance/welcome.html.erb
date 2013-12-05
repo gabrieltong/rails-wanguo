@@ -7,3 +7,11 @@
 <% if current_user && can?(:view,Import) %>
 <%=link_to '导入题库',{:controller=>:imports,:action=>:index},:class=>'btn'%>  
 <% end %>
+
+<% if current_user && can?(:view,School) %>
+<%=link_to '课程管理',{:controller=>:schools,:action=>:index},:class=>'btn'%>  
+<% end %>
+
+<% if current_user && can?(:view,Book) %>
+<%=link_to '书籍管理',{:controller=>:books,:action=>:index},:class=>'btn'%>  
+<% end %>
