@@ -31,6 +31,10 @@ RailsWanguo::Application.routes.draw do
 
   resources :heartbeats
 
+  post 'api/zhentis'
+
+  post 'api/zhenti/:year'=>'api#zhenti',:as=>'api_zhenti'
+
   post 'api/books'
 
   post 'api/schools'

@@ -8,6 +8,10 @@ class ApiController < ApplicationController
     render :json=>Question.zhentis
   end
 
+  def zhenti
+    render :json=>Question.zhenti(year)
+  end
+
   def books
     @relation = Book.where('id>0')
     paginate
