@@ -144,9 +144,9 @@ class ApiController < ApplicationController
   # 免费法条
   def freelaws
   	if params[:id] == nil
-  		@relation = Law.roots
+  		@relation = Freelaw.roots
   	else
-  		@relation = Law.find(params[:id]).children
+  		@relation = Freelaw.find(params[:id]).children
   	end
     paginate
   	render :json=>freelaws_to_json(@relation)
