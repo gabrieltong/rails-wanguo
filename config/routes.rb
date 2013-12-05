@@ -33,7 +33,7 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/zhentis'
 
-  post 'api/zhenti/:year'=>'api#zhenti',:as=>'api_zhenti'
+  post 'api/zhenti'
 
   post 'api/books'
 

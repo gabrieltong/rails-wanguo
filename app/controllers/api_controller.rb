@@ -9,7 +9,9 @@ class ApiController < ApplicationController
   end
 
   def zhenti
-    render :json=>Question.zhenti(year)
+    @relation = Question.zhenti(params[:year],params[:volumn])
+    paginate
+    render :json=>@collection
   end
 
   def books

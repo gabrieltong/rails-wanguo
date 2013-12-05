@@ -31,4 +31,9 @@ class Question < ActiveRecord::Base
       }
     end
   end
+
+  def self.zhenti(year,volumn)
+    relation = Question.where("`num` like '#{year}#{volumn}%' ")
+    relation
+  end
 end
