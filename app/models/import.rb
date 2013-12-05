@@ -70,7 +70,7 @@ class Import < ActiveRecord::Base
     end if s == nil
 
     begin
-      s = Roo::Openoffice.new(path)
+      s = Roo::OpenOffice.new(path)
     rescue
     end if s == nil
 
@@ -90,12 +90,6 @@ class Import < ActiveRecord::Base
 
   state_machine :state,:initial=>:freelaws do 
     state :laws_zip do 
-  #     validates_attachment :file, :content_type => {
-  #   :content_type=>["application/vnd.ms-excel",   
-  #            'application/octet-stream',
-  #            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  #          ]
-  # } 
       def import 
         base = 'tmp'
         name = File.basename(file.path).split('.')[0..-2].join('.').strip
@@ -116,89 +110,15 @@ class Import < ActiveRecord::Base
             Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
               path = "#{two_path}/#{other}"
               data = open(path)
-
               import_law(name,other,data)
               import_freelaw(name,other,data)
               update_law(data)
             end
           else
             data = open(two_path)
-            next unless data
-            if data[0][0..3] == %w(法条编号 音频讲解文件 真题编号 知识点)
-
-              data[1..-1].each do |row|
-                p '.'*100
-                p row
-                node = Law.find_by_number(row[0])
-                node.sound = row[1]
-                node.exampoints = []
-                row[3].to_s.split(/[，,、]/).each do |ep|
-                  node.exampoints << Exampoint.find_or_create_by_title(ep)
-                end
-
-                node.questions_number = []
-
-                row[2].to_s.split(/[，,、]/).each do |number|
-                  node.questions_number.push number
-                end
-
-                node.blanks = row[4..-1].delete_if{|i|i.blank?}
-                node.score = 1
-                node.save
-              end
-            end
-            # 导入真题
-            if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
-              data[1..-1].each do |row|
-                q = Question.find_or_create_by_title row[1].strip
-                q.state = row[2]
-                q.score = row[3]
-                q.num = row[0].to_i
-                q.title = row[1]
-                q.answer = row[4]
-                q.description = row[5]
-                q.description3 = row[6]
-                q.choices = []
-                q.choices_description = []
-                row[7..-1].each_with_index do |cell,index|
-                  if(index%2 == 0)
-                    q.choices.push cell
-                  else
-                    q.choices_description.push cell
-                  end
-                end
-                q.save
-              end
-            end
-            # 导入知识点
-            if data && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
-              data[1..-1].each do |row|
-                menu = Epmenu.find_or_create_by_title(row[0].strip)
-                sub = menu.children.find_or_create_by_title(row[1].strip)
-                ep = Exampoint.find_or_create_by_title(row[2].strip)
-                menu.exampoints << ep
-                sub.exampoints << ep
-
-                if row[3]
-                  row[3].split(',').each do |q|
-                    question_num = q.match(/\d+/).to_s
-                    
-                    question = Question.find_by_num(question_num)
-                    if question 
-                      choices = q.match(/[ABCDEFGH]+/).to_s
-                      if !choices.blank?
-                        choices.split('').each do |choice|
-                          ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,choice)
-                        end
-                      else
-                        ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,'')
-                      end
-                    end
-                  end
-                end
-                
-              end
-            end
+            update_law(data)
+            import_question(data)
+            import_ep(data)
           end
         end
       end
@@ -378,6 +298,62 @@ class Import < ActiveRecord::Base
           node.blanks = row[4..-1].delete_if{|i|i.blank?}
           node.score = 1
           node.save
+        end
+      end
+    end
+  end
+  def import_question(data)
+    # 导入真题
+    if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
+      data[1..-1].each do |row|
+        q = Question.find_or_create_by_title row[1].strip
+        q.state = row[2]
+        q.score = row[3]
+        q.num = row[0].to_i
+        q.title = row[1]
+        q.answer = row[4]
+        q.description = row[5]
+        q.description3 = row[6]
+        q.choices = []
+        q.choices_description = []
+        row[7..-1].each_with_index do |cell,index|
+          if(index%2 == 0)
+            q.choices.push cell
+          else
+            q.choices_description.push cell
+          end
+        end
+        q.save
+      end
+    end
+  end
+
+  def import_ep(data)
+    # 导入知识点
+    if data && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
+      data[1..-1].each do |row|
+        menu = Epmenu.find_or_create_by_title(row[0].strip)
+        sub = menu.children.find_or_create_by_title(row[1].strip)
+        ep = Exampoint.find_or_create_by_title(row[2].strip)
+        menu.exampoints << ep
+        sub.exampoints << ep
+
+        if row[3]
+          row[3].split(',').each do |q|
+            question_num = q.match(/\d+/).to_s
+            
+            question = Question.find_by_num(question_num)
+            if question 
+              choices = q.match(/[ABCDEFGH]+/).to_s
+              if !choices.blank?
+                choices.split('').each do |choice|
+                  ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,choice)
+                end
+              else
+                ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,'')
+              end
+            end
+          end
         end
       end
     end
