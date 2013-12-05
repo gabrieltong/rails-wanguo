@@ -11,7 +11,7 @@ class ApiController < ApplicationController
   def zhenti
     @relation = Question.zhenti(params[:year],params[:volumn])
     paginate
-    render :json=>@collection
+    render :json=>wrap_questions(@collection)
   end
 
   def books
@@ -37,6 +37,7 @@ class ApiController < ApplicationController
 
   def authorize_token
     @user = User.find_by_remember_token(params[:session][:token])
+    # @user = User.first
     render :json=>{:success=>false} unless @user
   end
 
@@ -225,8 +226,14 @@ class ApiController < ApplicationController
 
   # 随机输入  
   def rapid_questions
-    questions = R.new.rand_questions_by_epms(Epmenu.roots.where('volumn'=>params[:volumn]),params[:limit].to_i)
-    questions = Question.where(:id=>questions.collect{|i|i.id})
+    # questions = R.new.rand_questions_by_epms(Epmenu.roots.where('volumn'=>params[:volumn]),params[:limit].to_i)
+    # questions = Question.where(:id=>questions.collect{|i|i.id})
+    volumn = params[:volumn]
+    volumn = "0#{volumn}" if volumn.size == 1
+    year_first = Question.order('num asc').limit(1).first.num.to_s[0..3].to_i
+    year_last = Question.order('num desc').limit(1).first.num.to_s[0..3].to_i
+    year = (year_first..year_last).to_a.sample
+    questions = Question.where("num like '#{year}#{volumn}%'").random(15)
     render :json=>wrap_questions(questions)
   end
 
@@ -294,13 +301,6 @@ class ApiController < ApplicationController
     render :json=>eps_to_json(@collection)
   end
 
-  def mistake_questions_by_epmenu
-    histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
-    @relation = Question.where(:id=>histories.collect{|i|i.question_id})
-    paginate
-    render :json=>wrap_questions(@collection)
-  end
-
   def mistake_questions_by_ep
     histories = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>params[:exampoint_id])
     @relation = Question.where(:id=>histories.collect{|i|i.question_id})
@@ -310,8 +310,8 @@ class ApiController < ApplicationController
 
   def mistake_questions_by_epmenu
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
-    @relation = Question.where(:id=>histories.collect{|i|i.question_id})
-    paginate
+    @collection = Question.where(:id=>histories.collect{|i|i.question_id}).random(15)
+    # paginate
     render :json=>wrap_questions(@collection)
   end
 
@@ -373,8 +373,8 @@ class ApiController < ApplicationController
     questions = eps.collect do |ep|
       Collect.children(current_user,ep)
     end.flatten.uniq
-    @relation = Question.where(:id=>questions.collect{|i|i.id})
-    paginate
+    @collection = Question.where(:id=>questions.collect{|i|i.id}).random(15)
+    # paginate
     render :json=>wrap_questions(@collection)
   end
 
