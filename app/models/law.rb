@@ -23,7 +23,7 @@ class Law < ActiveRecord::Base
   end
 
   def sound_url
-    sound.url
+    sound_file_name.nil? ? '' : sound.url
   end
 
   def children_state
