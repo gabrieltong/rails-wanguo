@@ -1,5 +1,11 @@
 RailsWanguo::Application.routes.draw do
 
+  resources :schools
+
+
+  resources :books
+
+
   resources :import_errors
 
 

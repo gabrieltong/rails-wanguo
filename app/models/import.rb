@@ -58,6 +58,7 @@ class Import < ActiveRecord::Base
 
 
   def open(path)
+    p ">>> importing #{path}"
     s , data = nil,nil
     begin
       s = Roo::Excel.new(path)
@@ -84,7 +85,7 @@ class Import < ActiveRecord::Base
         end
       end
     end
-    self.import_errors.create :title=>path unless data
+    self.import_errors.find_or_create_by_title path unless data
     data
   end
 
@@ -207,7 +208,7 @@ class Import < ActiveRecord::Base
 
   def import_law(name,other,data)
     # 导入法条与免费法条
-    if data[0][0..4] == %w(法条编号 编 章 节 法条内容)
+    if data &&  data[0] && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
       one = Law.find_or_create_by_title name.strip
       data[1..-1].each do |row|
         last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
@@ -241,7 +242,7 @@ class Import < ActiveRecord::Base
 
   def import_freelaw(name,other,data)
     # 导入法条与免费法条
-    if data[0][0..4] == %w(法条编号 编 章 节 法条内容)
+    if data &&  data[0] && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
       one = Freelaw.find_or_create_by_title name.strip
       data[1..-1].each do |row|
         last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
@@ -276,11 +277,8 @@ class Import < ActiveRecord::Base
   def update_law(data)
     # 更新法条班
     p '.'*100
-    p data[0]
-    if data[0][0..3] == %w(法条编号 音频 真题 知识点)
+    if data && data[0] && data[0][0..3] == %w(法条编号 音频 真题 知识点)
       data[1..-1].each do |row|
-        p '.'*100
-        p row
         node = Law.find_by_number(row[0])
         if node
           node.sound = row[1]
@@ -306,51 +304,55 @@ class Import < ActiveRecord::Base
     # 导入真题
     if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
       data[1..-1].each do |row|
-        q = Question.find_or_create_by_title row[1].strip
-        q.state = row[2]
-        q.score = row[3]
-        q.num = row[0].to_i
-        q.title = row[1]
-        q.answer = row[4]
-        q.description = row[5]
-        q.description3 = row[6]
-        q.choices = []
-        q.choices_description = []
-        row[7..-1].each_with_index do |cell,index|
-          if(index%2 == 0)
-            q.choices.push cell
-          else
-            q.choices_description.push cell
+        if row[1]
+          q = Question.find_or_create_by_title row[1].strip
+          q.state = row[2]
+          q.score = row[3]
+          q.num = row[0].to_i
+          q.title = row[1]
+          q.answer = row[4]
+          q.description = row[5]
+          q.description3 = row[6]
+          q.choices = []
+          q.choices_description = []
+          row[7..-1].each_with_index do |cell,index|
+            if(index%2 == 0)
+              q.choices.push cell
+            else
+              q.choices_description.push cell
+            end
           end
+          q.save
         end
-        q.save
       end
     end
   end
 
   def import_ep(data)
     # 导入知识点
-    if data && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
+    if data && data[0] && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
       data[1..-1].each do |row|
-        menu = Epmenu.find_or_create_by_title(row[0].strip)
-        sub = menu.children.find_or_create_by_title(row[1].strip)
-        ep = Exampoint.find_or_create_by_title(row[2].strip)
-        menu.exampoints << ep
-        sub.exampoints << ep
+        if row[0] && row[1] && row[2] && row[3]
+          menu = Epmenu.find_or_create_by_title(row[0].strip)
+          sub = menu.children.find_or_create_by_title(row[1].strip)
+          ep = Exampoint.find_or_create_by_title(row[2].strip)
+          menu.exampoints << ep
+          sub.exampoints << ep
 
-        if row[3]
-          row[3].split(',').each do |q|
-            question_num = q.match(/\d+/).to_s
-            
-            question = Question.find_by_num(question_num)
-            if question 
-              choices = q.match(/[ABCDEFGH]+/).to_s
-              if !choices.blank?
-                choices.split('').each do |choice|
-                  ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,choice)
+          if row[3]
+            row[3].split(',').each do |q|
+              question_num = q.match(/\d+/).to_s
+              
+              question = Question.find_by_num(question_num)
+              if question 
+                choices = q.match(/[ABCDEFGH]+/).to_s
+                if !choices.blank?
+                  choices.split('').each do |choice|
+                    ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,choice)
+                  end
+                else
+                  ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,'')
                 end
-              else
-                ep_question = EpQuestion.find_or_create_by_exampoint_id_and_question_id_and_state(ep.id,question.id,'')
               end
             end
           end

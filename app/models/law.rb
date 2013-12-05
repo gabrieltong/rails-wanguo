@@ -16,6 +16,8 @@ class Law < ActiveRecord::Base
     instance.score = 0 if instance.state == nil
   end
 
+  scope 'node', :conditions => { :state => 'node' }
+
   def as_json(options={})
     super({:methods=>[:sound_url]}.merge options)
   end
@@ -31,6 +33,22 @@ class Law < ActiveRecord::Base
   def self.dup_freelaw
     Freelaw.each do |freelaw|
       law = Law.find_or_initialize_by_number 
+    end
+  end
+
+  def self.destroy_freelaws
+    # Law.all.each do |l|
+    #   if l.state == 'node' && l.blanks.blank? && l.exampoints.blank? 
+    #     p '.'*50
+    #     p "destroy law #{l.id}.#{l.title}"
+    #     l.destroy
+    #   end
+    # end
+    Law.all.each do |l|
+      if l.subtree.node.blank? 
+        p "destroy law #{l.id}.#{l.title}"
+        l.destroy
+      end
     end
   end
 end

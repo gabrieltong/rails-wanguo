@@ -11,12 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131204165416) do
+ActiveRecord::Schema.define(:version => 20131205035121) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
     t.integer  "law_id"
     t.string   "state"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "books", :force => true do |t|
+    t.string   "title"
+    t.string   "press"
+    t.float    "price"
+    t.string   "author"
+    t.text     "details"
+    t.text     "taobao"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -217,6 +228,14 @@ ActiveRecord::Schema.define(:version => 20131204165416) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], :name => "index_roles_on_name_and_resource_type_and_resource_id"
   add_index "roles", ["name"], :name => "index_roles_on_name"
+
+  create_table "schools", :force => true do |t|
+    t.string   "title"
+    t.text     "details"
+    t.string   "url"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "searches", :force => true do |t|
     t.integer  "user_id"

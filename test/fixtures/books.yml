@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  press: MyString
+  price: 1.5
+  author: MyString
+  details: MyText
+  taobao: MyText
+
+two:
+  title: MyString
+  press: MyString
+  price: 1.5
+  author: MyString
+  details: MyText
+  taobao: MyText
