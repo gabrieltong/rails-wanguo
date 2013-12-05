@@ -33,6 +33,8 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/books'
 
+  post 'api/schools'
+
   post 'api/user_validity'
   
   post 'api/assign_captcha'

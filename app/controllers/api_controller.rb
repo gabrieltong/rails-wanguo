@@ -10,6 +10,12 @@ class ApiController < ApplicationController
     render :json=>@collection
   end
 
+  def schools
+    @relation = School.where('id>0')
+    paginate
+    render :json=>@collection
+  end
+
   def assign_captcha
     Captcha.assign(params[:value],current_user)
     render :json=>current_user.validity
