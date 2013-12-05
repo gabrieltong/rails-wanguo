@@ -5,7 +5,8 @@ class Ability
         can :valid,Captcha
         can :expired,Captcha
         can :unused,Captcha
-
+        can :manage,Book
+        can :manage,School
         can :manage,Import
     end
 

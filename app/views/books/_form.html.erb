@@ -1,16 +1,13 @@
-<%= simple_form_for(@book) do |f| %>
-  <%= f.error_notification %>
-
-  <div class="form-inputs">
-    <%= f.input :title %>
-    <%= f.input :press %>
-    <%= f.input :price %>
-    <%= f.input :author %>
-    <%= f.input :details %>
-    <%= f.input :taobao %>
-  </div>
-
+<%= simple_form_for @book, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :title %>
+  <%= f.input :press %>
+  <%= f.input :price %>
+  <%= f.input :author %>
+  <%= f.input :details %>
+  <%= f.input :taobao %>
   <div class="form-actions">
-    <%= f.button :submit %>
+    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                books_path, :class => 'btn' %>
   </div>
 <% end %>

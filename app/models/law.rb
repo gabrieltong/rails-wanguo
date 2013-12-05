@@ -37,13 +37,13 @@ class Law < ActiveRecord::Base
   end
 
   def self.destroy_freelaws
-    # Law.all.each do |l|
-    #   if l.state == 'node' && l.blanks.blank? && l.exampoints.blank? 
-    #     p '.'*50
-    #     p "destroy law #{l.id}.#{l.title}"
-    #     l.destroy
-    #   end
-    # end
+    Law.all.each do |l|
+      if l.state == 'node' && l.blanks.blank? && l.exampoints.blank? 
+        p '.'*50
+        p "destroy law #{l.id}.#{l.title}"
+        l.destroy
+      end
+    end
     Law.all.each do |l|
       if l.subtree.node.blank? 
         p "destroy law #{l.id}.#{l.title}"

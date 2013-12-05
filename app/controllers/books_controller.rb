@@ -1,4 +1,5 @@
 class BooksController < ApplicationController
+  authorize_resource
   # GET /books
   # GET /books.json
   def index
