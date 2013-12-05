@@ -5,7 +5,9 @@ class ApiController < ApplicationController
   before_filter :authorize_token,:except=>[:login,:signup]
 
   def books
-    render :json=>Book.all
+    @relation = Book.where('id>0')
+    paginate
+    render :json=>@collection
   end
 
   def assign_captcha
