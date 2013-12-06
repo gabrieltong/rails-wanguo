@@ -1,5 +1,5 @@
 class Book < ActiveRecord::Base
-  attr_accessible :author, :details, :press, :price, :taobao, :title,:file
+  attr_accessible :author, :details, :press, :price, :taobao, :title,:file,:published_at
   has_attached_file :file
 
   def as_json(options={})

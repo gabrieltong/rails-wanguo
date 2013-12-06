@@ -8,11 +8,12 @@
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:title) %></th>
       <th><%= model_class.human_attribute_name(:press) %></th>
-      <th><%= model_class.human_attribute_name(:price) %></th>
       <th><%= model_class.human_attribute_name(:author) %></th>
-      <th><%= model_class.human_attribute_name(:details) %></th>
+      <th><%= model_class.human_attribute_name(:price) %></th>
       <th><%= model_class.human_attribute_name(:taobao) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%= model_class.human_attribute_name(:file) %></th>
+      <th><%= model_class.human_attribute_name(:published_at) %></th>
+      <th><%= model_class.human_attribute_name(:details) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -22,11 +23,12 @@
         <td><%= link_to book.id, book_path(book) %></td>
         <td><%= book.title %></td>
         <td><%= book.press %></td>
-        <td><%= book.price %></td>
         <td><%= book.author %></td>
-        <td><%= book.details %></td>
+        <td><%= book.price %></td>
         <td><%= book.taobao %></td>
-        <td><%=l book.created_at %></td>
+        <td><%= book.file %></td>
+        <td><%= book.published_at %></td>
+        <td><%= book.details %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_book_path(book), :class => 'btn btn-mini' %>

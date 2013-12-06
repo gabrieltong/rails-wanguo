@@ -1,4 +1,9 @@
 'zh-CN': 
+  date:
+    order:
+    - :year
+    - :month
+    - :day
   captchas:
     expired: 
       title: '已过期验证码'
@@ -76,6 +81,23 @@
       default:
         state: '审核状态'
         created_at: '添加日期'
+      school:
+        title: '名称'
+        city: '城市'
+        price: '价钱'
+        started_at: '开课时间'
+        url: '学校网址'
+        file: '封面'
+        details: '详情'
+      book:
+        title: '名称'
+        press: '出版社'
+        author: '作者'
+        price: '价钱'
+        taobao: '淘宝网址'
+        file: '封面'
+        published_at: '发布日期'
+        details: '详情'
       captcha:
         title: '验证码'
         user_id: '用户'
