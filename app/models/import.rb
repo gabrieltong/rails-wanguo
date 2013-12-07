@@ -92,6 +92,27 @@ class Import < ActiveRecord::Base
   state_machine :state,:initial=>:freelaws do 
     state :audios do
       def import 
+        target_dir = 'public/audio'
+        `
+        mkdir -p #{target_dir}
+        `
+        Zip::ZipFile.open(file.path) do |zipfile|
+          zipfile.each do |file|
+            target = "#{target_dir}/#{file.to_s}"
+            zipfile.extract(file,target) unless File.exist?(target)
+          end
+          Dir.glob("#{target_dir}/*.mp3").each do |file|
+            number =  File.basename(file,".*")
+            law = Law.find_by_number(number)
+            if law
+              law.sound = File.open(file)
+              law.save
+            end
+          end
+          `
+          rm -rf #{target_dir}
+          `
+        end
       end
     end
 
