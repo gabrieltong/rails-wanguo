@@ -3,7 +3,7 @@ class FreelawsController < ApplicationController
   # GET /freelaws
   # GET /freelaws.json
   def index
-    @freelaws = Freelaw.all
+    @freelaws = Freelaw.roots
 
     respond_to do |format|
       format.html # index.html.erb
@@ -15,6 +15,12 @@ class FreelawsController < ApplicationController
   # GET /freelaws/1.json
   def show
     @freelaw = Freelaw.find(params[:id])
+
+    @freelaw.ancestors.each do |freelaw|
+      add_breadcrumb freelaw.title,freelaw_path(freelaw)
+    end
+    add_breadcrumb @freelaw.title
+    @freelaws = @freelaw.children
 
     respond_to do |format|
       format.html # show.html.erb

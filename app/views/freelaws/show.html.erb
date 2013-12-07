@@ -1,25 +1,6 @@
 <%- model_class = Freelaw -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
-</div>
-
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
-  <dd><%= @freelaw.title %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:content) %>:</strong></dt>
-  <dd><%= @freelaw.content %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:ancestry) %>:</strong></dt>
-  <dd><%= @freelaw.ancestry %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:state) %>:</strong></dt>
-  <dd><%= @freelaw.state %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:category) %>:</strong></dt>
-  <dd><%= @freelaw.category %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:ancestry_depth) %>:</strong></dt>
-  <dd><%= @freelaw.ancestry_depth %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:number) %>:</strong></dt>
-  <dd><%= @freelaw.number %></dd>
-</dl>
-
+<%= render_breadcrumbs %>
+<%=render 'freelaws/list',:collection=>@freelaws%>
 <div class="form-actions">
   <%= link_to t('back', :default => t("helpers.links.back")),
               freelaws_path, :class => 'btn'  %>

@@ -2,37 +2,23 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
-<table class="table table-striped">
+<table class="table table-striped table-bordered">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:title) %></th>
       <th><%= model_class.human_attribute_name(:score) %></th>
       <th><%= model_class.human_attribute_name(:num) %></th>
       <th><%= model_class.human_attribute_name(:state) %></th>
-      <th><%= model_class.human_attribute_name(:description) %></th>
-      <th><%= model_class.human_attribute_name(:answer) %></th>
-      <th><%= model_class.human_attribute_name(:choices) %></th>
-      <th><%= model_class.human_attribute_name(:description3) %></th>
-      <th><%= model_class.human_attribute_name(:choices_description) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <th><%=t 'actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
-    <% @questions.each do |question| %>
+    <% @collection.each do |question| %>
       <tr>
-        <td><%= link_to question.id, question_path(question) %></td>
-        <td><%= question.title %></td>
+        <td><%= link_to truncate(question.title), question_path(question) %></td>
         <td><%= question.score %></td>
         <td><%= question.num %></td>
         <td><%= question.state %></td>
-        <td><%= question.description %></td>
-        <td><%= question.answer %></td>
-        <td><%= question.choices %></td>
-        <td><%= question.description3 %></td>
-        <td><%= question.choices_description %></td>
-        <td><%=l question.created_at %></td>
         <td>
           <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_question_path(question), :class => 'btn btn-mini' %>
@@ -47,6 +33,4 @@
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_question_path,
-            :class => 'btn btn-primary' %>
+<%= will_paginate @collection, renderer: BootstrapPagination::Rails,:class=>'text-center pagination' %>

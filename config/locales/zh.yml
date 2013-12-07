@@ -46,12 +46,16 @@
         email: '邮箱'
         password: '密码'
         signature: '个性签名'
+  freelaws:  
+    index:
+      title: '免费法条'
+    edit:
+      title: '编辑免费法条'        
   laws:  
     index:
       title: '法条班'
     edit:
       title: '编辑法条'
-  freelaws: '免费法条' 
   questions: '真题'
   eps: '知识点'
   laws_zip: '法条压缩包'
@@ -118,6 +122,9 @@
             password:
               blank: '密码不能为空'
     models:
+      law: '法条班'
+      freelaw: '免费法条'
+      question: '历年真题'
       book: '书籍'
       school: '课程'
       import: '导入'
@@ -125,11 +132,26 @@
       default:
         state: '审核状态'
         created_at: '添加日期'
+      question:
+        title: '标题'
+        score: '分值'
+        num: '编号'
+        state: '类型'
+        description: '开始描述'
+        description3: '结束描述'
+        answer: '答案'
+        choices: '选项'
+        choices_description: '选项描述'
       law:
         title: '标题'
         blanks: '填空'
         score: '分值'
         number: '编号'
+      freelaw:
+        title: '标题'
+        blanks: '填空'
+        score: '分值'
+        number: '编号'  
       school:
         title: '名称'
         city: '城市'
