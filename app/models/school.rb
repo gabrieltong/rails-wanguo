@@ -11,4 +11,14 @@ class School < ActiveRecord::Base
   def file_url
     file.url
   end
+
+  def self.order_by_locality(locality)
+  	locality = locality.gsub('市','')
+  	items = []
+  	level_1 = School.where(:city=>locality).order('id asc')
+  	level_2 = School.where("`city` != ?",locality).order('id asc')
+  	level_1.each {|i|items.push i}
+  	level_2.each {|i|items.push i}
+  	items
+  end
 end
