@@ -81,6 +81,7 @@ class Istudy
 
     {
       :id=>epmenu.try(:id) || 0,
+      :title=>type,
       :law_ratio=>lr,
       :question_ratio=>question_ratio,
       :mastered_status=>mastered_status,
@@ -95,8 +96,11 @@ class Istudy
       :epmenus=>[]
     }
     Map.collect{|i|i[:title]}.each do |type|
+      # result[:epmenus][type] = self.epmenu_summary(user,type)
+      # result[:total] += result[:epmenus][type][:ratio]
+
       data = self.epmenu_summary(user,type)
-      result[:epmenus].push [type,data]
+      result[:epmenus].push data
       # result[:epmenus][type] = self.epmenu_summary(user,type)
       result[:total] += data[:ratio]
     end
