@@ -92,7 +92,7 @@ class Istudy
   def self.epmenus_summaries(user)
     result = {
       :total=>0,
-      :epmenus=>{}
+      :epmenus=>[]
     }
     Map.collect{|i|i[:title]}.each do |type|
       result[:epmenus].push [type,self.epmenu_summary(user,type)]
