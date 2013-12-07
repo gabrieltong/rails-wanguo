@@ -95,7 +95,8 @@ class Istudy
       :epmenus=>{}
     }
     Map.collect{|i|i[:title]}.each do |type|
-      result[:epmenus][type] = self.epmenu_summary(user,type)
+      result[:epmenus].push [type,self.epmenu_summary(user,type)]
+      # result[:epmenus][type] = self.epmenu_summary(user,type)
       result[:total] += result[:epmenus][type][:ratio]
     end
     
