@@ -13,7 +13,6 @@
       <th><%= model_class.human_attribute_name(:taobao) %></th>
       <th><%= model_class.human_attribute_name(:file) %></th>
       <th><%= model_class.human_attribute_name(:published_at) %></th>
-      <th><%= model_class.human_attribute_name(:details) %></th>
       <th><%=t 'actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -28,7 +27,6 @@
         <td><%= book.taobao %></td>
         <td><%= image_tag book.file,:class=>'span2' %></td>
         <td><%= book.published_at %></td>
-        <td><%= book.details %></td>
         <td>
           <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_book_path(book), :class => 'btn btn-mini' %>

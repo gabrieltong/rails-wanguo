@@ -29,20 +29,8 @@
     <td><%= @book.taobao %></td>
   </tr>
   <tr>
-    <td><%= model_class.human_attribute_name(:file_file_name) %>:</td>
-    <td><%= @book.file_file_name %></td>
-  </tr>
-  <tr>
-    <td><%= model_class.human_attribute_name(:file_content_type) %>:</td>
-    <td><%= @book.file_content_type %></td>
-  </tr>
-  <tr>
-    <td><%= model_class.human_attribute_name(:file_file_size) %>:</td>
-    <td><%= @book.file_file_size %></td>
-  </tr>
-  <tr>
-    <td><%= model_class.human_attribute_name(:file_updated_at) %>:</td>
-    <td><%= @book.file_updated_at %></td>
+    <td><%= model_class.human_attribute_name(:file) %>:</td>
+    <td><%= image_tag @book.file.url %></td>
   </tr>
   <tr>
     <td><%= model_class.human_attribute_name(:published_at) %>:</td>
