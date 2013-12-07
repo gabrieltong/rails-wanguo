@@ -1,20 +1,33 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Freelaw -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
 
-<p>
-  <b>Title:</b>
-  <%= @freelaw.title %>
-</p>
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
+  <dd><%= @freelaw.title %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:content) %>:</strong></dt>
+  <dd><%= @freelaw.content %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:ancestry) %>:</strong></dt>
+  <dd><%= @freelaw.ancestry %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:state) %>:</strong></dt>
+  <dd><%= @freelaw.state %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:category) %>:</strong></dt>
+  <dd><%= @freelaw.category %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:ancestry_depth) %>:</strong></dt>
+  <dd><%= @freelaw.ancestry_depth %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:number) %>:</strong></dt>
+  <dd><%= @freelaw.number %></dd>
+</dl>
 
-<p>
-  <b>Content:</b>
-  <%= @freelaw.content %>
-</p>
-
-<p>
-  <b>Ancestry:</b>
-  <%= @freelaw.ancestry %>
-</p>
-
-
-<%= link_to 'Edit', edit_freelaw_path(@freelaw) %> |
-<%= link_to 'Back', freelaws_path %>
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              freelaws_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_freelaw_path(@freelaw), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              freelaw_path(@freelaw),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

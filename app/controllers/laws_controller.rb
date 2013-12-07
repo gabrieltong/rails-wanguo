@@ -2,8 +2,8 @@ class LawsController < ApplicationController
   # GET /laws
   # GET /laws.json
   def index
-    @laws = Law.all
-
+    @relation = Law.where('id>0')
+    paginate
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @laws }
@@ -80,4 +80,11 @@ class LawsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  # 在返回集合的api上设置分页的页数和分页大小
+  # 结果：设置好 @page 和 @per_page
+  def paginate_params
+    @page = params[:page] || 1 
+    @per_page = params[:per_page] || 20
+    @random = params[:random].to_i || 0
+  end  
 end
