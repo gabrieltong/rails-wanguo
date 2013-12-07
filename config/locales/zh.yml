@@ -1,4 +1,5 @@
 'zh-CN': 
+  audios: '音频'
   will_paginate:
     previous_label: "&#8592; 上一页"
     next_label: " &#8594;"
@@ -86,10 +87,22 @@
     submit:
       create: "创建%{model}"
       update: "更新%{model}"
+  errors:
+    messages:
+      blank: '不能未空'
   activerecord:
     school: '课程'
     errors:
       models:
+        # books:
+        #   attributes:
+        #     author: '标题不能未空'
+        #     details: '详情不能未空'
+        #     press: '出版社不能未空'
+        #     price: '不能未空'
+        #     taobao: '不能未空'
+        #     title:'不能未空'
+        #     file:'不能未空'
         user:
           attributes:
             username:
