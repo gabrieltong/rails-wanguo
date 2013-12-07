@@ -37,32 +37,43 @@
     <%= javascript_include_tag "application" %>
   </head>
   <body>
-  	<br/>
-    <br/>
-		<br/>
+    <%= nav_bar :fixed => :top, :brand => "万国", :responsive => true do %>
+      <%= menu_group do %>
+
+        <% if current_user && can?(:view,School) %>
+        <%=menu_item '课程管理', schools_path %>  
+        <% end %>
+
+        <% if current_user && can?(:view,Book) %>
+        <%=menu_item '书籍管理', books_path %>  
+        <% end %>
+
+        <% if current_user && can?(:valid,Captcha) %>
+        <%=menu_item '查看验证码',captchas_valid_path%>  
+        <% end %>
+
+        <% if current_user && can?(:view,Import) %>
+        <%=menu_item '导入题库', imports_path %>  
+        <% end %>
+      <% end %>
+
+      <%= menu_group :pull => :right do %>
+        <% if current_user %>
+          <%= menu_item "注销", sign_out_path, method: :delete %>
+        <% else %>
+          <%= menu_item "登陆", sign_in_path %>
+        <% end %>
+      <% end %>
+    <% end %>
     <div class="container">
         <div class="row">
-          <div class="span9">
+          <div class="span12">
+            <br/>
+            <br/>
+            <br/>
             <%= bootstrap_flash %>
             <%= yield %>
           </div>
-          <div class="span3">
-            <div class="well sidebar-nav">
-              <h3>Sidebar</h3>
-              <ul class="nav nav-list">
-                <li class="nav-header">Sidebar</li>
-                <% if signed_in? %>
-                <% p current_user%>
-                <li><%= link_to 'Sign out', sign_out_path, method: :delete %></li>
-                <% else %>
-                <li><%= link_to 'Sign in', sign_in_path%></li>
-                <% end %>
-                <li><%= link_to "Link1", "/path1"  %></li>
-                <li><%= link_to "Link2", "/path2"  %></li>
-                <li><%= link_to "Link3", "/path3"  %></li>
-              </ul>
-            </div><!--/.well
-          </div><!--/span-->
         </div><!--/row-->
       <br/><br/><br/><br/>
     </div> <!-- /container -->

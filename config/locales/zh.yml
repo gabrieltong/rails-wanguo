@@ -1,10 +1,34 @@
 'zh-CN': 
+  will_paginate:
+    previous_label: "&#8592; 上一页"
+    next_label: " &#8594;"
+    page_gap: "&hellip;"
+  actions: '操作'
+  edit: '编辑'
+  destroy: '删除'
+  back: '返回'
+  new: '创建'
+  cancel: '取消'
   date:
     order:
     - :year
     - :month
     - :day
+  schools:
+    index: 
+      title: '课程'
+    new:
+      title: '创建课程'
+  books:
+    index: 
+      title: '书籍'
+    new:
+      title: '创建书籍'
   captchas:
+    valid:
+      title: '有效验证码'
+    unused:
+      title: '未使用验证码'  
     expired: 
       title: '已过期验证码'
   simple_form:
@@ -63,6 +87,7 @@
       create: "创建%{model}"
       update: "更新%{model}"
   activerecord:
+    school: '课程'
     errors:
       models:
         user:
@@ -76,6 +101,8 @@
             password:
               blank: '密码不能为空'
     models:
+      book: '书籍'
+      school: '课程'
       import: '导入'
     attributes:
       default:
@@ -86,7 +113,7 @@
         city: '城市'
         price: '价钱'
         started_at: '开课时间'
-        url: '学校网址'
+        url: '课程网址'
         file: '封面'
         details: '详情'
       book:

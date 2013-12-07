@@ -1,17 +1,3 @@
-<h1>welcome</h1>
-<hr/>
-<% if current_user && can?(:valid,Captcha) %>
-<%=link_to '查看验证码',{:controller=>:captchas,:action=>:valid},:class=>'btn'%>  
-<% end %>
-
-<% if current_user && can?(:view,Import) %>
-<%=link_to '导入题库',{:controller=>:imports,:action=>:index},:class=>'btn'%>  
-<% end %>
-
-<% if current_user && can?(:view,School) %>
-<%=link_to '课程管理',{:controller=>:schools,:action=>:index},:class=>'btn'%>  
-<% end %>
-
-<% if current_user && can?(:view,Book) %>
-<%=link_to '书籍管理',{:controller=>:books,:action=>:index},:class=>'btn'%>  
-<% end %>
+<div class="page-header">
+  <h1>欢迎来到万国管理后台</h1>
+</div>
