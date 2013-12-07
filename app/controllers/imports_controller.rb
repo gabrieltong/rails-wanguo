@@ -1,5 +1,6 @@
 class ImportsController < ApplicationController
   before_filter :authorize
+  authorize_resource
   # GET /imports
   # GET /imports.json
   def index

@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  before_filter :authorize
   authorize_resource
   # GET /questions
   # GET /questions.json

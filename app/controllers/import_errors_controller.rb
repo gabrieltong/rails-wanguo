@@ -1,4 +1,6 @@
 class ImportErrorsController < ApplicationController
+  before_filter :authorize
+  authorize_resource
   # GET /import_errors
   # GET /import_errors.json
   def index

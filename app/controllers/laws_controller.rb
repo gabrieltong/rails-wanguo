@@ -1,4 +1,5 @@
 class LawsController < ApplicationController
+  before_filter :authorize
   authorize_resource
   # GET /laws
   # GET /laws.json

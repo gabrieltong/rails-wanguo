@@ -1,4 +1,5 @@
 class FreelawsController < ApplicationController
+  before_filter :authorize
   authorize_resource
   # GET /freelaws
   # GET /freelaws.json
