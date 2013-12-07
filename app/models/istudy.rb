@@ -56,6 +56,17 @@ class Istudy
     (Heartbeat.duration(Heartbeat.ranges(user,user))*1.0/60/3).to_i*0.1
   end
 
+  # 部门法子项的进度情况
+  def self.sub_epmenus_summaries(user,id)
+    Epmenu.find(id).children.collect do |epmenu|
+      ss = History.mastered_status(epmenu,user)
+      {
+        :title=>epmenu.title,
+        :radio=> ss[:total]==0 ? 0 : ss[:mastered]*1.0/ss[:total] 
+      }
+    end
+  end
+
   # 取得用户部门法学习情况
   def self.epmenu_summary(user,type)
     lr = law_ratio(user,type)

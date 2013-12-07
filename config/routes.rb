@@ -53,6 +53,8 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/mix'
 
+  post 'api/istudy_sub_epmenus_summaries'
+
   post 'api/istudy_epmenu_summary'
 
   post 'api/istudy_epmenus_summaries'

@@ -465,6 +465,10 @@ class ApiController < ApplicationController
     render :json=>Istudy.epmenu_summary(current_user,params[:type])
   end
 
+  def istudy_sub_epmenus_summaries
+    render :json=>Istudy.sub_epmenus_summaries(current_user,params[:id])
+  end
+
   def istudy_epmenus_summaries
     render :json=>Istudy.epmenus_summaries(current_user)
   end
