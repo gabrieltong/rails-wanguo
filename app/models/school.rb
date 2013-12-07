@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class School < ActiveRecord::Base
   attr_accessible :details, :title, :url,:file,:city,:price,:started_at
   has_attached_file :file
