@@ -46,7 +46,11 @@
         email: '邮箱'
         password: '密码'
         signature: '个性签名'
-  laws: '收费法条' 
+  laws:  
+    index:
+      title: '法条班'
+    edit:
+      title: '编辑法条'
   freelaws: '免费法条' 
   questions: '真题'
   eps: '知识点'
@@ -121,6 +125,11 @@
       default:
         state: '审核状态'
         created_at: '添加日期'
+      law:
+        title: '标题'
+        blanks: '填空'
+        score: '分值'
+        number: '编号'
       school:
         title: '名称'
         city: '城市'

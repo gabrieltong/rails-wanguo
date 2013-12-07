@@ -24,7 +24,7 @@ $(function(){
 <div class="form-actions">
   <%= link_to t('.new', :default => t("helpers.links.new")),
               new_import_path, :class => 'btn' %>
-  <%= link_to t('.import_all', :default => t("helpers.links.new")),
+  <%#= link_to t('.import_all', :default => t("helpers.links.new")),
               imports_import_all_path, :class => 'btn',:data => { :confirm => t('.confirm_import_all', :default => t("helpers.links.confirm", :default => 'Are you sure?')) } %>
 
 </div>

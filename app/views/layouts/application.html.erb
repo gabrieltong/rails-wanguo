@@ -55,6 +55,18 @@
         <% if current_user && can?(:view,Import) %>
         <%=menu_item '导入数据', imports_path %>  
         <% end %>
+
+        <% if current_user && can?(:view,Law) %>
+        <%=menu_item '法条班数据', laws_path %>  
+        <% end %>
+
+        <% if current_user && can?(:view,Freelaw) %>
+        <%=menu_item '免费法条', freelaws_path %>  
+        <% end %>
+
+        <% if current_user && can?(:view,Question) %>
+        <%=menu_item '历年真题', questions_path %>  
+        <% end %>
       <% end %>
 
       <%= menu_group :pull => :right do %>

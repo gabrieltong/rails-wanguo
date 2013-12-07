@@ -8,6 +8,9 @@ class Ability
         can :manage,Book
         can :manage,School
         can :manage,Import
+        can :manage,Law
+        can :manage,Freelaw
+        can :manage,Question       
     end
 
     # Define abilities for the passed in user here. For example:

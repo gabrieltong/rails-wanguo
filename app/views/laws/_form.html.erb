@@ -1,21 +1,13 @@
 <%= simple_form_for @law, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :title %>
-  <%= f.input :content %>
-  <%= f.input :ancestry %>
-  <%= f.input :state %>
-  <%= f.input :category %>
-  <%= f.input :blanks %>
-  <%= f.input :ancestry_depth %>
+  <%= f.input :title ,:input_html=>{:rows=>5}%>
+  <% if f.object.state == 'node' %>
+  <%= f.input :blanks,:input_html=>{:rows=>5}%>
   <%= f.input :score %>
-  <%= f.input :sound_file_name %>
-  <%= f.input :sound_content_type %>
-  <%= f.input :sound_file_size %>
-  <%= f.input :sound_updated_at %>
   <%= f.input :number %>
-  <%= f.input :questions_number %>
+  <% end %>
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+    <%= link_to t('cancel', :default => t("helpers.links.cancel")),
                 laws_path, :class => 'btn' %>
   </div>
 <% end %>

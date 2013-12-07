@@ -1,9 +1,9 @@
 class LawsController < ApplicationController
+  authorize_resource
   # GET /laws
   # GET /laws.json
   def index
-    @relation = Law.where('id>0')
-    paginate
+    @laws = Law.roots
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @laws }
@@ -14,7 +14,11 @@ class LawsController < ApplicationController
   # GET /laws/1.json
   def show
     @law = Law.find(params[:id])
-
+    @law.ancestors.each do |law|
+      add_breadcrumb law.title,law_path(law)
+    end
+    add_breadcrumb @law.title
+    @laws = @law.children
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @law }

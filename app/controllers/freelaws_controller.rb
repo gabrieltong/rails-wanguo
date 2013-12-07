@@ -1,4 +1,5 @@
 class FreelawsController < ApplicationController
+  authorize_resource
   # GET /freelaws
   # GET /freelaws.json
   def index

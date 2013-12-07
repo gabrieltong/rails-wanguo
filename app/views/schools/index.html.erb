@@ -5,12 +5,10 @@
 <table class="table table-striped table-bordered">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:title) %></th>
       <th><%= model_class.human_attribute_name(:city) %></th>
       <th><%= model_class.human_attribute_name(:price) %></th>
       <th><%= model_class.human_attribute_name(:started_at) %></th>
-      <th><%= model_class.human_attribute_name(:url) %></th>
       <th><%= model_class.human_attribute_name(:file) %></th>
       <th><%=t 'actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -18,13 +16,11 @@
   <tbody>
     <% @schools.each do |school| %>
       <tr>
-        <td><%= link_to school.id, school_path(school) %></td>
-        <td><%= school.title %></td>
+        <td><%= link_to school.title, school_path(school) %></td>
         <td><%= school.city %></td>
         <td><%= school.price %></td>
         <td><%= school.started_at %></td>
-        <td><%= school.url %></td>
-        <td><%= school.file %></td>
+        <td><%= image_tag school.file %></td>
         <td>
           <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_school_path(school), :class => 'btn btn-mini' %>
