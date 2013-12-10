@@ -26,6 +26,10 @@ class Law < ActiveRecord::Base
     sound_file_name.nil? ? '' : sound.url
   end
 
+  def questions_count
+    questions.count
+  end
+
   def children_state
     children.first.try(:state)
   end

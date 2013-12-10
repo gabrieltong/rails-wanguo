@@ -586,7 +586,7 @@ class ApiController < ApplicationController
     if laws.first && laws.first.ancestry_depth >= 3
       laws.to_json(
         :include=>{:exampoints=>{}},
-        :methods=>[:is_collected,:sound_url,:children_state]
+        :methods=>[:is_collected,:sound_url,:children_state,:questions_count]
       )
     else
       laws.to_json(
