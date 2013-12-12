@@ -4,6 +4,11 @@ class ApiController < ApplicationController
 
   before_filter :authorize_token,:except=>[:login,:signup]
 
+  def forget_password
+    current_user.forgot_password!
+    ClearanceMailer.change_password(current_user).deliver
+  end
+
   def zhentis
     render :json=>Question.zhentis
   end
