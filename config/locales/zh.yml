@@ -36,6 +36,7 @@
     labels:
       password:
         password: '密码'
+        email: '邮件'
       session:
         username: '用户名'
         password: '密码'

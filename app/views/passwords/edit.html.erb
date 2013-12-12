@@ -5,7 +5,7 @@
 
   <%= simple_form_for :password_reset,
         :url => user_password_path(@user, :token => @user.confirmation_token),
-        :html => { :method => :put,:class => 'form-horizontal' } } do |form| %>
+        :html => { :method => :put,:class => 'form-horizontal'  } do |form| %>
     <%= form.input :password%>
     <div class="control-group">
       <div class="controls">
