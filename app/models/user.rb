@@ -12,9 +12,11 @@ class User < ActiveRecord::Base
 
   validates :username,:email,:phone,:presence=>true
   validates :username, :length => { :minimum => 3 }
+
   validates :username,:uniqueness=>true
   validates :email,:uniqueness=>true
   validates :qq,:uniqueness=>true
+  
   after_save :assign_trial_captcha
   # validates :password, :confirmation => true,:unless => Proc.new { |a| a.password.blank? }
   include Clearance::User
