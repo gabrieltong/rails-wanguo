@@ -1,8 +1,4 @@
 <%- model_class = Captcha -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
-</div>
-
 <ul class="nav nav-pills">
   <li class="<%=tab_class(:valid)%>">
   	<%=link_to '生效中',:controller=>:captchas,:action=>:valid%>  

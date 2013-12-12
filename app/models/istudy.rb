@@ -1,20 +1,112 @@
 # encoding: UTF-8
 class Istudy
-  Map = [
-    {:title=>'民法',:ratio=>0.16,:law_ratio=>0.2,:law_cost=>96,:question_cost=>18},
-    {:title=>'刑法',:ratio=>0.16,:law_ratio=>0.2,:law_cost=>96,:question_cost=>15},
-    {:title=>'行政法',:ratio=>0.08,:law_ratio=>0.2,:law_cost=>48,:question_cost=>8},
-    {:title=>'法理学',:ratio=>0.06,:law_ratio=>0.5,:law_cost=>10000,:question_cost=>9},
-    {:title=>'法制史',:ratio=>0.02,:law_ratio=>0.5,:law_cost=>10000,:question_cost=>4},
-    {:title=>'宪法',:ratio=>0.03,:law_ratio=>0.5,:law_cost=>18,:question_cost=>9},
-    {:title=>'司法制度',:ratio=>0.02,:law_ratio=>0.5,:law_cost=>12,:question_cost=>5},
-    {:title=>'商法',:ratio=>0.08,:law_ratio=>0.5,:law_cost=>48,:question_cost=>13},
-    {:title=>'经济法',:ratio=>0.07,:law_ratio=>0.5,:law_cost=>42,:question_cost=>12},
-    {:title=>'刑诉',:ratio=>0.12,:law_ratio=>0.8,:law_cost=>72,:question_cost=>40},
-    {:title=>'民诉',:ratio=>0.12,:law_ratio=>0.8,:law_cost=>72,:question_cost=>45},
-    {:title=>'国际法',:ratio=>0.02,:law_ratio=>0.8,:law_cost=>12,:question_cost=>10},
-    {:title=>'国际私法',:ratio=>0.03,:law_ratio=>0.8,:law_cost=>18,:question_cost=>13},
-    {:title=>'国际经济法',:ratio=>0.03,:law_ratio=>0.8,:law_cost=>18,:question_cost=>15}
+  Map = [ 
+    {
+      :title=>'社会主义法治理念',
+       :radio=>0.01,
+       :law_ratio=>0.2, 
+       :law_cost=>10000 ,
+       :question_cost=>5 
+    },
+    {
+      :title=>'法理学',
+      :radio=>0.06,
+      :law_ratio=>0.5, 
+      :law_cost=>10000 ,
+      :question_cost=>9 
+    },
+    {
+      :title=>'法制史',
+      :radio=>0.02,
+      :law_ratio=>0.5, 
+      :law_cost=>10000 ,
+      :question_cost=>4 
+    },
+    {
+      :title=>'宪法',
+      :radio=>0.03,
+      :law_ratio=>0.5, 
+      :law_cost=>18,
+      :question_cost=>9 
+    },
+    {
+      :title=>'经济法',
+      :radio=>0.07,
+      :law_ratio=>0.5, 
+      :law_cost=>42,
+      :question_cost=>12
+    },
+    {
+      :title=>'国际法',
+      :radio=>0.02,
+      :law_ratio=>0.8, 
+      :law_cost=>12,
+      :question_cost=>10
+    },
+    {
+      :title=>'国际私法',
+      :radio=>0.03,
+      :law_ratio=>0.8, 
+      :law_cost=>18,
+      :question_cost=>13
+    },
+    {
+      :title=>'国际经济法',
+      :radio=>0.03,
+      :law_ratio=>0.8, 
+      :law_cost=>18,
+      :question_cost=>15
+    },
+    {
+      :title=>'司法制度和法律职业道德',
+      :radio=>0.01,
+      :law_ratio=>0.5, 
+      :law_cost=>12,
+      :question_cost=>5 
+    },
+    {
+      :title=>'刑法',
+      :radio=>0.06,
+      :law_ratio=>0.2, 
+      :law_cost=>96,
+      :question_cost=>15
+    },
+    {
+      :title=>'刑事诉讼法',
+      :radio=>0.02,
+      :law_ratio=>0.8, 
+      :law_cost=>72,
+      :question_cost=>40
+    },
+    {
+      :title=>'行政法与行政诉讼法',
+      :radio=>0.08,
+      :law_ratio=>0.2, 
+      :law_cost=>48,
+      :question_cost=>8 
+    },
+    {
+      :title=>'民法',
+      :radio=>0.06,
+      :law_ratio=>0.2, 
+      :law_cost=>96,
+      :question_cost=>18
+    },
+    {
+      :title=>'商法',
+      :radio=>0.08,
+      :law_ratio=>0.5, 
+      :law_cost=>48,
+      :question_cost=>13
+    },
+    {
+      :title=>'民事诉讼法与仲裁制度',
+      :radio=>0.12,
+      :law_ratio=>0.8, 
+      :law_cost=>72,
+      :question_cost=>45
+    },
+    
   ]
 
   def self.cache_complex
@@ -31,7 +123,7 @@ class Istudy
 
   # 综合实力排名
   def self.complex_rank(user)
-    {:total=>User.count(),:rank=>User.where("complex > ?",user.complex).count()+1,:value=>user.complex}
+    {:total=>User.count(), :rank=>User.where("complex > ?",user.complex).count()+1,:value=>user.complex}
   end
 
   # 综合能力数值
@@ -54,6 +146,17 @@ class Istudy
     (Heartbeat.duration(Heartbeat.ranges(user,user))*1.0/60/3).to_i*0.1
   end
 
+  # 部门法子项的进度情况
+  def self.sub_epmenus_summaries(user,id)
+    Epmenu.find(id).children.collect do |epmenu|
+      ss = History.mastered_status(epmenu,user)
+      {
+        :title=>epmenu.title,
+        :radio=> ss[:total]==0 ? 0 : ss[:mastered]*1.0/ss[:total] 
+      }
+    end
+  end
+
   # 取得用户部门法学习情况
   def self.epmenu_summary(user,type)
     lr = law_ratio(user,type)
@@ -64,10 +167,11 @@ class Istudy
 
     mastered_status = History.mastered_status(epmenu,user)      
 
-    question_ratio = [(mastered_status[:mastered].size/setting[:question_cost]).to_i/100.0,(1-setting[:law_ratio])].min
+    question_ratio = [(mastered_status[:mastered]/setting[:question_cost]).to_i/100.0,(1-setting[:law_ratio])].min
 
     {
       :id=>epmenu.try(:id) || 0,
+      :title=>type,
       :law_ratio=>lr,
       :question_ratio=>question_ratio,
       :mastered_status=>mastered_status,
@@ -79,11 +183,16 @@ class Istudy
   def self.epmenus_summaries(user)
     result = {
       :total=>0,
-      :epmenus=>{}
+      :epmenus=>[]
     }
     Map.collect{|i|i[:title]}.each do |type|
-      result[:epmenus][type] = self.epmenu_summary(user,type)
-      result[:total] += result[:epmenus][type][:ratio]
+      # result[:epmenus][type] = self.epmenu_summary(user,type)
+      # result[:total] += result[:epmenus][type][:ratio]
+
+      data = self.epmenu_summary(user,type)
+      result[:epmenus].push data
+      # result[:epmenus][type] = self.epmenu_summary(user,type)
+      result[:total] += data[:ratio]
     end
     
     result

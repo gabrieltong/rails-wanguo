@@ -1,5 +1,5 @@
 GIT
-  remote: http://github.com/gabrieltong/acts_as_collectable.git
+  remote: https://github.com/gabrieltong/acts_as_collectable.git
   revision: 09fdaf746c26f146f8b939e94bb495f71419dd6a
   specs:
     acts_as_collectable (0.0.1)
@@ -110,6 +110,9 @@ GEM
       activesupport (= 3.2.13)
       bundler (~> 1.0)
       railties (= 3.2.13)
+    rails-i18n (3.0.0)
+      i18n (~> 0.5)
+      rails (>= 3.0.0, < 4.0.0)
     railties (3.2.13)
       actionpack (= 3.2.13)
       activesupport (= 3.2.13)
@@ -189,6 +192,7 @@ DEPENDENCIES
   mysql2
   paperclip (= 3.0.4)
   rails (= 3.2.13)
+  rails-i18n (~> 3.0.0)
   randumb
   rest-client
   rolify

@@ -1,4 +1,6 @@
 class ExampointsController < ApplicationController
+  before_filter :authorize
+  authorize_resource
   # GET /exampoints
   # GET /exampoints.json
   def index

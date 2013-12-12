@@ -1,4 +1,5 @@
 class CaptchasController < ApplicationController
+  before_filter :authorize
   authorize_resource
   # GET /captchas
   # GET /captchas.json

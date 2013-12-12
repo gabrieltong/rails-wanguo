@@ -1,5 +1,6 @@
 class ImportsController < ApplicationController
   before_filter :authorize
+  authorize_resource
   # GET /imports
   # GET /imports.json
   def index
@@ -52,8 +53,15 @@ class ImportsController < ApplicationController
 
     respond_to do |format|
       if @import.save
-        # @import.import
-        # @import.import
+        if @import.state == 'audios'
+          @import.import
+        end
+
+        if @import.state == 'laws_zip'
+          # @import.import
+          # @import.import
+        end
+        
         format.html { redirect_to @import, notice: 'Import was successfully created.' }
         format.json { render json: @import, status: :created, location: @import }
       else

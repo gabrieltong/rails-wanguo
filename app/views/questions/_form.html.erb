@@ -1,45 +1,16 @@
-<%= form_for(@question) do |f| %>
-  <% if @question.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
-
-      <ul>
-      <% @question.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :score %><br />
-    <%= f.number_field :score %>
-  </div>
-  <div class="field">
-    <%= f.label :num %><br />
-    <%= f.text_field :num %>
-  </div>
-  <div class="field">
-    <%= f.label :state %><br />
-    <%= f.text_field :state %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label :answer %><br />
-    <%= f.text_field :answer %>
-  </div>
-  <div class="field">
-    <%= f.label :choices %><br />
-    <%= f.text_area :choices %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+<%= simple_form_for @question, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :title %>
+  <%= f.input :score %>
+  <%= f.input :num %>
+  <%= f.input :state %>
+  <%= f.input :description %>
+  <%= f.input :answer %>
+  <%= f.input :choices %>
+  <%= f.input :description3 %>
+  <%= f.input :choices_description %>
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= link_to t('cancel', :default => t("helpers.links.cancel")),
+                questions_path, :class => 'btn' %>
   </div>
 <% end %>

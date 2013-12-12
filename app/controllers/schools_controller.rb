@@ -1,4 +1,5 @@
 class SchoolsController < ApplicationController
+  before_filter :authorize
   authorize_resource
   # GET /schools
   # GET /schools.json

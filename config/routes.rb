@@ -9,6 +9,7 @@ RailsWanguo::Application.routes.draw do
   resources :import_errors
 
 
+
   get "captchas/valid"
 
   get "captchas/expired"
@@ -31,6 +32,8 @@ RailsWanguo::Application.routes.draw do
 
   resources :heartbeats
 
+  post 'api/forget_password'
+
   post 'api/zhentis'
 
   post 'api/zhenti'
@@ -52,6 +55,8 @@ RailsWanguo::Application.routes.draw do
   post 'api/signup'
 
   post 'api/mix'
+
+  post 'api/istudy_sub_epmenus_summaries'
 
   post 'api/istudy_epmenu_summary'
 

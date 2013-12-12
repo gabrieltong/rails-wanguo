@@ -12,7 +12,8 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: rails-wanguo_gabriellocal
+  # database: rails-wanguo_gabriellocal
+  database: rails-wanguo_data2
   pool: 5
   username: root
   password:
@@ -49,5 +50,5 @@ gabriellocal:
   pool: 5
   username: root
   password:
-  socket: /tmp/mysql.sock 
-  # socket: /Applications/XAMPP/xamppfiles/var/mysql/mysql.sock
+  # socket: /tmp/mysql.sock 
+  socket: /Applications/XAMPP/xamppfiles/var/mysql/mysql.sock

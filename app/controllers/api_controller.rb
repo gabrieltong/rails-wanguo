@@ -4,6 +4,11 @@ class ApiController < ApplicationController
 
   before_filter :authorize_token,:except=>[:login,:signup]
 
+  def forget_password
+    current_user.forgot_password!
+    ClearanceMailer.change_password(current_user).deliver
+  end
+
   def zhentis
     render :json=>Question.zhentis
   end
@@ -465,6 +470,10 @@ class ApiController < ApplicationController
     render :json=>Istudy.epmenu_summary(current_user,params[:type])
   end
 
+  def istudy_sub_epmenus_summaries
+    render :json=>Istudy.sub_epmenus_summaries(current_user,params[:id])
+  end
+
   def istudy_epmenus_summaries
     render :json=>Istudy.epmenus_summaries(current_user)
   end
@@ -582,7 +591,7 @@ class ApiController < ApplicationController
     if laws.first && laws.first.ancestry_depth >= 3
       laws.to_json(
         :include=>{:exampoints=>{}},
-        :methods=>[:is_collected,:sound_url,:children_state]
+        :methods=>[:is_collected,:sound_url,:children_state,:questions_count]
       )
     else
       laws.to_json(

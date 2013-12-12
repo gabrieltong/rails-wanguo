@@ -1,11 +1,42 @@
 'zh-CN': 
+  audios: '音频'
+  will_paginate:
+    previous_label: "&#8592; 上一页"
+    next_label: " &#8594;"
+    page_gap: "&hellip;"
+  actions: '操作'
+  edit: '编辑'
+  destroy: '删除'
+  back: '返回'
+  new: '创建'
+  cancel: '取消'
+  date:
+    order:
+    - :year
+    - :month
+    - :day
+  schools:
+    index: 
+      title: '课程'
+    new:
+      title: '创建课程'
+  books:
+    index: 
+      title: '书籍'
+    new:
+      title: '创建书籍'
   captchas:
+    valid:
+      title: '有效验证码'
+    unused:
+      title: '未使用验证码'  
     expired: 
       title: '已过期验证码'
   simple_form:
     labels:
       password:
         password: '密码'
+        email: '邮件'
       session:
         username: '用户名'
         password: '密码'
@@ -16,9 +47,19 @@
         email: '邮箱'
         password: '密码'
         signature: '个性签名'
-  laws: '收费法条' 
-  freelaws: '免费法条' 
-  questions: '真题'
+  freelaws:  
+    index:
+      title: '免费法条'
+    edit:
+      title: '编辑免费法条'        
+  laws:  
+    index:
+      title: '法条班'
+    edit:
+      title: '编辑法条'
+  questions:
+    index:
+      title: '历年真题'
   eps: '知识点'
   laws_zip: '法条压缩包'
   freelaws_zip: '免费法条压缩包'
@@ -57,11 +98,26 @@
     submit:
       create: "创建%{model}"
       update: "更新%{model}"
+  errors:
+    messages:
+      blank: '不能未空'
   activerecord:
+    school: '课程'
     errors:
       models:
+        # books:
+        #   attributes:
+        #     author: '标题不能未空'
+        #     details: '详情不能未空'
+        #     press: '出版社不能未空'
+        #     price: '不能未空'
+        #     taobao: '不能未空'
+        #     title:'不能未空'
+        #     file:'不能未空'
         user:
           attributes:
+            qq:
+              taken: 'QQ号码已经被占用'
             username:
               blank: '用户名不能为空'
             phone:
@@ -71,11 +127,53 @@
             password:
               blank: '密码不能为空'
     models:
+      law: '法条班'
+      freelaw: '免费法条'
+      question: '历年真题'
+      book: '书籍'
+      school: '课程'
       import: '导入'
     attributes:
       default:
         state: '审核状态'
         created_at: '添加日期'
+      question:
+        title: '标题'
+        score: '分值'
+        num: '编号'
+        state: '类型'
+        description: '开始描述'
+        description3: '结束描述'
+        answer: '答案'
+        choices: '选项'
+        choices_description: '选项描述'
+      law:
+        title: '标题'
+        blanks: '填空'
+        score: '分值'
+        number: '编号'
+      freelaw:
+        title: '标题'
+        blanks: '填空'
+        score: '分值'
+        number: '编号'  
+      school:
+        title: '名称'
+        city: '城市'
+        price: '价钱'
+        started_at: '开课时间'
+        url: '课程网址'
+        file: '封面'
+        details: '详情'
+      book:
+        title: '名称'
+        press: '出版社'
+        author: '作者'
+        price: '价钱'
+        taobao: '淘宝网址'
+        file: '封面'
+        published_at: '发布日期'
+        details: '详情'
       captcha:
         title: '验证码'
         user_id: '用户'

@@ -1,4 +1,6 @@
 class HeartbeatsController < ApplicationController
+  before_filter :authorize
+  authorize_resource
   # GET /heartbeats
   # GET /heartbeats.json
   def index

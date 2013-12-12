@@ -1,4 +1,5 @@
 class BooksController < ApplicationController
+  before_filter :authorize
   authorize_resource
   # GET /books
   # GET /books.json

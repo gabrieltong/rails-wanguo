@@ -1,9 +1,11 @@
 class QuestionsController < ApplicationController
+  before_filter :authorize
+  authorize_resource
   # GET /questions
   # GET /questions.json
   def index
-    @questions = Question.all
-
+    @relation = Question.where('id>0')
+    paginate
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @questions }
@@ -80,4 +82,10 @@ class QuestionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def paginate_params
+    @page = params[:page] || 1 
+    @per_page = params[:per_page] || 20
+    @random = params[:random].to_i || 0
+  end  
 end

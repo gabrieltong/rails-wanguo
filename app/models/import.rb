@@ -11,7 +11,7 @@ class Import < ActiveRecord::Base
 
   has_many :import_errors
   
-  State = %w(laws freelaws questions eps laws_zip freelaws_zip)
+  State = %w(laws_zip audios)
 
   def self.import_all
     Import.freelaws.each {|i|i.import}
@@ -90,6 +90,32 @@ class Import < ActiveRecord::Base
   end
 
   state_machine :state,:initial=>:freelaws do 
+    state :audios do
+      def import 
+        target_dir = 'public/audio'
+        `
+        mkdir -p #{target_dir}
+        `
+        Zip::ZipFile.open(file.path) do |zipfile|
+          zipfile.each do |file|
+            target = "#{target_dir}/#{file.to_s}"
+            zipfile.extract(file,target) unless File.exist?(target)
+          end
+          Dir.glob("#{target_dir}/*.mp3").each do |file|
+            number =  File.basename(file,".*")
+            law = Law.find_by_number(number)
+            if law
+              law.sound = File.open(file)
+              law.save
+            end
+          end
+          `
+          rm -rf #{target_dir}
+          `
+        end
+      end
+    end
+
     state :laws_zip do 
       def import 
         base = 'tmp'
@@ -126,41 +152,7 @@ class Import < ActiveRecord::Base
     end
 
     state :freelaws_zip do 
-      def import 
-        base = 'tmp'
-        name = File.basename(file.path).split('.')[0..-2].join('.').strip
-        dir = File.dirname(file.path)
-        tmp = "#{dir}/tmp"
-        target = "#{tmp}/#{name}"
-        `
-        rm -rf #{tmp} &&
-        mkdir #{tmp} &&
-        cd #{tmp} &&
-        unzip #{file.path}
-        `
-
-        one = Freelaw.find_or_create_by_title name.strip
-        Dir.entries(target).delete_if {|i|i=='.'||i=='..'}.each do |two|
-          two_path = "#{target}/#{two}"
-          if File.directory? two_path
-            Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
-              path = "#{two_path}/#{other}"
-              data = open(path)
-
-              if data[0][0..3] == %w(法条编号 章 节 法条内容)
-                two = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
-                three_title = ''
-                data[1..-1].each do |row|
-                  three_title = row[1] unless row[1].blank? 
-                  three_title = '第一章' if three_title.blank?
-                  three = two.children.find_or_create_by_title three_title.strip
-                  four = three.children.find_or_create_by_title row[3].strip
-                  four.save
-                end
-              end
-            end
-          end
-        end
+      def import
       end
     end
 

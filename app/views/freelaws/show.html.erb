@@ -1,20 +1,14 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>Title:</b>
-  <%= @freelaw.title %>
-</p>
-
-<p>
-  <b>Content:</b>
-  <%= @freelaw.content %>
-</p>
-
-<p>
-  <b>Ancestry:</b>
-  <%= @freelaw.ancestry %>
-</p>
-
-
-<%= link_to 'Edit', edit_freelaw_path(@freelaw) %> |
-<%= link_to 'Back', freelaws_path %>
+<%- model_class = Freelaw -%>
+<%= render_breadcrumbs %>
+<%=render 'freelaws/list',:collection=>@freelaws%>
+<div class="form-actions">
+  <%= link_to t('back', :default => t("helpers.links.back")),
+              freelaws_path, :class => 'btn'  %>
+  <%= link_to t('edit', :default => t("helpers.links.edit")),
+              edit_freelaw_path(@freelaw), :class => 'btn' %>
+  <%= link_to t('destroy', :default => t("helpers.links.destroy")),
+              freelaw_path(@freelaw),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>
