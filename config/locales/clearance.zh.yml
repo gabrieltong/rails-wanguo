@@ -51,7 +51,7 @@
         '请根据邮件重置密码'
     edit:
       description:
-        'Your password has been reset. Choose a new password below.'
+        '请输入新密码.'
       title:
         '修改密码'
     new:
