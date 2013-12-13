@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131213020749) do
+ActiveRecord::Schema.define(:version => 20131213035419) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -292,8 +292,8 @@ ActiveRecord::Schema.define(:version => 20131213020749) do
     t.text     "dec"
     t.string   "username"
     t.float    "complex",                           :default => 0.0
-    t.integer  "qq"
-    t.integer  "phone"
+    t.string   "qq"
+    t.string   "phone"
     t.text     "signature"
   end
 
