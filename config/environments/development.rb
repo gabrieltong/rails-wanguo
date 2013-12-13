@@ -37,14 +37,24 @@ RailsWanguo::Application.configure do
 
   config.action_mailer.delivery_method = :smtp
 
+  # config.action_mailer.smtp_settings = {
+  #   address:              'smtp.gmail.com',
+  #   port:                 587,
+  #   domain:               'smtp.gmail.com',
+  #   user_name:            'tongyangmath',
+  #   password:             '',
+  #   authentication:       'plain',
+  #   enable_starttls_auto: true  
+  # }
+
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
-    port:                 587,
-    domain:               'example.com',
-    user_name:            'tongyangmath',
+    address:              'smtp.qq.com',
+    port:                 25,
+    domain:               'smtp.qq.com',
+    user_name:            '331333210@qq.com',
     password:             '',
     authentication:       'plain',
-    enable_starttls_auto: true  
+    enable_starttls_auto: true 
   }
 
   config.action_mailer.default_url_options = { :host => "wg.edu58.cn" }
