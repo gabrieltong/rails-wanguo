@@ -1,5 +1,7 @@
 RailsWanguo::Application.routes.draw do
 
+  # resources :passwords, only: [:create]
+  
   resources :schools
 
 
