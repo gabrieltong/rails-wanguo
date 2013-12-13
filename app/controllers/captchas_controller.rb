@@ -3,6 +3,12 @@ class CaptchasController < ApplicationController
   authorize_resource
   # GET /captchas
   # GET /captchas.json
+
+  def generate
+    Captcha.generate
+    redirect_to request.referer
+  end
+
   def index
     @captchas = Captcha.all
 

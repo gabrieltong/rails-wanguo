@@ -180,7 +180,7 @@
         valid_at: '生效日期'
         expired_at: '实效日期'
         assigned_at: '绑定日期'
-        duration: '持续时间'
+        duration: '持续时间(天)'
 
       import:
         title: '标题'

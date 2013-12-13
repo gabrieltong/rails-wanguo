@@ -1,7 +1,7 @@
 RailsWanguo::Application.routes.draw do
 
   # resources :passwords, only: [:create]
-  
+
   resources :schools
 
 
@@ -10,8 +10,8 @@ RailsWanguo::Application.routes.draw do
 
   resources :import_errors
 
-
-
+  get "captchas/generate"
+  
   get "captchas/valid"
 
   get "captchas/expired"
