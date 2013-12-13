@@ -2,11 +2,17 @@
 class ApiController < ApplicationController
   # include Clearance::Controller
 
-  before_filter :authorize_token,:except=>[:login,:signup]
+  before_filter :authorize_token,:except=>[:login,:signup,:forget_password]
 
   def forget_password
-    current_user.forgot_password!
-    ClearanceMailer.change_password(current_user).deliver
+    user = User.where(:email=>params[:email]).first
+    if user
+      user.forgot_password!
+      ClearanceMailer.change_password(user).deliver
+      render_success
+    else
+      render_fail
+    end
   end
 
   def zhentis

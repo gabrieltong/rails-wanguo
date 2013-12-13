@@ -2,11 +2,9 @@
   clearance_mailer:
     change_password:
       opening:
-        'Someone, hopefully you, requested we send you a link to change your
-         password:'
+        '请点击链接重置密码:'
       closing:
-        "If you didn't request this, ignore this email. Your password has not
-         been changed."
+        "如果您没有发起过该请求,请忽略此邮件."
   flashes:
     failure_when_forbidden:
       '请检查路径后,重新提交.'
@@ -47,7 +45,7 @@
         '请根据邮件重置密码'
     edit:
       description:
-        'Your password has been reset. Choose a new password below.'
+        '请选择一个新密码.'
       title:
         '修改密码'
     new:
