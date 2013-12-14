@@ -66,9 +66,8 @@ class ApiController < ApplicationController
 
   def signup
     @user = user_from_params
-
-    sign_in(@user)
-    if @user
+    if @user.valid?
+      sign_in(@user)
       render :json=>{:success=>true,:user=>@user}
     else
       render :json=>{:success=>false,:errors=>@user.errors.full_messages}
