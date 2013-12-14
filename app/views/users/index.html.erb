@@ -9,6 +9,10 @@
       <th><%= model_class.human_attribute_name(:email) %></th>
       <th><%= model_class.human_attribute_name(:qq) %></th>
       <th><%= model_class.human_attribute_name(:phone) %></th>
+      <th><%= model_class.human_attribute_name(:complex_rank) %></th>
+      <th><%= model_class.human_attribute_name(:xueba) %></th>
+      <td><strong><%= model_class.human_attribute_name(:time) %>:</strong></td>
+      <td><strong><%= model_class.human_attribute_name(:evaluate) %>:</strong></td>
       <!-- <th><%=t 'actions', :default => t("helpers.actions") %></th> -->
     </tr>
   </thead>
@@ -19,6 +23,10 @@
         <td><%= user.email %></td>
         <td><%= user.qq %></td>
         <td><%= user.phone %></td>
+        <td><%= "#{Istudy.complex_rank(user)[:rank]}/#{Istudy.complex_rank(user)[:total]}" %></td>
+        <td><%= Istudy.xueba(user) %></td>
+        <td><%= Heartbeat.duration(Heartbeat.ranges(user,user)) %></td>
+        <td><%= Istudy.evaluate(user) %></td>
 <!--        <td>
            <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_user_path(user), :class => 'btn btn-mini' %>
