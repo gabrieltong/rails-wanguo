@@ -321,7 +321,7 @@ class ApiController < ApplicationController
 
   def mistake_questions_by_epmenu
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
-    @collection = Question.where(:id=>histories.collect{|i|i.question_id})
+    @relation = Question.where(:id=>histories.collect{|i|i.question_id})
     paginate
     render :json=>wrap_questions(@collection)
   end
@@ -384,7 +384,7 @@ class ApiController < ApplicationController
     questions = eps.collect do |ep|
       Collect.children(current_user,ep)
     end.flatten.uniq
-    @collection = Question.where(:id=>questions.collect{|i|i.id})
+    @relation = Question.where(:id=>questions.collect{|i|i.id})
     paginate
     render :json=>wrap_questions(@collection)
   end
