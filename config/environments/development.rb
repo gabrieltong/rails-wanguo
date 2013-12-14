@@ -47,15 +47,26 @@ RailsWanguo::Application.configure do
   #   enable_starttls_auto: true  
   # }
 
+  # config.action_mailer.smtp_settings = {
+  #   address:              'smtp.qq.com',
+  #   port:                 25,
+  #   domain:               'smtp.qq.com',
+  #   user_name:            '331333210@qq.com',
+  #   password:             '',
+  #   authentication:       'plain',
+  #   enable_starttls_auto: true 
+  # }
+
   config.action_mailer.smtp_settings = {
-    address:              'smtp.qq.com',
-    port:                 25,
-    domain:               'smtp.qq.com',
-    user_name:            '331333210@qq.com',
-    password:             '',
+    address:              'smtp.exmail.qq.com',
+    port:                 465,
+    domain:               'smtp.exmail.qq.com',
+    user_name:            'test@wanguoschool.com',
+    password:             '1qaz@WSX',
     authentication:       'plain',
     enable_starttls_auto: true 
   }
+  
 
   config.action_mailer.default_url_options = { :host => "wg.edu58.cn" }
 end
