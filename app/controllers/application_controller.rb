@@ -30,7 +30,7 @@ private
     @page = params[:page] || 1 
     @per_page = params[:per_page] || 1000
     @random = params[:random].to_i || 0
-    @per_random = params[:per_random].to_i || 15
+    @per_random = params[:per_random] || 15
   end
 
   # 根据分页的数量
