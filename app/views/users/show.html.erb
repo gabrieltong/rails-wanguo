@@ -3,7 +3,7 @@
   <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
 </div>
 
-<table class="table table table-striped table-bordered">
+<table class="table table-striped table-bordered">
   <tr>
     <td><strong><%= model_class.human_attribute_name(:email) %>:</strong></td>
     <td><%= @user.email %></td>
@@ -27,6 +27,41 @@
   <tr>
     <td><strong><%= model_class.human_attribute_name(:complex) %>:</strong></td>
     <td><%= @user.complex %></td>
+  </tr>
+  <tr>
+    <td><strong><%= model_class.human_attribute_name(:complex_rank) %>:</strong></td>
+    <td><%= "#{Istudy.complex_rank(@user)[:rank]}/#{Istudy.complex_rank(@user)[:total]}" %></td>
+  </tr>
+  <tr>
+    <td><strong><%= model_class.human_attribute_name(:xueba) %>:</strong></td>
+    <td><%= Istudy.xueba(@user) %></td>
+  </tr>
+  <tr>
+    <td><strong><%= model_class.human_attribute_name(:time) %>:</strong></td>
+    <td><%= Heartbeat.duration(Heartbeat.ranges(@user,@user)) %></td>
+  </tr>
+  <tr>
+    <td><strong><%= model_class.human_attribute_name(:evaluate) %>:</strong></td>
+    <td><%= Istudy.evaluate(@user) %></td>
+  </tr>
+  <tr>
+    <td><strong><%= model_class.human_attribute_name(:epmenus_summaries) %>:</strong></td>
+    <td>
+      <table class="table table-striped table-bordered">
+        <% Istudy.epmenus_summaries(@user)[:epmenus].each do |summary| %>
+        <tr>
+          <td class='span3'>
+            <%=summary[:title]%>
+          </td>
+          <td>
+            <div class="progress progress-striped active" >
+              <div class="bar bar-success" style="width: <%=summary[:ratio]*100%>%;"></div>
+            </div>
+          </td>
+        </tr>
+        <% end %>
+      </table>
+    </td>
   </tr>
 </table>
 

@@ -37,8 +37,12 @@
     <%= javascript_include_tag "application" %>
   </head>
   <body>
-    <%= nav_bar :fixed => :top, :brand => "万国", :responsive => true do %>
+    <%= nav_bar :fixed => :top, :brand => "考拉", :responsive => true do %>
       <%= menu_group do %>
+
+        <% if current_user && can?(:view,School) %>
+        <%=menu_item '学员列表', users_path %>  
+        <% end %>
 
         <% if current_user && can?(:view,School) %>
         <%=menu_item '课程管理', schools_path %>  

@@ -21,8 +21,7 @@
         <td><%= captcha.assigned_at %></td>
         <td><%= captcha.valid_at %></td>
         <td><%= captcha.expired_at %></td>
-        <td><%= captcha.duration %></td>
-        <td><%= captcha.created_at %></td>
+        <td><%= minutes_to_days captcha.duration %></td>
         <td>
           <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_captcha_path(captcha), :class => 'btn btn-mini' %>

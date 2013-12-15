@@ -2,11 +2,17 @@
 class ApiController < ApplicationController
   # include Clearance::Controller
 
-  before_filter :authorize_token,:except=>[:login,:signup]
+  before_filter :authorize_token,:except=>[:login,:signup,:forget_password]
 
   def forget_password
-    current_user.forgot_password!
-    ClearanceMailer.change_password(current_user).deliver
+    user = User.where(:email=>params[:email]).first
+    if user
+      user.forgot_password!
+      ClearanceMailer.change_password(user).deliver
+      render_success
+    else
+      render_fail
+    end
   end
 
   def zhentis
@@ -60,9 +66,8 @@ class ApiController < ApplicationController
 
   def signup
     @user = user_from_params
-
-    sign_in(@user)
-    if @user
+    if @user.valid?
+      sign_in(@user)
       render :json=>{:success=>true,:user=>@user}
     else
       render :json=>{:success=>false,:errors=>@user.errors.full_messages}
@@ -315,8 +320,8 @@ class ApiController < ApplicationController
 
   def mistake_questions_by_epmenu
     histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
-    @collection = Question.where(:id=>histories.collect{|i|i.question_id}).random(15)
-    # paginate
+    @relation = Question.where(:id=>histories.collect{|i|i.question_id})
+    paginate
     render :json=>wrap_questions(@collection)
   end
 
@@ -378,8 +383,8 @@ class ApiController < ApplicationController
     questions = eps.collect do |ep|
       Collect.children(current_user,ep)
     end.flatten.uniq
-    @collection = Question.where(:id=>questions.collect{|i|i.id}).random(15)
-    # paginate
+    @relation = Question.where(:id=>questions.collect{|i|i.id})
+    paginate
     render :json=>wrap_questions(@collection)
   end
 

@@ -5,33 +5,39 @@
 <table class="table table-striped table-bordered">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:username) %></th>
       <th><%= model_class.human_attribute_name(:email) %></th>
       <th><%= model_class.human_attribute_name(:qq) %></th>
       <th><%= model_class.human_attribute_name(:phone) %></th>
-      <th><%=t 'actions', :default => t("helpers.actions") %></th>
+      <th><%= model_class.human_attribute_name(:complex_rank) %></th>
+      <th><%= model_class.human_attribute_name(:xueba) %></th>
+      <td><strong><%= model_class.human_attribute_name(:time) %>:</strong></td>
+      <td><strong><%= model_class.human_attribute_name(:evaluate) %>:</strong></td>
+      <!-- <th><%=t 'actions', :default => t("helpers.actions") %></th> -->
     </tr>
   </thead>
   <tbody>
     <% @collection.each do |user| %>
       <tr>
-        <td><%= link_to user.id, user_path(user) %></td>
-        <td><%= user.username %></td>
+        <td><%= link_to user.username, user_path(user) %></td>
         <td><%= user.email %></td>
         <td><%= user.qq %></td>
         <td><%= user.phone %></td>
-        <td>
-<!--           <%= link_to t('edit', :default => t("helpers.links.edit")),
+        <td><%= "#{Istudy.complex_rank(user)[:rank]}/#{Istudy.complex_rank(user)[:total]}" %></td>
+        <td><%= Istudy.xueba(user) %></td>
+        <td><%= Heartbeat.duration(Heartbeat.ranges(user,user)) %></td>
+        <td><%= Istudy.evaluate(user) %></td>
+<!--        <td>
+           <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_user_path(user), :class => 'btn btn-mini' %>
           <%= link_to t('destroy', :default => t("helpers.links.destroy")),
                       user_path(user),
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-mini btn-danger' %> -->
-        </td>
+                      :class => 'btn btn-mini btn-danger' %> 
+        </td>-->
       </tr>
     <% end %>
   </tbody>
 </table>
-<%= will_paginate collection, renderer: BootstrapPagination::Rails,:class=>'text-center pagination' %>
+<%= will_paginate @collection, renderer: BootstrapPagination::Rails,:class=>'text-center pagination' %>

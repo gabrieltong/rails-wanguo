@@ -13,10 +13,12 @@ class User < ActiveRecord::Base
   validates :username,:email,:phone,:presence=>true
   validates :username, :length => { :minimum => 3 }
 
-
+  # validates :qq,:numericality => { :only_integer => true }
+  validates :phone,:numericality => { :only_integer => true }
+  
   validates :username,:uniqueness=>true
   validates :email,:uniqueness=>true
-  validates :qq,:uniqueness=>true
+  # validates :qq,:uniqueness=>true
   validates :phone,:uniqueness=>true
   
   after_save :assign_trial_captcha
