@@ -4,6 +4,7 @@ class Book < ActiveRecord::Base
 
   validates :author, :details, :press, :price, :taobao, :title,:file,:presence=>true
   validates_attachment :file,:presence=>true
+  validates :price,:numericality => { :only_integer => true }
   def as_json(options={})
     super({:methods=>[:file_url]}.merge options)
   end

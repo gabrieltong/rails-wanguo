@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_filter :find_user
   skip_before_filter :find_user,:only=>[:index]
   
+  authorize_resource
   def index
     @relation = User.where('id>0')
     paginate

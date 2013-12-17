@@ -30,6 +30,7 @@ private
     @page = params[:page] || 1 
     @per_page = params[:per_page] || 1000
     @random = params[:random].to_i || 0
+    @per_random = params[:per_random] || 15
   end
 
   # 根据分页的数量
@@ -40,7 +41,7 @@ private
     if @random == 0
       @collection = @relation.paginate(:page=>@page,:per_page=>@per_page)
     else
-      @collection = @relation.random(@per_page)
+      @collection = @relation.random(@per_random)
     end
   end  
 

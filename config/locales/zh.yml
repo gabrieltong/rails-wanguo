@@ -15,6 +15,11 @@
     - :year
     - :month
     - :day
+  users:
+    index:
+      title: '学员'
+    show:
+      title: '学员'
   schools:
     index: 
       title: '课程'
@@ -137,6 +142,18 @@
       default:
         state: '审核状态'
         created_at: '添加日期'
+      user:
+        epmenus_summaries: '部门法进度'
+        signature: '个性签名'
+        complex: '综合指数'
+        username: '用户名'
+        email: '邮箱'
+        qq: 'QQ'
+        phone: '手机号'
+        complex_rank: '综合排名'
+        xueba: '学霸指数'
+        time: '学习时间'
+        evaluate: '参考通过率'
       question:
         title: '标题'
         score: '分值'
