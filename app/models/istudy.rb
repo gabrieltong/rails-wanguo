@@ -167,7 +167,7 @@ class Istudy
 
     mastered_status = History.mastered_status(epmenu,user)      
 
-    question_ratio = [(mastered_status[:mastered]/setting[:question_cost]).to_i/100.0,(1-setting[:law_ratio])].min
+    question_ratio = [(mastered_status[:mastered].size/setting[:question_cost]).to_i/100.0,(1-setting[:law_ratio])].min
 
     {
       :id=>epmenu.try(:id) || 0,
