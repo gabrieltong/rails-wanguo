@@ -22,7 +22,7 @@ class History < ActiveRecord::Base
     scope state.name, :conditions => { :state => state.name.to_s }
   end
 
-  def self.log(user_id,question_id,answer)
+  def self.log(user_id,question_id,result)
   	answer.upcase!
   	user = User.find(user_id)
   	question = Question.find(question_id)		
@@ -40,7 +40,7 @@ class History < ActiveRecord::Base
 	  		history.exampoint = ep
 	  		history.answer = answer
 	  		history.epmenu = epmenu
-	  		history.state = (question.answer == answer ? :right : :wrong)
+	  		history.state = (result.to_i == 1 ? :right : :wrong)
 	  		history.save
 	  	end
 	  end
