@@ -59,7 +59,7 @@ RailsWanguo::Application.configure do
 
   config.action_mailer.smtp_settings = {
     address:              'smtp.exmail.qq.com',
-    port:                 465,
+    port:                 25,
     domain:               'smtp.exmail.qq.com',
     user_name:            'test@wanguoschool.com',
     password:             '1qaz@WSX',
