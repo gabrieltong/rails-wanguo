@@ -319,8 +319,10 @@ class ApiController < ApplicationController
   end
 
   def mistake_questions_by_epmenu
-    histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
-    @relation = Question.where(:id=>histories.collect{|i|i.question_id})
+    questions_id = History.mastered_status(Epmenu.find(params[:epmenu_id]),current_user)[:unmastered]
+    @relation = Question.where(:id=>questions_id)
+    # histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
+    # @relation = Question.where(:id=>histories.collect{|i|i.question_id})
     paginate
     render :json=>wrap_questions(@collection)
   end

@@ -53,6 +53,7 @@ class History < ActiveRecord::Base
   end
 
   def self.mastered_status(epmenu,user)
+    
     unless epmenu
       return {
         :mastered=>0,
@@ -66,10 +67,24 @@ class History < ActiveRecord::Base
     unmastered = []
 
     histories = History.by_epmenu(epmenu).by_user(user).group('question_id').select("question_id")
+    # histories.each do |history|
+    #   right_count = History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).right.count()
+    #   wrong_count = History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).wrong.count()
+    #   if right_count*1.0/(right_count+wrong_count) > pass_ratio
+    #     mastered.push history.question_id
+    #   else
+    #     unmastered.push history.question_id
+    #   end
+    # end
+    test_limit = 3
     histories.each do |history|
-      right_count = History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).right.count()
-      wrong_count = History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).wrong.count()
-      if right_count*1.0/(right_count+wrong_count) > pass_ratio
+      master_status = true
+      History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).order('id desc').limit(test_limit).each do |h|
+        if h.wrong?
+          master_status = false
+        end      
+      end
+      if master_status == true
         mastered.push history.question_id
       else
         unmastered.push history.question_id
