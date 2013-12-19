@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131213035419) do
+ActiveRecord::Schema.define(:version => 20131214030528) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -283,15 +283,15 @@ ActiveRecord::Schema.define(:version => 20131213035419) do
   add_index "searches", ["user_id"], :name => "index_searches_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.datetime "created_at",                                         :null => false
-    t.datetime "updated_at",                                         :null => false
-    t.string   "email",                                              :null => false
-    t.string   "encrypted_password", :limit => 128,                  :null => false
+    t.datetime "created_at",                                                                       :null => false
+    t.datetime "updated_at",                                                                       :null => false
+    t.string   "email",                                                                            :null => false
+    t.string   "encrypted_password", :limit => 128,                                                :null => false
     t.string   "confirmation_token", :limit => 128
-    t.string   "remember_token",     :limit => 128,                  :null => false
+    t.string   "remember_token",     :limit => 128,                                                :null => false
     t.text     "dec"
     t.string   "username"
-    t.float    "complex",                           :default => 0.0
+    t.decimal  "complex",                           :precision => 5, :scale => 4, :default => 0.0
     t.string   "qq"
     t.string   "phone"
     t.text     "signature"

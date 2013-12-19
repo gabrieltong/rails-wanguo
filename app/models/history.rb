@@ -56,8 +56,8 @@ class History < ActiveRecord::Base
     
     unless epmenu
       return {
-        :mastered=>0,
-        :unmastered=>0,
+        :mastered=>[],
+        :unmastered=>[],
         :total=>1,
       }
     end
@@ -91,8 +91,8 @@ class History < ActiveRecord::Base
       end
     end
     {
-      :mastered=>mastered.size,
-      :unmastered=>unmastered.size,
+      :mastered=>mastered,
+      :unmastered=>unmastered,
       :total=>epmenu.questions.count()
     }
   end

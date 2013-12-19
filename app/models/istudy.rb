@@ -152,7 +152,7 @@ class Istudy
       ss = History.mastered_status(epmenu,user)
       {
         :title=>epmenu.title,
-        :radio=> ss[:total]==0 ? 0 : ss[:mastered]*1.0/ss[:total] 
+        :radio=> ss[:total]==0 ? 0 : ss[:mastered].size*1.0/ss[:total]
       }
     end
   end
