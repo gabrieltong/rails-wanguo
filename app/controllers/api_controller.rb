@@ -257,7 +257,7 @@ class ApiController < ApplicationController
   # end
 
   def answer_question
-    History.log(current_user.id,params[:question_id],params[:result])
+    History.log(current_user.id,params[:question_id],params[:result],params[:myAnswer])
     render_success
   end
 

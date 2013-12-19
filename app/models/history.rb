@@ -22,7 +22,7 @@ class History < ActiveRecord::Base
     scope state.name, :conditions => { :state => state.name.to_s }
   end
 
-  def self.log(user_id,question_id,result)
+  def self.log(user_id,question_id,result,answer)
   	answer.upcase!
   	user = User.find(user_id)
   	question = Question.find(question_id)		
