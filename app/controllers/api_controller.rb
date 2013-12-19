@@ -267,7 +267,7 @@ class ApiController < ApplicationController
     end
 
     params[:data].each_pair do |_,item|
-      History.log(current_user.id,item[:id],params[:result],params[:myAnswer])
+      History.log(current_user.id,item[:id],item[:result],item[:myAnswer])
     end
     render_success
   end
