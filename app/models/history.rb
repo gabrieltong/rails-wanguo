@@ -47,9 +47,13 @@ class History < ActiveRecord::Base
 	end
 
   def self.correct_rate(user)
-    right_count = History.by_user(user).right.count()
-    wrong_count = History.by_user(user).wrong.count()
-    right_count*1.0/(right_count+wrong_count)
+    right_count = History.by_user(user).right.group('created_at').count().keys.size
+    wrong_count = History.by_user(user).wrong.group('created_at').count().keys.size
+    if right_count+wrong_count == 0
+      return 0
+    else
+      return right_count*1.0/(right_count+wrong_count)
+    end
   end
 
   def self.mastered_status(epmenu,user)

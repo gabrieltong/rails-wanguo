@@ -257,7 +257,7 @@ class ApiController < ApplicationController
   # end
 
   def answer_question
-    History.log(current_user.id,params[:question_id],params[:result],params[:myAnswer])
+    History.log(current_user.id,params[:question_id],params[:result],params[:originalMyAnswer])
     render_success
   end
 
@@ -277,8 +277,8 @@ class ApiController < ApplicationController
     list = Epmenu.where(:id=>histories.collect{|i|i.epmenu_id}).select('id,title')
     list = list.map do |i|
       attrs = i.attributes
-      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>i.id).select('distinct `question_id`').count()
-      attrs[:eps_count] = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>i.id).select('distinct `exampoint_id`').count()
+      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>i.id).select('distinct `question_id`').group('created_at').count().keys.size
+      attrs[:eps_count] = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>i.id).select('distinct `exampoint_id`').group('created_at').count().keys.size
       attrs
     end
     render :json=>list
@@ -293,7 +293,7 @@ class ApiController < ApplicationController
 
     @collection = @collection.map do |i|
       attrs = i.attributes
-      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').count()
+      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').group('created_at').count().keys.size
       attrs
     end
     render :json=>eps_to_json(@collection)
@@ -305,7 +305,7 @@ class ApiController < ApplicationController
     paginate
     @collection = @collection.map do |i|
       attrs = i.attributes
-      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').count()
+      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').group('created_at').count().keys.size
       attrs
     end
     render :json=>eps_to_json(@collection)
