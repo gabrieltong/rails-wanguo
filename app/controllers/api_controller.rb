@@ -273,7 +273,7 @@ class ApiController < ApplicationController
   end
 
   def mistake_epmenus
-    render :json=>History.mistake_epmenus current_user
+    render :json=>History.mistake_epmenus(current_user)
   end
 
 

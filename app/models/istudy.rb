@@ -112,6 +112,7 @@ class Istudy
   def self.cache_complex
     User.all.each do |user|
       user.complex = Istudy.complex(user)
+
       user.save :validate=>false
     end
   end
@@ -134,11 +135,16 @@ class Istudy
 
     xueba_full = 8
 
-    [self.xueba(user),xueba_full].min*1.0/xueba_full*xueba_ratio
-     +
-    History.correct_rate(user)*correct_rate_ratio
-     +
-    self.epmenus_summaries(user)[:total]*summary_ratio
+    a = [self.xueba(user),xueba_full].min*1.0/xueba_full*xueba_ratio
+    b = History.correct_rate(user)*correct_rate_ratio
+    c = self.epmenus_summaries(user)[:total]*summary_ratio
+
+    # [self.xueba(user),xueba_full].min*1.0/xueba_full*xueba_ratio
+    #  +
+    # History.correct_rate(user)*correct_rate_ratio
+    #  +
+    # self.epmenus_summaries(user)[:total]*summary_ratio
+    a + b + c
   end
 
   # 学霸指数
