@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   rolify
-  attr_accessible :username, :phone, :qq,:signature,:password_confirm
+  attr_accessible :username, :phone, :qq,:signature,:password_confirm,:nickname
 
 	has_many :collects
 
