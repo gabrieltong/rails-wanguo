@@ -273,15 +273,7 @@ class ApiController < ApplicationController
   end
 
   def mistake_epmenus
-    histories = History.wrong.where(:user_id=>current_user.id)
-    list = Epmenu.where(:id=>histories.collect{|i|i.epmenu_id}).select('id,title')
-    list = list.map do |i|
-      attrs = i.attributes
-      attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>i.id).select('distinct `question_id`').group('created_at').count().keys.size
-      attrs[:eps_count] = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>i.id).select('distinct `exampoint_id`').group('created_at').count().keys.size
-      attrs
-    end
-    render :json=>list
+    render :json=>History.mistake_epmenus current_user
   end
 
 

@@ -1,4 +1,5 @@
 class History < ActiveRecord::Base
+  Limit = 3
 
   attr_accessible :epmenu_id, :exampoint_id, :question_id, :state, :user_id
 
@@ -56,48 +57,65 @@ class History < ActiveRecord::Base
     end
   end
 
+
   def self.mastered_status(epmenu,user)
     
     unless epmenu
       return {
         :mastered=>[],
         :unmastered=>[],
+        :unmastered_eps=>[],
         :total=>1,
       }
     end
 
-    pass_ratio = 0.8
     mastered = []
     unmastered = []
-
-    histories = History.by_epmenu(epmenu).by_user(user).group('question_id').select("question_id")
-    # histories.each do |history|
-    #   right_count = History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).right.count()
-    #   wrong_count = History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).wrong.count()
-    #   if right_count*1.0/(right_count+wrong_count) > pass_ratio
-    #     mastered.push history.question_id
-    #   else
-    #     unmastered.push history.question_id
-    #   end
-    # end
-    test_limit = 3
+    unmastered_eps = []
+    histories = History.by_epmenu(epmenu).by_user(user).group('question_id').select(%w(question_id exampoint_id))
+    
     histories.each do |history|
-      master_status = true
-      History.by_epmenu(epmenu).by_user(user).where('question_id'=>history.question_id).order('id desc').limit(test_limit).each do |h|
-        if h.wrong?
-          master_status = false
-        end      
-      end
-      if master_status == true
-        mastered.push history.question_id
-      else
-        unmastered.push history.question_id
+      status =  History.question_status history.question,user
+      if status == :right
+        mastered.push history.question.id
+      elsif status == :wrong
+        unmastered.push history.question.id
+        unmastered_eps.push history.exampoint_id
       end
     end
     {
-      :mastered=>mastered,
-      :unmastered=>unmastered,
+      :mastered=>mastered.compact.uniq,
+      :unmastered=>unmastered.compact.uniq,
+      :unmastered_eps=>unmastered_eps.compact.uniq,
       :total=>epmenu.questions.count()
     }
   end
+
+# return [:wrong,:right,nil]
+  def self.question_status question,user
+    relation = History.where(:question_id=>question.id,:user_id=>user.id).group(:created_at).order('created_at desc').limit(History::Limit)
+    return nil if relation.count().keys.size == 0
+    relation.each do |history|
+      return :wrong if history.wrong?
+    end
+    :right
+  end  
+
+  def self.mistake_epmenus user
+    list = []
+    Epmenu.roots.each do |epmenu|
+      ss = History.mastered_status(epmenu,user)
+      if ss[:unmastered].size > 0 
+        item = epmenu.attributes
+        item[:questions_count] = ss[:unmastered].size
+        item[:eps_count] = ss[:unmastered_eps].size
+        list.push item
+      end
+    end
+    list
+  end
+  # def self.epmenu_status epmenu,user
+  #   relation = History.where(:epmenu_id=>epmenu.id,:user_id=>user.id)
+  #   return 
+  # end
 end
