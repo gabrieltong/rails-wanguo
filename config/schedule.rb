@@ -13,7 +13,7 @@
 #   rake "some:great:rake:task"
 # end
 #
-every 1.minutes do
+every 3.hours do
   runner "Istudy.cache_complex"
 end
 
