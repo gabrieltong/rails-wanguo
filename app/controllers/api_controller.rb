@@ -92,10 +92,10 @@ class ApiController < ApplicationController
   def mix
     current_user.auto_cache_setting
     render :json=>{
-      :istudy_epmenus_summaries=>current_user.settings.istudy_epmenus_summaries
-      :istudy_complex_rank=>current_user.settings.istudy_complex_rank
-      :istudy_xueba=>current_user.settings.istudy_xueba
-      :istudy_evaluate=>current_user.settings.istudy_evaluate
+      :istudy_epmenus_summaries=>current_user.settings.istudy_epmenus_summaries,
+      :istudy_complex_rank=>current_user.settings.istudy_complex_rank,
+      :istudy_xueba=>current_user.settings.istudy_xueba,
+      :istudy_evaluate=>current_user.settings.istudy_evaluate,
       :istudy_time=>Heartbeat.duration(Heartbeat.ranges(user,user))
     }
   end
