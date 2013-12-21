@@ -96,7 +96,7 @@ class ApiController < ApplicationController
       :istudy_complex_rank=>current_user.settings.istudy_complex_rank,
       :istudy_xueba=>current_user.settings.istudy_xueba,
       :istudy_evaluate=>current_user.settings.istudy_evaluate,
-      :istudy_time=>Heartbeat.duration(Heartbeat.ranges(user,user))
+      :istudy_time=>Heartbeat.duration(Heartbeat.ranges(current_user,current_user))
     }
   end
 
