@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131214030528) do
+ActiveRecord::Schema.define(:version => 20131221005406) do
 
   create_table "annexes", :force => true do |t|
     t.string   "title"
@@ -282,6 +282,17 @@ ActiveRecord::Schema.define(:version => 20131214030528) do
   add_index "searches", ["searchable_type"], :name => "index_searches_on_searchable"
   add_index "searches", ["user_id"], :name => "index_searches_on_user_id"
 
+  create_table "settings", :force => true do |t|
+    t.string   "var",                      :null => false
+    t.text     "value"
+    t.integer  "thing_id"
+    t.string   "thing_type", :limit => 30
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
+
+  add_index "settings", ["thing_type", "thing_id", "var"], :name => "index_settings_on_thing_type_and_thing_id_and_var", :unique => true
+
   create_table "users", :force => true do |t|
     t.datetime "created_at",                                                                       :null => false
     t.datetime "updated_at",                                                                       :null => false
@@ -295,6 +306,7 @@ ActiveRecord::Schema.define(:version => 20131214030528) do
     t.string   "qq"
     t.string   "phone"
     t.text     "signature"
+    t.string   "nickname"
   end
 
   add_index "users", ["complex"], :name => "index_users_on_complex"

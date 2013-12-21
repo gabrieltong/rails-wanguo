@@ -1,6 +1,6 @@
 class EntranceController < ApplicationController
   def callback
-  	ppp params
+  	# ppp params
   end
 
   def welcome

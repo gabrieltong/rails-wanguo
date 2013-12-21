@@ -1,11 +1,15 @@
 class UsersController < ApplicationController
   before_filter :find_user
   skip_before_filter :find_user,:only=>[:index]
-  
+    
   authorize_resource
+  # caches_action :index
   def index
     @relation = User.where('id>0')
     paginate
+    @collection.each do |user|
+      user.auto_cache_setting
+    end
   end
 
   def show

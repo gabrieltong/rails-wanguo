@@ -58,7 +58,7 @@ group :development,:gabriellocal do
 	gem 'better_errors'
 end
 
-gem 'whenever', :require => false
+# gem 'whenever', :require => false
 
 # gem 'will_paginate', '~> 3.0'
 gem 'will_paginate-bootstrap', '0.2.5'
@@ -70,3 +70,5 @@ gem 'rolify'
 gem 'rails-i18n', '~> 3.0.0' # For 3.x
 
 gem 'delayed_job_active_record'
+
+gem "rails-settings-cached", "0.2.4"

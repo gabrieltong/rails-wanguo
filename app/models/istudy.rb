@@ -110,6 +110,7 @@ class Istudy
   ]
 
   def self.cache_complex
+    ppp 'in'*1000
     User.all.each do |user|
       user.complex = Istudy.complex(user)
 
@@ -144,12 +145,12 @@ class Istudy
     # History.correct_rate(user)*correct_rate_ratio
     #  +
     # self.epmenus_summaries(user)[:total]*summary_ratio
-    a + b + c
+    (a + b + c).round(3)
   end
 
   # 学霸指数
   def self.xueba(user)
-    (Heartbeat.duration(Heartbeat.ranges(user,user))*1.0/60/3).to_i*0.1
+    ((Heartbeat.duration(Heartbeat.ranges(user,user))*1.0/60/3).to_i*0.1).round(3)
   end
 
   # 部门法子项的进度情况

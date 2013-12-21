@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include RailsSettings::Extend
+
   rolify
   attr_accessible :username, :phone, :qq,:signature,:password_confirm,:nickname
 
@@ -22,7 +24,8 @@ class User < ActiveRecord::Base
   validates :phone,:uniqueness=>true
   
   after_save :assign_trial_captcha
-
+  after_create :cache_setting
+  # after_save :cache_setting
   # after_save :assign_trial_captcha
   # validates :password, :confirmation => true,:unless => Proc.new { |a| a.password.blank? }
   include Clearance::User
@@ -53,5 +56,28 @@ class User < ActiveRecord::Base
       captcha = Captcha.generate(1,1)[0]
       Captcha.assign captcha.title,self
     end
+  end
+
+  def cache_setting
+    Setting.where(:thing_type=>self.class,:thing_id=>self.id).destroy_all
+    self.settings.istudy_epmenus_summaries = Istudy.epmenus_summaries(self)
+    self.settings.istudy_xueba = Istudy.xueba(self)
+    self.settings.istudy_complex_rank = Istudy.complex_rank(self)
+    self.settings.istudy_evaluate = Istudy.evaluate(self)
+    # self.settings.istudy_time = Heartbeat.duration(Heartbeat.ranges(self,self))
+  end
+
+  def self.cache_setting
+    Istudy.cache_complex
+    User.all.each do |user|
+      user.cache_setting
+    end
+  end
+
+  def auto_cache_setting
+    first_setting = Setting.where(:thing_type=>self.class,:thing_id=>self.id).first
+    if first_setting.nil? || (first_setting.updated_at + 1.day < DateTime.now)
+      self.cache_setting
+    end    
   end
 end

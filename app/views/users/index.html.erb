@@ -23,10 +23,17 @@
         <td><%= user.email %></td>
         <td><%= user.qq %></td>
         <td><%= user.phone %></td>
-        <td><%= "#{Istudy.complex_rank(user)[:rank]}/#{Istudy.complex_rank(user)[:total]}" %></td>
-        <td><%= Istudy.xueba(user) %></td>
+        <td><%= 
+        rank = user.settings.try(:istudy_complex_rank)
+        if rank
+          "#{rank[:rank]}/#{rank[:total]}"
+        else
+          ''
+        end
+         %></td>
+        <td><%= user.settings.try(:istudy_xueba) %></td>
         <td><%= Heartbeat.duration(Heartbeat.ranges(user,user)) %></td>
-        <td><%= Istudy.evaluate(user) %></td>
+        <td><%= user.settings.try(:istudy_evaluate) %></td>
 <!--        <td>
            <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_user_path(user), :class => 'btn btn-mini' %>
