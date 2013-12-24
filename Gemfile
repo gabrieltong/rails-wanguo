@@ -72,3 +72,5 @@ gem 'rails-i18n', '~> 3.0.0' # For 3.x
 gem 'delayed_job_active_record'
 
 gem "rails-settings-cached", "0.2.4"
+
+gem 'draper', '~> 1.3'
