@@ -154,6 +154,7 @@
         xueba: '学霸指数'
         time: '学习时间'
         evaluate: '参考通过率'
+        questions_count: '做题总数'
       question:
         title: '标题'
         score: '分值'

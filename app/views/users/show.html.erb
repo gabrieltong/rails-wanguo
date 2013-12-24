@@ -45,6 +45,14 @@
     <td><%= Istudy.evaluate(@user) %></td>
   </tr>
   <tr>
+    <td><strong>做题总数:</strong></td>
+    <td><%= @user.histories.count() %></td>
+  </tr>
+  <tr>
+    <td><strong>做题正确率:</strong></td>
+    <td><%= (@user.histories.right.count()/@user.histories.count()).round(3) %></td>
+  </tr>
+  <tr>
     <td><strong><%= model_class.human_attribute_name(:epmenus_summaries) %>:</strong></td>
     <td>
       <table class="table table-striped table-bordered">
