@@ -1,7 +1,8 @@
+# encoding: UTF-8
 require 'test_helper'
 
-class HistoriesTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+class HistoriesTest < Test::Unit::TestCase
+	context "测试错题" do
+		
+	end
 end
