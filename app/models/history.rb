@@ -1,5 +1,5 @@
 class History < ActiveRecord::Base
-  Limit = 3
+  Limit = 2
 
   attr_accessible :epmenu_id, :exampoint_id, :question_id, :state, :user_id
 
@@ -23,6 +23,7 @@ class History < ActiveRecord::Base
     scope state.name, :conditions => { :state => state.name.to_s }
   end
 
+  # 记录用户答题情况 ， 
   def self.log(user_id,question_id,result,answer)
   	answer.upcase!
   	user = User.find(user_id)
@@ -32,21 +33,29 @@ class History < ActiveRecord::Base
 			exampoints = exampoints | question.send("#{i.downcase}_eps") 		
   	end
 
-  	unless exampoints.blank?
-	  	epmenu = exampoints.first.epmenus.roots.first
-	  	exampoints.each do |ep|
-	  		history = History.new()
-	  		history.user = user
-	  		history.question = question
-	  		history.exampoint = ep
-	  		history.answer = answer
-	  		history.epmenu = epmenu
-	  		history.state = (result.to_i == 1 ? :right : :wrong)
-	  		history.save
-	  	end
-	  end
+  	if exampoints.blank?
+	  	history = History.new()
+        history.user = user
+        history.question = question
+        history.answer = answer
+        history.state = (result.to_i == 1 ? :right : :wrong)
+        history.save
+	  else
+      epmenu = exampoints.first.epmenus.roots.first
+      exampoints.each do |ep|
+        history = History.new()
+        history.user = user
+        history.question = question
+        history.exampoint = ep
+        history.answer = answer
+        history.epmenu = epmenu
+        history.state = (result.to_i == 1 ? :right : :wrong)
+        history.save
+      end
+    end
 	end
 
+  # 用户答题正确率
   def self.correct_rate(user)
     right_count = History.by_user(user).right.group('created_at').count().keys.size
     wrong_count = History.by_user(user).wrong.group('created_at').count().keys.size
@@ -58,6 +67,7 @@ class History < ActiveRecord::Base
   end
 
 
+  # 用户部门法掌握情况 。 
   def self.mastered_status(epmenu,user)
     
     unless epmenu
@@ -91,7 +101,8 @@ class History < ActiveRecord::Base
     }
   end
 
-# return [:wrong,:right,nil]
+  # 用户针对某道题的答题情况
+  # return [:wrong,:right,nil]
   def self.question_status question,user
     relation = History.where(:question_id=>question.id,:user_id=>user.id).group(:created_at).order('created_at desc').limit(History::Limit)
     return nil if relation.count().keys.size == 0
@@ -101,6 +112,7 @@ class History < ActiveRecord::Base
     :right
   end  
 
+  # 用户有错题的部门法 。 
   def self.mistake_epmenus user
     list = []
     Epmenu.roots.each do |epmenu|
