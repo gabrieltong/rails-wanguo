@@ -16,11 +16,11 @@ class ApiController < ApplicationController
   end
 
   def zhentis
-    render :json=>Question.zhentis
+    render :json=>Question.zhentis.order('num desc')
   end
 
   def zhenti
-    @relation = Question.zhenti(params[:year],params[:volumn])
+    @relation = Question.zhenti(params[:year],params[:volumn]).order('num desc')
     paginate
     render :json=>wrap_questions(@collection)
   end
