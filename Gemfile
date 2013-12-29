@@ -74,3 +74,10 @@ gem 'delayed_job_active_record'
 gem "rails-settings-cached", "0.2.4"
 
 gem 'draper', '~> 1.3'
+
+gem "mocha", :require => false
+
+group :test do
+  gem 'shoulda'
+  gem "factory_girl_rails", "~> 4.0"
+end

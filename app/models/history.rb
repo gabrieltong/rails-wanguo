@@ -69,20 +69,18 @@ class History < ActiveRecord::Base
 
   # 用户部门法掌握情况 。 
   def self.mastered_status(epmenu,user)
-    
-    unless epmenu
-      return {
-        :mastered=>[],
-        :unmastered=>[],
-        :unmastered_eps=>[],
-        :total=>1,
-      }
+    if epmenu
+      histories = History.by_epmenu(epmenu).by_user(user).group('question_id').select(%w(question_id exampoint_id))
+      total = epmenu.questions.count()
+    else
+      histories = History.by_user(user).group('question_id').select(%w(question_id exampoint_id))
+      total = Question.count()
     end
 
     mastered = []
     unmastered = []
     unmastered_eps = []
-    histories = History.by_epmenu(epmenu).by_user(user).group('question_id').select(%w(question_id exampoint_id))
+    
     
     histories.each do |history|
       status =  History.question_status history.question,user
@@ -94,10 +92,10 @@ class History < ActiveRecord::Base
       end
     end
     {
-      :mastered=>mastered.compact.uniq,
-      :unmastered=>unmastered.compact.uniq,
-      :unmastered_eps=>unmastered_eps.compact.uniq,
-      :total=>epmenu.questions.count()
+      :mastered=>mastered.compact.uniq.sort,
+      :unmastered=>unmastered.compact.uniq.sort,
+      :unmastered_eps=>unmastered_eps.compact.uniq.sort,
+      :total=>total
     }
   end
 

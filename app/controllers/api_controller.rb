@@ -90,13 +90,17 @@ class ApiController < ApplicationController
 
 
   def mix
+    mastered_status = History.mastered_status(nil,current_user)
+    mastered_status[:unmastered] = mastered_status[:unmastered].size
+    mastered_status[:mastered] = mastered_status[:mastered].size
     current_user.auto_cache_setting
     render :json=>{
       :istudy_epmenus_summaries=>current_user.settings.istudy_epmenus_summaries,
       :istudy_complex_rank=>current_user.settings.istudy_complex_rank,
       :istudy_xueba=>current_user.settings.istudy_xueba,
       :istudy_evaluate=>current_user.settings.istudy_evaluate,
-      :istudy_time=>Heartbeat.duration(Heartbeat.ranges(current_user,current_user))
+      :istudy_time=>Heartbeat.duration(Heartbeat.ranges(current_user,current_user)),
+      :mastered_status=>mastered_status
     }
   end
 
