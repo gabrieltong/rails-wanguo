@@ -16,7 +16,7 @@ class ApiController < ApplicationController
   end
 
   def zhentis
-    render :json=>Question.zhentis.order('num desc')
+    render :json=>Question.zhentis
   end
 
   def zhenti
