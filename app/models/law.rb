@@ -1,4 +1,5 @@
 class Law < ActiveRecord::Base
+  include PublicActivity::Model
   include IsCollected
   has_attached_file :sound  
   attr_accessible :ancestry, :content, :title, :score,:sound,:number

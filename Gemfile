@@ -77,6 +77,8 @@ gem 'draper', '~> 1.3'
 
 gem "mocha", :require => false
 
+gem 'public_activity'
+
 group :test do
   gem 'shoulda'
   gem "factory_girl_rails", "~> 4.0"

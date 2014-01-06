@@ -4,6 +4,14 @@ class ApiController < ApplicationController
 
   before_filter :authorize_token,:except=>[:login,:signup,:forget_password]
 
+  def audio_played
+    Law.find(params[:law_id]).create_activity key: 'law.audio_played', owner: current_user
+  end
+
+  # def audio_played
+  #   Law.find(params[:law_id]).create_activity key: 'law.audio_played', owner: current_user
+  # end
+
   def forget_password
     user = User.where(:email=>params[:email]).first
     if user
