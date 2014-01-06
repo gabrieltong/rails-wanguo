@@ -4,8 +4,12 @@ class ApiController < ApplicationController
 
   before_filter :authorize_token,:except=>[:login,:signup,:forget_password]
 
-  def audio_played
-    Law.find(params[:law_id]).create_activity key: 'law.audio_played', owner: current_user
+  def play_law_audio
+    Law.find(params[:id]).create_activity key: 'law.play_law_audio', owner: current_user
+  end
+
+  def open_law_blank
+    Law.find(params[:id]).create_activity key: 'law.open_law_blank', owner: current_user
   end
 
   # def audio_played

@@ -120,6 +120,10 @@ RailsWanguo::Application.routes.draw do
 
   post 'api/heartbeat_stop'
 
+  match 'api/play_law_audio(/:id)'=>'api#play_law_audio',:as=>'api_play_law_audio'
+
+  match 'api/open_law_blank(/:id)'=>'api#open_law_blank',:as=>'api_open_law_blank'
+
   match 'api/collect_law(/:id)'=>'api#collect_law',:as=>'api_collect_law'
 
   match 'api/uncollect_law(/:id)'=>'api#uncollect_law',:as=>'api_collect_law'
