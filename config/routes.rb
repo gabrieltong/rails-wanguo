@@ -122,7 +122,7 @@ RailsWanguo::Application.routes.draw do
 
   match 'api/play_audio(/:id)'=>'api#play_audio',:as=>'api_play_audio'
 
-  match 'api/open_law_blank(/:id)'=>'api#open_law_blank',:as=>'api_open_law_blank'
+  match 'api/open_blank(/:id)'=>'api#open_blank',:as=>'api_open_blank'
 
   match 'api/collect_law(/:id)'=>'api#collect_law',:as=>'api_collect_law'
 
