@@ -9,6 +9,8 @@
       <th><%= model_class.human_attribute_name(:score) %></th>
       <th><%= model_class.human_attribute_name(:sound) %></th>
       <th><%= model_class.human_attribute_name(:number) %></th>
+      <th><%= model_class.human_attribute_name(:play_audio_count) %></th>
+      <th><%= model_class.human_attribute_name(:open_blank_count) %></th>
       <% end %>
       <th><%=t 'actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -22,6 +24,8 @@
         <td><%= law.score %></td>
         <td><%= law.sound %></td>
         <td><%= law.number %></td>
+        <td><%= law.play_audio_count %></td>
+        <td><%= law.open_blank_count %></td>
         <% end %>
         <td>
           <%= link_to t('edit', :default => t("helpers.links.edit")),
