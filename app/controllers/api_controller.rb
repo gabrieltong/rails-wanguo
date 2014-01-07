@@ -6,11 +6,19 @@ class ApiController < ApplicationController
 
 
   def play_audio
-    Law.find(params[:id]).create_activity key: 'law.play_audio', owner: current_user
+    if Law.find(params[:id]).create_activity key: 'law.play_audio', owner: current_user
+      render_success
+    else
+      render_fail
+    end
   end
 
   def open_blank
-    Law.find(params[:id]).create_activity key: 'law.open_blank', owner: current_user
+    if Law.find(params[:id]).create_activity key: 'law.open_blank', owner: current_user
+      render_success
+    else
+      render_fail
+    end
   end
 
   # def audio_played
