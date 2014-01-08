@@ -169,6 +169,7 @@
         choices: '选项'
         choices_description: '选项描述'
       law:
+        sound: '音频'
         play_audio_count: '播放音频次数'
         open_blank_count: '填空次数'
         title: '标题'
