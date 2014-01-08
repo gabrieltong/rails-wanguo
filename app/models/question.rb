@@ -6,6 +6,7 @@ class Question < ActiveRecord::Base
   serialize :choices_description  
   
   has_many :ep_questions
+  has_many :histories
   acts_as_collectable
   
   has_many :eps,:through=>:ep_questions,:source => :exampoint,:uniq=>true
@@ -35,5 +36,21 @@ class Question < ActiveRecord::Base
   def self.zhenti(year,volumn)
     relation = Question.where("`num` like '#{year}#{volumn}%' ")
     relation
+  end
+
+  def answered_count
+    histories.group('created_at').count().keys.count
+  end
+
+  def right_count
+    histories.right.group('created_at').count().keys.count
+  end
+
+  def wrong_count
+    histories.wrong.group('created_at').count().keys.count
+  end
+
+  def right_rate
+    right_count*1.0/answered_count
   end
 end

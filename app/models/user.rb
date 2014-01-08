@@ -81,4 +81,12 @@ class User < ActiveRecord::Base
       self.cache_setting
     end    
   end
+
+  def play_audio_count
+    owned_activities.get_stat(:play_audio_count)
+  end
+
+  def open_blank_count
+    owned_activities.get_stat(:open_blank_count)
+  end
 end

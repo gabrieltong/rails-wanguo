@@ -53,6 +53,14 @@
     <td><%= (@user.histories.right.count()*1.0/@user.histories.count()).round(3) %></td>
   </tr>
   <tr>
+    <td><strong>播放音频次数:</strong></td>
+    <td><%= @user.play_audio_count %></td>
+  </tr>
+  <tr>
+    <td><strong>填空次数:</strong></td>
+    <td><%= @user.open_blank_count %></td>
+  </tr>
+  <tr>
     <td><strong><%= model_class.human_attribute_name(:epmenus_summaries) %>:</strong></td>
     <td>
       <table class="table table-striped table-bordered">
