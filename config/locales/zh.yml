@@ -143,6 +143,7 @@
         state: '审核状态'
         created_at: '添加日期'
       user:
+        created_at: '注册日期'
         epmenus_summaries: '部门法进度'
         signature: '个性签名'
         complex: '综合指数'
