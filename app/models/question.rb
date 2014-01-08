@@ -51,6 +51,10 @@ class Question < ActiveRecord::Base
   end
 
   def right_rate
-    right_count*1.0/answered_count
+    if answered_count == 0
+      0
+    else
+      right_count*1.0/answered_count
+    end
   end
 end
