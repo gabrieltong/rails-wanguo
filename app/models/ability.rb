@@ -1,7 +1,7 @@
 class Ability
   include CanCan::Ability
   def initialize(user)
-    if user.has_role? :admin
+    if user and user.has_role? :admin
         can :manage,User
         can :generate,Captcha
         can :valid,Captcha
