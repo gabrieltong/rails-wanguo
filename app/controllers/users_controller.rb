@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   authorize_resource
   # caches_action :index
   def index
-    @relation = User.where('id>0')
+    @relation = User.where(true)
     paginate
     @collection.each do |user|
       user.auto_cache_setting

@@ -47,13 +47,13 @@ class ApiController < ApplicationController
   end
 
   def books
-    @relation = Book.where('id>0')
+    @relation = Book.where(true)
     paginate
     render :json=>@collection
   end
 
   def schools
-    @relation = School.where('id>0')
+    @relation = School.where(true)
     paginate
     render :json=>@collection
   end

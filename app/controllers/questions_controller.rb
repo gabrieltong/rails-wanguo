@@ -1,10 +1,15 @@
 class QuestionsController < ApplicationController
-  before_filter :authorize
+  before_filter :authorize,:get_epmenu
   authorize_resource
   # GET /questions
   # GET /questions.json
   def index
-    @relation = Question.where('id>0')
+    if @epmenu
+      @relation = @epmenu.questions
+    else
+      @relation = Question.where(true)
+    end
+    
     paginate
     respond_to do |format|
       format.html # index.html.erb
@@ -88,4 +93,8 @@ class QuestionsController < ApplicationController
     @per_page = params[:per_page] || 20
     @random = params[:random].to_i || 0
   end  
+
+  def get_epmenu
+    @epmenu = Epmenu.find_by_id(params[:epmenu_id])
+  end
 end

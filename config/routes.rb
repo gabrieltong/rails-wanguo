@@ -1,5 +1,9 @@
 RailsWanguo::Application.routes.draw do
 
+  get "epmenus/index"
+
+  get "epmenus/show"
+
   # resources :passwords, only: [:create]
 
   resources :schools
@@ -30,6 +34,9 @@ RailsWanguo::Application.routes.draw do
     end
   end
 
+  resources :epmenus,:only=>[] do 
+    resources :questions,:only=>[:index]
+  end
 
   resources :captchas
 
