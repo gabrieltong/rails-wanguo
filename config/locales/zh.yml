@@ -156,6 +156,8 @@
         evaluate: '参考通过率'
         questions_count: '做题总数'
       question:
+        answered_count: '回答次数'
+        right_rate: '正确率'
         title: '标题'
         score: '分值'
         num: '编号'
