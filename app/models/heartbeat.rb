@@ -1,11 +1,41 @@
 class Heartbeat < ActiveRecord::Base
   Precision = false
 	Interval = 5.minutes
-  attr_accessible :user_id,:state
+  attr_accessible :user_id,:state,:duration
   belongs_to :user
   belongs_to :beatable,:polymorphic=>true
-  validates :user,:presence=>true
+  validates :user_id,:presence=>true
 
+  # after_save :set_duration
+
+  def set_duration
+    self.duration = 0
+
+    if !self.start? && duration.nil?
+      last_start = self.class.where(:beatable_type=>self.beatable_type,:beatable_id=>self.beatable_id).start.order('created_at desc').last
+      last = self.class.where(:beatable_type=>self.beatable_type,:beatable_id=>self.beatable_id).order('created_at desc').last
+
+      if last_start &&( self.created_at - last_start.created_at) < 1.hours.seconds.to_i
+        self.duration = self.created_at - last.created_at
+      end
+      
+    end
+    # self.class.skip_callback(:save,:after,:set_duration)
+    self.save
+  end
+
+  state_machine :state,:initial=>:start  do
+    state :start do
+    end
+    state :beat do
+    end
+    state :end do
+    end
+  end
+
+  state_machine.states.map do |state|
+    scope state.name, :conditions => { :state => state.name.to_s }
+  end
   def self.start(user,beatable)
   	hb = Heartbeat.new :state=>:start
     hb.beatable = beatable

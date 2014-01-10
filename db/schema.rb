@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140106071833) do
+ActiveRecord::Schema.define(:version => 20140110055805) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(:version => 20140106071833) do
     t.datetime "updated_at",    :null => false
     t.string   "beatable_type"
     t.integer  "beatable_id"
+    t.integer  "duration"
   end
 
   add_index "heartbeats", ["state"], :name => "index_heartbeats_on_state"
