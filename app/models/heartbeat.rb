@@ -11,9 +11,9 @@ class Heartbeat < ActiveRecord::Base
   def set_duration
     self.duration = 0
 
-    if !self.start? && duration.nil?
-      last_start = self.class.where(:beatable_type=>self.beatable_type,:beatable_id=>self.beatable_id).start.order('created_at desc').last
-      last = self.class.where(:beatable_type=>self.beatable_type,:beatable_id=>self.beatable_id).order('created_at desc').last
+    if !self.start? 
+      last_start = self.class.where(:beatable_type=>self.beatable_type,:beatable_id=>self.beatable_id).where("id < ?",self.id).start.order('created_at desc').first
+      last = self.class.where(:beatable_type=>self.beatable_type,:beatable_id=>self.beatable_id).where("id < ?",self.id).order('created_at desc').first
 
       if last_start &&( self.created_at - last_start.created_at) < 1.hours.seconds.to_i
         self.duration = self.created_at - last.created_at
@@ -36,21 +36,22 @@ class Heartbeat < ActiveRecord::Base
   state_machine.states.map do |state|
     scope state.name, :conditions => { :state => state.name.to_s }
   end
-  def self.start(user,beatable)
+
+  def self.log_start(user,beatable)
   	hb = Heartbeat.new :state=>:start
     hb.beatable = beatable
   	hb.user = user
   	hb.save
   end
 
-  def self.beat(user,beatable)
+  def self.log_beat(user,beatable)
   	hb = Heartbeat.new :state=>:beat
     hb.beatable = beatable
   	hb.user = user
   	hb.save
   end
 
-  def self.stop(user,beatable)
+  def self.log_stop(user,beatable)
   	hb = Heartbeat.new :state=>:stop
     hb.beatable = beatable
   	hb.user = user

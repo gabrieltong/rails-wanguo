@@ -110,7 +110,6 @@ class Istudy
   ]
 
   def self.cache_complex
-    ppp 'in'*1000
     User.all.each do |user|
       user.complex = Istudy.complex(user)
 

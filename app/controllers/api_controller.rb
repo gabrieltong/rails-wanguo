@@ -111,6 +111,7 @@ class ApiController < ApplicationController
 
 
   def mix
+    # 整体掌握情况
     mastered_status = History.mastered_status(nil,current_user)
     mastered_status[:unmastered] = mastered_status[:unmastered].size
     mastered_status[:mastered] = mastered_status[:mastered].size
@@ -121,7 +122,7 @@ class ApiController < ApplicationController
       :istudy_xueba=>current_user.settings.istudy_xueba,
       :istudy_evaluate=>current_user.settings.istudy_evaluate,
       :istudy_time=>Heartbeat.duration(Heartbeat.ranges(current_user,current_user)),
-      :mastered_status=>mastered_status
+      :mastered_status=>mastered_statusis
     }
   end
 
@@ -442,7 +443,7 @@ class ApiController < ApplicationController
     else
       beatable = current_user
     end
-    Heartbeat.start(current_user,beatable)
+    Heartbeat.log_start(current_user,beatable)
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
@@ -453,7 +454,7 @@ class ApiController < ApplicationController
     else
       beatable = current_user
     end
-    Heartbeat.beat(current_user,beatable)
+    Heartbeat.log_beat(current_user,beatable)
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
@@ -464,7 +465,7 @@ class ApiController < ApplicationController
     else
       beatable = current_user
     end
-    Heartbeat.stop(current_user,beatable)
+    Heartbeat.log_stop(current_user,beatable)
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
