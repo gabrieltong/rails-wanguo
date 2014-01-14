@@ -121,7 +121,7 @@ class ApiController < ApplicationController
       :istudy_complex_rank=>current_user.settings.istudy_complex_rank,
       :istudy_xueba=>current_user.settings.istudy_xueba,
       :istudy_evaluate=>current_user.settings.istudy_evaluate,
-      :istudy_time=>Heartbeat.duration(Heartbeat.ranges(current_user,current_user)),
+      :istudy_time=>current_user.time,
       :mastered_status=>mastered_statusis
     }
   end
@@ -468,7 +468,10 @@ class ApiController < ApplicationController
     Heartbeat.log_stop(current_user,beatable)
     render :json=>{:interval=>Heartbeat::Interval}
   end
-
+# 每个部门法的累计学习时间 / 用户累计使用软件的时间和天数
+# id 部门法id , 必填 . 如果没有id, 则返回所有部门法的时间 , 有id , 返回指定部门法
+# from,to:可选 , 格式为 2013-09-27 15:19:00
+# 返回值 : 包含用户使用软件的天数和时间 
   def heartbeat_summary
     if params[:id]
       beatable = Law.find(params[:id])

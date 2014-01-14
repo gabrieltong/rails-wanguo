@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
 
 	has_many :collects
 
+  has_many :heartbeats
+
   has_many :captchas
 
 	has_many :histories
@@ -88,5 +90,9 @@ class User < ActiveRecord::Base
 
   def open_blank_count
     owned_activities.get_stat(:open_blank_count)
+  end
+
+  def time
+    heartbeats.statistics[:sum_time]
   end
 end

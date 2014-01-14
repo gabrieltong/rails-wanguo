@@ -220,7 +220,10 @@ class Istudy
     end      
   end
 
-
+  # 学员的学习时间 ， 单位秒
+  def self.time(user)
+    
+  end
   # # 得到某部门法的真题学习情况
   # def self.question_ratio(user,type)
     
