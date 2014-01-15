@@ -445,7 +445,8 @@ class ApiController < ApplicationController
     else
       beatable = current_user
     end
-    Heartbeat.log_start(current_user,beatable)
+    hb = Heartbeat.log_start(current_user,beatable)
+    hb.set_duration
     render :json=>{:interval=>Heartbeat::Interval}
   end
 
@@ -456,7 +457,8 @@ class ApiController < ApplicationController
     else
       beatable = current_user
     end
-    Heartbeat.log_beat(current_user,beatable)
+    hb = Heartbeat.log_beat(current_user,beatable)
+    hb.set_duration
     current_user.cache_complex
     render :json=>{:interval=>Heartbeat::Interval}
   end
@@ -468,7 +470,8 @@ class ApiController < ApplicationController
     else
       beatable = current_user
     end
-    Heartbeat.log_stop(current_user,beatable)
+    hb = Heartbeat.log_stop(current_user,beatable)
+    hb.set_duration
     render :json=>{:interval=>Heartbeat::Interval}
   end
 # 每个部门法的累计学习时间 / 用户累计使用软件的时间和天数
