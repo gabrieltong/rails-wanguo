@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   authorize_resource
   # caches_action :index
   def index
+    @per_page = 10
     @relation = User.where(true)
     paginate
     @collection.each do |user|

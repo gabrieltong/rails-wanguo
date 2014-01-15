@@ -149,7 +149,7 @@ class Istudy
 
   # 学霸指数
   def self.xueba(user)
-    ((Heartbeat.duration(Heartbeat.ranges(user,user))*1.0/60/3).to_i*0.1).round(3)
+    ((user.heartbeats.statistics[:sum_time]*1.0/60/3).to_i*0.1).round(3)
   end
 
   # 部门法子项的进度情况

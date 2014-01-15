@@ -117,15 +117,31 @@ class Heartbeat < ActiveRecord::Base
   # from,to:可选 , 格式为 2013-09-27 15:19:00
   # 返回值 : 包含用户使用软件的天数和时间   
   def self.summary(user,beatable,from=DateTime.new(2000,1,1),to=DateTime.new(3000,1,1))
-    result = []
 
-    rangeses = self.ranges(user,beatable,from,to).group_by {|range|range[:beatable]}
-    
-    rangeses.each_pair do |beatable,ranges|
+    relation = Heartbeat.where(
+      :user_id=>user.id
+    )
+
+    if beatable.is_a? Class
+      klass = beatable
+      relation = relation.where(
+        :beatable_type=>beatable.to_s
+      )
+    else
+      klass = beatable.class
+      relation = relation.where(
+        :beatable_type=>beatable.class,
+        :beatable_id=>beatable.id,
+      )
+    end
+
+    result = []
+    relation.group([:beatable_type,:beatable_id]).count.each do |arr,c|
+      beats = Heartbeat.where(:user_id=>user.id,:beatable_type=>arr[0],:beatable_id=>arr[1])
       item = {
-        :beatable=>beatable,
-        :duration=>duration(ranges),
-        :days=>days(ranges)
+        :beatable=>klass.find(arr[1]),
+        :duration=>beats.statistics[:sum_time],
+        :days=>beats.collect{|b|b.created_at.to_s[0..9]}.flatten.uniq
       }
       result.push item
     end

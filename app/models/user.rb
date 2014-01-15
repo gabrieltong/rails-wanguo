@@ -92,7 +92,20 @@ class User < ActiveRecord::Base
     owned_activities.get_stat(:open_blank_count)
   end
 
+  # 总的学习时间
   def time
     heartbeats.statistics[:sum_time]
+  end
+
+  def xueba
+    Istudy.xueba(self)
+  end
+
+  def complex_rank
+    Istudy.complex_rank(self)
+  end
+
+  def evaluate
+    Istudy.evaluate(self)
   end
 end
