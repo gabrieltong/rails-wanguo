@@ -154,7 +154,7 @@ class Istudy
   def self.xueba(user)
     seconds = user.heartbeats.statistics[:sum_time]
     days_size = user.heartbeats.collect{|h|h.created_at.to_date}.uniq.size
-    avg = seconds*1.0/days_size
+    avg = (days_size==0 ? 0 : seconds*1.0/days_size)
     [((avg*1.0/60/3).to_i*0.1).round(3),8].min
   end
 
