@@ -113,8 +113,10 @@ class ApiController < ApplicationController
   def mix
     # 整体掌握情况
     mastered_status = History.mastered_status(nil,current_user)
+    # 默认返回值 ，是所有掌握未掌握的id ， api需要返回数量
     mastered_status[:unmastered] = mastered_status[:unmastered].size
     mastered_status[:mastered] = mastered_status[:mastered].size
+    # 开始缓存
     current_user.auto_cache_setting
     render :json=>{
       :istudy_epmenus_summaries=>current_user.settings.istudy_epmenus_summaries,
@@ -455,6 +457,7 @@ class ApiController < ApplicationController
       beatable = current_user
     end
     Heartbeat.log_beat(current_user,beatable)
+    current_user.cache_complex
     render :json=>{:interval=>Heartbeat::Interval}
   end
 

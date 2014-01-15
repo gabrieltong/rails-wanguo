@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     @per_page = 10
     @relation = User.where(true)
     paginate
+    
     @collection.each do |user|
       user.auto_cache_setting
     end

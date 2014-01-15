@@ -77,6 +77,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  def cache_complex
+    self.complex = Istudy.complex(self)
+    self.save :validate=>false
+  end
+
   def auto_cache_setting
     first_setting = Setting.where(:thing_type=>self.class,:thing_id=>self.id).first
     if first_setting.nil? || (first_setting.updated_at + 1.day < DateTime.now)
@@ -108,4 +113,7 @@ class User < ActiveRecord::Base
   def evaluate
     Istudy.evaluate(self)
   end
+
+  # def avg_time
+  # end
 end

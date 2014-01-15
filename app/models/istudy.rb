@@ -5,6 +5,7 @@ class Istudy
       :title=>'社会主义法治理念',
        :radio=>0.01,
        :law_ratio=>0.2, 
+       # 没有法条进度 ， 设置一个较大值
        :law_cost=>10000 ,
        :question_cost=>5 
     },
@@ -12,6 +13,7 @@ class Istudy
       :title=>'法理学',
       :radio=>0.06,
       :law_ratio=>0.5, 
+      # 没有法条进度 ， 设置一个较大值
       :law_cost=>10000 ,
       :question_cost=>9 
     },
@@ -19,6 +21,7 @@ class Istudy
       :title=>'法制史',
       :radio=>0.02,
       :law_ratio=>0.5, 
+      # 没有法条进度 ， 设置一个较大值
       :law_cost=>10000 ,
       :question_cost=>4 
     },
@@ -149,7 +152,10 @@ class Istudy
 
   # 学霸指数
   def self.xueba(user)
-    ((user.heartbeats.statistics[:sum_time]*1.0/60/3).to_i*0.1).round(3)
+    seconds = user.heartbeats.statistics[:sum_time]
+    days = user.heartbeats.collect{|h|h.created_at.to_date}.uniq
+    avg = seconds*1.0/days
+    [((avg*1.0/60/3).to_i*0.1).round(3),8].min
   end
 
   # 部门法子项的进度情况
@@ -193,13 +199,15 @@ class Istudy
       :total=>0,
       :epmenus=>[]
     }
+    # 遍历部门法，得到每个部门法的信息，
     Map.collect{|i|i[:title]}.each do |type|
       # result[:epmenus][type] = self.epmenu_summary(user,type)
       # result[:total] += result[:epmenus][type][:ratio]
-
+      # 得到
       data = self.epmenu_summary(user,type)
       result[:epmenus].push data
       # result[:epmenus][type] = self.epmenu_summary(user,type)
+      # 计算总进度
       result[:total] += data[:ratio]
     end
     
@@ -213,6 +221,7 @@ class Istudy
     if law 
       heatbeats = Heartbeat.summary(user,law)
       seconds =  heatbeats.inject(0){|sum,i|sum+i[:duration]}
+
       law_ratio = [(seconds/60/setting[:law_cost]).to_i/100.0,setting[:law_ratio]].min
       law_ratio
     else

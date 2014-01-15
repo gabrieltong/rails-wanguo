@@ -69,6 +69,7 @@ class History < ActiveRecord::Base
 
   # 用户部门法掌握情况 。 
   def self.mastered_status(epmenu,user)
+    # 如果有部门法 ， 取得关于部门法的消息 ，否则 ，取得所有
     if epmenu
       histories = History.by_epmenu(epmenu).by_user(user).group('question_id').select(%w(question_id exampoint_id))
       total = epmenu.questions.count()
@@ -80,7 +81,6 @@ class History < ActiveRecord::Base
     mastered = []
     unmastered = []
     unmastered_eps = []
-    
     
     histories.each do |history|
       status =  History.question_status history.question,user
