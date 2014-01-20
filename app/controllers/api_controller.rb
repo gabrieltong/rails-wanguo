@@ -124,7 +124,7 @@ class ApiController < ApplicationController
       :istudy_xueba=>current_user.settings.istudy_xueba,
       :istudy_evaluate=>current_user.settings.istudy_evaluate,
       :istudy_time=>current_user.time,
-      :mastered_status=>mastered_statusis
+      :mastered_status=>mastered_status
     }
   end
 
