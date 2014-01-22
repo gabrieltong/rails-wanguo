@@ -58,8 +58,8 @@ class ImportsController < ApplicationController
         end
 
         if @import.state == 'laws_zip'
-          # @import.import
-          # @import.import
+          @import.import
+          @import.import
         end
         
         format.html { redirect_to @import, notice: 'Import was successfully created.' }

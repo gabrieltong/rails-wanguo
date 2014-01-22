@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include Clearance::User
   include RailsSettings::Extend
   has_many :tracked_activities,:as=>:trackable,:class_name=>'Activity'
   has_many :owned_activities,:as=>:recipient,:class_name=>'Activity'
@@ -31,7 +32,6 @@ class User < ActiveRecord::Base
   # after_save :cache_setting
   # after_save :assign_trial_captcha
   # validates :password, :confirmation => true,:unless => Proc.new { |a| a.password.blank? }
-  include Clearance::User
 
   def email_optional?
     true

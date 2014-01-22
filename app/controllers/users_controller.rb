@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_filter :find_user
   skip_before_filter :find_user,:only=>[:index]
     
-  authorize_resource,:only=>[:index,:show]
+  # authorize_resource,:only=>[:index,:show]
   # caches_action :index
   def index
     @per_page = 10

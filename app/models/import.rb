@@ -268,7 +268,6 @@ class Import < ActiveRecord::Base
 
   def update_law(data)
     # 更新法条班
-    p '.'*100
     if data && data[0] && data[0][0..3] == %w(法条编号 音频 真题 知识点)
       data[1..-1].each do |row|
         node = Law.find_by_number(row[0])
