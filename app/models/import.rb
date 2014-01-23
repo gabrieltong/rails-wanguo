@@ -119,6 +119,7 @@ class Import < ActiveRecord::Base
     state :laws_zip do 
       def import 
         base = 'tmp'
+        # 得到zip包名
         name = File.basename(file.path).split('.')[0..-2].join('.').strip
         dir = File.dirname(file.path)
         tmp = "#{dir}/tmp"
@@ -131,10 +132,10 @@ class Import < ActiveRecord::Base
         `
 
         one = Law.find_or_create_by_title name.strip
-        Dir.entries(target).delete_if {|i|i=='.'||i=='..'}.each do |two|
+        Dir.entries(target).delete_if {|i|i=='.'||i=='..'}.sort.each do |two|
           two_path = "#{target}/#{two}"
           if File.directory? two_path
-            Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.each do |other|
+            Dir.entries(two_path).delete_if {|i|i=='.'||i=='..'}.sort.each do |other|
               path = "#{two_path}/#{other}"
               data = open(path)
               import_law(name,other,data)

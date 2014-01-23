@@ -116,4 +116,13 @@ class User < ActiveRecord::Base
 
   # def avg_time
   # end
+
+  def self.create_admin password=123456
+    u = User.find_or_initialize_by_username :admin
+    u.password = password
+    u.phone = 123456789
+    u.email = 'admin@wanguo.com'
+    u.save
+    u.add_role :admin
+  end
 end
