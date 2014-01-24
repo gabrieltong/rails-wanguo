@@ -224,8 +224,8 @@ class Import < ActiveRecord::Base
         end
 
         if row[4]
-          last = last.children.find_or_initialize_by_title row[4].strip
-          last.number = row[0]
+          last = last.children.find_or_initialize_by_number row[0]
+          last.title = row[4].strip
           last.state = 'node'
           last.save
         end
