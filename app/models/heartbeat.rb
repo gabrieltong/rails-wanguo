@@ -43,6 +43,7 @@ class Heartbeat < ActiveRecord::Base
     hb.beatable = beatable
   	hb.user = user
   	hb.save
+    hb
   end
 
   def self.log_beat(user,beatable)
@@ -50,6 +51,7 @@ class Heartbeat < ActiveRecord::Base
     hb.beatable = beatable
   	hb.user = user
   	hb.save
+    hb
   end
 
   def self.log_stop(user,beatable)
@@ -57,6 +59,7 @@ class Heartbeat < ActiveRecord::Base
     hb.beatable = beatable
   	hb.user = user
   	hb.save
+    hb
   end
 
   #得到用户的心跳对象在某段时间的心跳区间
