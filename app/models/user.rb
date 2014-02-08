@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   end
 
   def validity
-    seconds ＝ self.period_of_validity
+    seconds = self.period_of_validity
     {
       :active=>(seconds>0),
       :seconds=>seconds
