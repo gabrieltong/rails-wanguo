@@ -30,7 +30,7 @@ class History < ActiveRecord::Base
   	question = Question.find(question_id)		
   	exampoints = []
   	(question.answer.split('') | answer.split('')).each do |i|
-			exampoints = exampoints | question.send("#{i.downcase}_eps") 		
+			exampoints = exampoints | question.send("#{i.downcase}_eps")
   	end
 
   	if exampoints.blank?
