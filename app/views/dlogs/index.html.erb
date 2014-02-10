@@ -1,0 +1,29 @@
+<h1>Listing dlogs</h1>
+
+<table class="table table-striped table-bordered">
+  <tr>
+    <th>User</th>
+    <th>Content</th>
+    <th>Method</th>
+    <th>Params</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @collection.each do |dlog| %>
+  <tr>
+    <td><%= dlog.user_id %></td>
+    <td><%= dlog.content %></td>
+    <td><%= dlog.method %></td>
+    <td><%= dlog.params %></td>
+    <td><%= link_to 'Show', dlog %></td>
+    <td><%= link_to 'Edit', edit_dlog_path(dlog) %></td>
+    <td><%= link_to 'Destroy', dlog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= will_paginate @collection, renderer: BootstrapPagination::Rails,:class=>'text-center pagination' %>

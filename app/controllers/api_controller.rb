@@ -4,6 +4,7 @@ class ApiController < ApplicationController
 
   before_filter :authorize_token,:except=>[:login,:signup,:forget_password]
 
+  after_filter :save_dlog
 
   def play_audio
     if Law.find(params[:id]).create_activity key: 'law.play_audio', owner: current_user
@@ -37,34 +38,40 @@ class ApiController < ApplicationController
   end
 
   def zhentis
-    render :json=>Question.zhentis
+    @content = Question.zhentis
+    render :json=>@content
   end
 
   def zhenti
     @relation = Question.zhenti(params[:year],params[:volumn]).order('num desc')
     paginate
-    render :json=>wrap_questions(@collection)
+    @content = wrap_questions(@collection)
+    render :json=>@content
   end
 
   def books
     @relation = Book.where(true)
     paginate
-    render :json=>@collection
+    @content = @collection
+    render :json=>@content
   end
 
   def schools
     @relation = School.where(true)
     paginate
-    render :json=>@collection
+    @content = @collection
+    render :json=>@content
   end
 
   def assign_captcha
     Captcha.assign(params[:value],current_user)
-    render :json=>current_user.validity
+    @content = current_user.validity
+    render :json=>@content
   end
 
   def user_validity
-    render :json=>current_user.validity
+    @content = current_user.validity
+    render :json=>@content
   end
 
   def authorize_token
@@ -79,9 +86,11 @@ class ApiController < ApplicationController
 
   def edit_profile
     if @user.update_attributes(params[:user])
-      render :json=>{:success=>true}
+      @content = {:success=>true}
+      render :json=>@content
     else
-      render :json=>{:success=>false,:errors=>@user.errors.full_messages}
+      @content = {:success=>false,:errors=>@user.errors.full_messages}
+      render :json=>@content
     end
   end
 
@@ -89,9 +98,11 @@ class ApiController < ApplicationController
     @user = user_from_params
     if @user.valid?
       sign_in(@user)
-      render :json=>{:success=>true,:user=>@user}
+      @content = {:success=>true,:user=>@user}
+      render :json=>@content
     else
-      render :json=>{:success=>false,:errors=>@user.errors.full_messages}
+      @content = {:success=>false,:errors=>@user.errors.full_messages}
+      render :json=>@content
     end
   end
 
@@ -99,9 +110,11 @@ class ApiController < ApplicationController
     @user = User.authenticate params[:session][:username],params[:session][:password]
     sign_in(@user)
     if @user
-      render :json=>{:success=>true,:user=>@user}
+      @content = {:success=>true,:user=>@user}
+      render :json=>@content
     else
-      render :json=>{:success=>false}
+      @content = {:success=>false}
+      render :json=>@content
     end
   end
 
@@ -118,7 +131,7 @@ class ApiController < ApplicationController
     mastered_status[:mastered] = mastered_status[:mastered].size
     # 开始缓存
     current_user.auto_cache_setting
-    render :json=>{
+    @content = {
       :istudy_epmenus_summaries=>current_user.settings.istudy_epmenus_summaries,
       :istudy_complex_rank=>current_user.settings.istudy_complex_rank,
       :istudy_xueba=>current_user.settings.istudy_xueba,
@@ -126,6 +139,7 @@ class ApiController < ApplicationController
       :istudy_time=>current_user.time,
       :mastered_status=>mastered_status
     }
+    render :json=>@content
   end
 
   # def current_user
@@ -174,7 +188,8 @@ class ApiController < ApplicationController
     else
       relation = Collect.children current_user , Law.find(params[:id])
     end
-    render :json=>laws_to_json(relation)
+    @content = laws_to_json(relation)
+    render :json=>@content
   end
 
 
@@ -186,7 +201,8 @@ class ApiController < ApplicationController
   		@relation = Law.find(params[:id]).children
   	end
     paginate
-  	render :json=>laws_to_json(@collection)
+    @content = laws_to_json(@collection)
+  	render :json=>@content
   end
 
 
@@ -198,11 +214,13 @@ class ApiController < ApplicationController
   		@relation = Freelaw.find(params[:id]).children
   	end
     paginate
-  	render :json=>freelaws_to_json(@relation)
+    @content = freelaws_to_json(@relation)
+  	render :json=>@content
   end
 
   def law_blanks
-    render :json=>Law.find(params[:id]).blanks
+    @content = Law.find(params[:id]).blanks
+    render :json=>@content
     # law = 
     # blanks = []
     # if law.ancestry_depth == 3
@@ -229,29 +247,34 @@ class ApiController < ApplicationController
     end
     @relation = Exampoint.where(:id=>exampoints.collect{|ep|ep.id})
     paginate
-  	render :json=>eps_to_json(@collection)
+    @content = eps_to_json(@collection)
+  	render :json=>@content
   end
 
   # 根据知识点返回问题
   def ep_questions
     @relation = Exampoint.find(params[:id]).questions
     paginate
-  	render :json=> wrap_questions(@collection)
+    @content = wrap_questions(@collection)
+  	render :json=> @content
   end
 
   # 根据法条返回问题
   def law_questions
     @relation = Law.find(params[:id]).questions
     paginate
-    render :json=>wrap_questions(@collection)
+    @content = wrap_questions(@collection)
+    render :json=>@content
   end
 
   # 返回知识点菜单结构
   def epmenus
     if params[:epmenu_id] == nil
-    	render :json=>Epmenu.roots.select(%w(id title))
+      @content = Epmenu.roots.select(%w(id title))
+    	render :json=>@content
     else
-      render :json=>Epmenu.find(params[:epmenu_id]).children.select(%w(id title))
+      @content = Epmenu.find(params[:epmenu_id]).children.select(%w(id title))
+      render :json=>@content
     end
   end
 
@@ -259,7 +282,8 @@ class ApiController < ApplicationController
   def epmenu_questions
     questions = R.new.rand_questions_by_epm(Epmenu.find(params[:id]),params[:limit].to_i)
     questions = Question.where(:id=>questions.collect{|i|i.id})
-  	render :json=>wrap_questions(questions)
+    @content = wrap_questions(questions)
+  	render :json=>@content
   end
 
   # 随机输入  
@@ -272,7 +296,8 @@ class ApiController < ApplicationController
     year_last = Question.order('num desc').limit(1).first.num.to_s[0..3].to_i
     year = (year_first..year_last).to_a.sample
     questions = Question.where("num like '#{year}#{volumn}%'").random(15)
-    render :json=>wrap_questions(questions)
+    @content = wrap_questions(questions)
+    render :json=>@content
   end
 
   # #登录 api
@@ -301,7 +326,8 @@ class ApiController < ApplicationController
   end
 
   def mistake_epmenus
-    render :json=>History.mistake_epmenus(current_user)
+    @content = History.mistake_epmenus(current_user)
+    render :json=>@content
   end
 
 
@@ -316,7 +342,8 @@ class ApiController < ApplicationController
       attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').group('created_at').count().keys.size
       attrs
     end
-    render :json=>eps_to_json(@collection)
+    @content = eps_to_json(@collection)
+    render :json=>@content
   end
 
   def mistake_eps_by_epmenu
@@ -328,14 +355,16 @@ class ApiController < ApplicationController
       attrs[:questions_count] = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>i.id).select('distinct `question_id`').group('created_at').count().keys.size
       attrs
     end
-    render :json=>eps_to_json(@collection)
+    @content = eps_to_json(@collection)
+    render :json=>@content
   end
 
   def mistake_questions_by_ep
     histories = History.wrong.where(:user_id=>current_user.id,:exampoint_id=>params[:exampoint_id])
     @relation = Question.where(:id=>histories.collect{|i|i.question_id})
     paginate
-    render :json=>wrap_questions(@collection)
+    @content = wrap_questions(@collection)
+    render :json=>@content
   end
 
   def mistake_questions_by_epmenu
@@ -344,7 +373,8 @@ class ApiController < ApplicationController
     # histories = History.wrong.where(:user_id=>current_user.id,:epmenu_id=>params[:epmenu_id])
     # @relation = Question.where(:id=>histories.collect{|i|i.question_id})
     paginate
-    render :json=>wrap_questions(@collection)
+    @content = wrap_questions(@collection)
+    render :json=>@content
   end
 
   # 基于收藏真题查找收藏部门法
@@ -367,7 +397,8 @@ class ApiController < ApplicationController
 
       attrs
     end
-    render :json=>@collection
+    @content = @collection
+    render :json=>@content
   end
 
   # 通过收藏部门法查找考点
@@ -383,21 +414,24 @@ class ApiController < ApplicationController
       ).select('distinct `collectable_id`').count()
       attrs
     end
-    render :json=>eps_to_json(@collection)
+    @content = eps_to_json(@collection)
+    render :json=>@content
   end
 
   # 通过收藏考点查找真题
   def collected_questions_by_ep
     @relation = Collect.children(current_user,Exampoint.find(params[:id]))
     paginate
-    render :json=>wrap_questions(@collection)
+    @content = wrap_questions(@collection)
+    render :json=>@content
   end
 
   # 基于收藏真题查找收藏知识点
   def collected_eps
     @relation = Collect.roots(current_user,'QuestionEp').select(%w(id title))
     paginate
-    render :json=>eps_to_json(@collection)
+    @content = eps_to_json(@collection)
+    render :json=>@content
   end  
 
   def collected_questions_by_epmenu
@@ -407,7 +441,8 @@ class ApiController < ApplicationController
     end.flatten.uniq
     @relation = Question.where(:id=>questions.collect{|i|i.id})
     paginate
-    render :json=>wrap_questions(@collection)
+    @content = wrap_questions(@collection)
+    render :json=>@content
   end
 
   # 搜索法条
@@ -421,7 +456,8 @@ class ApiController < ApplicationController
     end
     keyword = params[:keyword]
 
-    render :json=>laws_to_json(Search.search(who,action,searchable,keyword))
+    @content = laws_to_json(Search.search(who,action,searchable,keyword))
+    render :json=>@content
   end
 
   #搜索免费法条
@@ -435,7 +471,8 @@ class ApiController < ApplicationController
     end
     keyword = params[:keyword]
 
-    render :json=>freelaws_to_json(Search.search(who,action,searchable,keyword))
+    @content = freelaws_to_json(Search.search(who,action,searchable,keyword))
+    render :json=>@content
   end
 
   # 发送开始心跳
@@ -447,7 +484,8 @@ class ApiController < ApplicationController
     end
     hb = Heartbeat.log_start(current_user,beatable)
     hb.set_duration
-    render :json=>{:interval=>Heartbeat::Interval}
+    @content = {:interval=>Heartbeat::Interval}
+    render :json=>@content
   end
 
   # 发送心跳
@@ -460,7 +498,8 @@ class ApiController < ApplicationController
     hb = Heartbeat.log_beat(current_user,beatable)
     hb.set_duration
     current_user.cache_complex
-    render :json=>{:interval=>Heartbeat::Interval}
+    @content = {:interval=>Heartbeat::Interval}
+    render :json=>@content
   end
 
   # 发送停止心跳
@@ -472,7 +511,8 @@ class ApiController < ApplicationController
     end
     hb = Heartbeat.log_stop(current_user,beatable)
     hb.set_duration
-    render :json=>{:interval=>Heartbeat::Interval}
+    @content = {:interval=>Heartbeat::Interval}
+    render :json=>@content
   end
 # 每个部门法的累计学习时间 / 用户累计使用软件的时间和天数
 # id 部门法id , 必填 . 如果没有id, 则返回所有部门法的时间 , 有id , 返回指定部门法
@@ -497,43 +537,52 @@ class ApiController < ApplicationController
       to = Time.zone.parse('3000-01-01 01:00:00')
     end
 
-    render :json=>Heartbeat.summary(current_user,beatable,from,to)
+    @content = Heartbeat.summary(current_user,beatable,from,to)
+    render :json=>@content
   end
 
   def istudy_epmenu_summary
-    render :json=>Istudy.epmenu_summary(current_user,params[:type])
+    @content = Istudy.epmenu_summary(current_user,params[:type])
+    render :json=>@content
   end
 
   def istudy_sub_epmenus_summaries
-    render :json=>Istudy.sub_epmenus_summaries(current_user,params[:id])
+    @content = Istudy.sub_epmenus_summaries(current_user,params[:id])
+    render :json=>@content
   end
 
   def istudy_epmenus_summaries
-    render :json=>Istudy.epmenus_summaries(current_user)
+    @content = Istudy.epmenus_summaries(current_user)
+    render :json=>@content
   end
 
   def istudy_xueba
-    render :json=>{:value=>Istudy.xueba(current_user)}
+    @content = {:value=>Istudy.xueba(current_user)}
+    render :json=>@content
   end
 
   def istudy_complex
-    render :json=>{:value=>Istudy.complex(current_user)}
+    @content = {:value=>Istudy.complex(current_user)}
+    render :json=>@content
   end
 
   def istudy_complex_rank
-    render :json=>Istudy.complex_rank(current_user)
+    @content = Istudy.complex_rank(current_user)
+    render :json=>@content
   end
 
   def istudy_evaluate
-    render :json=>{:value=>Istudy.evaluate(current_user)}
+    @content = {:value=>Istudy.evaluate(current_user)}
+    render :json=>@content
   end
 
   def history
-    render :json=>{
+    @content = {
       :total=>History.by_user(current_user).count(),
       :right=>History.by_user(current_user).right.count(),
       :wrong=>History.by_user(current_user).wrong.count(),
     }
+    render :json=>@content
   end
 
   def history_by_epmenu
@@ -541,11 +590,12 @@ class ApiController < ApplicationController
       :user_id=>current_user.id,
       :epmenu_id=>params[:id]
     )
-    render :json=>{
+    @content = {
       :total=>base.count(),
       :right=>base.where(:state=>:right).count(),
       :wrong=>base.where(:state=>:wrong).count(),
     }
+    render :json=>@content
   end
 
   def history_by_epmenu_eps
@@ -557,14 +607,14 @@ class ApiController < ApplicationController
       :epmenu_id=>params[:id],
     )
 
-    status = eps.collect do |ep|
+    @content = eps.collect do |ep|
       attributes = ep.attributes
       attributes[:total]= base.where(:exampoint_id=>ep.id).count()
       attributes[:right]= base.where(:exampoint_id=>ep.id,:state=>:right).count()
       attributes[:wrong]= base.where(:exampoint_id=>ep.id,:state=>:wrong).count()
       attributes
     end
-    render :json=>status
+    render :json=>@content
   end
 
   def history_total_avg_by_epmenu
@@ -575,7 +625,8 @@ class ApiController < ApplicationController
     total = base.count()
     right = base.where(:state=>:right).count()
 
-    render :json=>{:value=>right*1.0/total*15}
+    @content = {:value=>right*1.0/total*15}
+    render :json=>@content
   end
 
   def history_total_avg_by_epmenu_eps
@@ -587,7 +638,7 @@ class ApiController < ApplicationController
       :epmenu_id=>params[:id],
     )
 
-    status = eps.collect do |ep|
+    @content = eps.collect do |ep|
       attributes = ep.attributes
       total = base.where(:exampoint_id=>ep.id).count()
       right = base.where(:exampoint_id=>ep.id,:state=>:right).count()
@@ -595,7 +646,7 @@ class ApiController < ApplicationController
       attributes[:value] = 0 if attributes[:value].nan?
       attributes
     end
-    render :json=>status
+    render :json=>@content
   end
 
   private
@@ -691,5 +742,13 @@ class ApiController < ApplicationController
   # def assign_trial_captcha
 
   # end
+
+  def log(method,content)
+    Dlog.create :content=>content,:params=>params,:method=>method,:user_id=>current_user.try(:id)
+  end
+
+  def save_dlog
+    Dlog.create :content=>@content,:params=>params,:method=>params[:action],:user_id=>current_user.try(:id)
+  end
 end
 

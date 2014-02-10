@@ -1,5 +1,8 @@
 RailsWanguo::Application.routes.draw do
 
+  resources :dlogs
+
+
   get "epmenus/index"
 
   get "epmenus/show"

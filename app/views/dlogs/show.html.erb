@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @dlog.user_id %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%= @dlog.content %>
+</p>
+
+<p>
+  <b>Method:</b>
+  <%= @dlog.method %>
+</p>
+
+<p>
+  <b>Params:</b>
+  <%= @dlog.params %>
+</p>
+
+
+<%= link_to 'Edit', edit_dlog_path(@dlog) %> |
+<%= link_to 'Back', dlogs_path %>

@@ -3,6 +3,7 @@ class Ability
   def initialize(user)
     if user and user.has_role? :admin
         can :manage,User
+        can :manage,Dlog
         can :generate,Captcha
         can :valid,Captcha
         can :expired,Captcha
