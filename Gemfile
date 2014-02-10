@@ -85,3 +85,5 @@ group :test do
 end
 
 gem 'statistics'
+
+gem 'exception_notification'

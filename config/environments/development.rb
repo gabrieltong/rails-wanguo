@@ -69,4 +69,12 @@ RailsWanguo::Application.configure do
   
 
   config.action_mailer.default_url_options = { :host => "wg.edu58.cn" }
+
 end
+
+RailsWanguo::Application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :email_prefix => "[Wanguo DEV] ",
+    :sender_address => %{"wanguoschool" <test@wanguoschool.com>},
+    :exception_recipients => %w{334812134@qq.com minyuanyang@gmail.com}
+  }
