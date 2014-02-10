@@ -748,7 +748,10 @@ class ApiController < ApplicationController
   end
 
   def save_dlog
-    Dlog.create :content=>@content,:params=>params,:method=>params[:action],:user_id=>current_user.try(:id)
+    begin
+      Dlog.create :content=>@content,:params=>params,:method=>params[:action],:user_id=>current_user.try(:id)
+    rescue
+    end
   end
 end
 
