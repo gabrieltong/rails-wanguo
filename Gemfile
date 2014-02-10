@@ -87,3 +87,4 @@ end
 gem 'statistics'
 
 gem 'exception_notification'
+# gem 'acts_as_list'

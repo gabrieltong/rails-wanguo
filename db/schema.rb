@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140210022304) do
+ActiveRecord::Schema.define(:version => 20140210062302) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -244,6 +244,7 @@ ActiveRecord::Schema.define(:version => 20140210022304) do
     t.datetime "sound_updated_at"
     t.integer  "number"
     t.text     "questions_number"
+    t.integer  "position",           :default => 0
   end
 
   add_index "laws", ["ancestry"], :name => "index_laws_on_ancestry"

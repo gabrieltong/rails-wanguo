@@ -18,7 +18,7 @@ class Law < ActiveRecord::Base
   	instance.state = '' if instance.state == nil
     instance.score = 0 if instance.state == nil
   end
-
+  # acts_as_list scope: :list_scope
   scope 'node', :conditions => { :state => 'node' }
 
   def as_json(options={})
@@ -64,6 +64,26 @@ class Law < ActiveRecord::Base
         p "destroy law #{l.id}.#{l.title}"
         l.destroy
       end
+    end
+  end
+
+  # def list_scope
+  #   # if self.root?
+  #   #   Law.roots
+  #   # else
+  #     self.parent
+  #   # end
+  # end
+  def move_up
+  end
+
+  def move_down
+  end
+
+  def self.build_position(laws=Law.roots)
+    laws.sort('id desc').each_with_index do |law,index|
+      law.postion = index + 1
+      law.save :validate=>false
     end
   end
 end
