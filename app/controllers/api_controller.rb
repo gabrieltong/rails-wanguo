@@ -75,7 +75,9 @@ class ApiController < ApplicationController
   end
 
   def authorize_token
-    @user = User.find_by_remember_token(params[:session][:token])
+    if params[:session] 
+      @user = User.find_by_remember_token(params[:session][:token])
+    end
     # @user = User.first
     render :json=>{:success=>false} unless @user
   end
