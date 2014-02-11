@@ -109,7 +109,11 @@ class ApiController < ApplicationController
   end
 
   def login
-    @user = User.authenticate params[:session][:username],params[:session][:password]
+    if params[:session]
+      @user = User.authenticate params[:session][:username],params[:session][:password]
+    else
+      @user = nil
+    end
     sign_in(@user)
     if @user
       @content = {:success=>true,:user=>@user}
