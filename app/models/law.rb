@@ -1,6 +1,9 @@
+# encoding: UTF-8
 class Law < ActiveRecord::Base
   include PublicActivity::Model
   include IsCollected
+  extend GabSortable::ClassMethods
+  include GabSortable::SingletonMethods
   has_attached_file :sound  
   attr_accessible :ancestry, :content, :title, :score,:sound,:number
   has_ancestry :cache_depth=>true
@@ -17,6 +20,10 @@ class Law < ActiveRecord::Base
   	instance.category = '' if instance.category == nil
   	instance.state = '' if instance.state == nil
     instance.score = 0 if instance.state == nil
+  end
+  # 
+  after_create do |instance|
+    instance.build_position
   end
   # acts_as_list scope: :list_scope
   scope 'node', :conditions => { :state => 'node' }
@@ -64,26 +71,6 @@ class Law < ActiveRecord::Base
         p "destroy law #{l.id}.#{l.title}"
         l.destroy
       end
-    end
-  end
-
-  # def list_scope
-  #   # if self.root?
-  #   #   Law.roots
-  #   # else
-  #     self.parent
-  #   # end
-  # end
-  def move_up
-  end
-
-  def move_down
-  end
-
-  def self.build_position(laws=Law.roots)
-    laws.sort('id desc').each_with_index do |law,index|
-      law.postion = index + 1
-      law.save :validate=>false
     end
   end
 end

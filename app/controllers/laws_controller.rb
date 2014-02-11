@@ -1,10 +1,12 @@
 class LawsController < ApplicationController
   before_filter :authorize
   authorize_resource
+  before_filter :find_law,:only=>[:move_up,:move_down]
+
   # GET /laws
   # GET /laws.json
   def index
-    @laws = Law.roots
+    @laws = Law.ordered_roots
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @laws }
@@ -19,7 +21,7 @@ class LawsController < ApplicationController
       add_breadcrumb law.title,law_path(law)
     end
     add_breadcrumb @law.title
-    @laws = @law.children
+    @laws = @law.ordered_children
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @law }
@@ -92,4 +94,8 @@ class LawsController < ApplicationController
     @per_page = params[:per_page] || 20
     @random = params[:random].to_i || 0
   end  
+
+  def find_law
+    @instance = Law.find(params[:id])
+  end
 end

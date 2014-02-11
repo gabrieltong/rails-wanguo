@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:title) %></th>
+      <!-- <th><%= model_class.human_attribute_name(:position) %></th>             -->
       <% if collection.first.state == 'node' %>
       <th><%= model_class.human_attribute_name(:blanks) %></th>
       <th><%= model_class.human_attribute_name(:score) %></th>
@@ -19,6 +20,7 @@
     <% collection.each do |law| %>
       <tr>
         <td><%= link_to law.title, law_path(law) %></td>
+        <!-- <td><%= law.position %></td> -->
         <% if collection.first.state == 'node' %>
         <td><%= law.blanks %></td>
         <td><%= law.score %></td>
@@ -28,6 +30,10 @@
         <td><%= law.open_blank_count %></td>
         <% end %>
         <td>
+          <%= link_to '<i class="icon-arrow-up"></i>'.html_safe,
+                      move_up_law_path(law), :class => 'btn  btn-mini' %>
+          <%= link_to '<i class="icon-arrow-down"></i>'.html_safe,
+                      move_down_law_path(law), :class => 'btn  btn-mini' %>                      
           <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_law_path(law), :class => 'btn btn-mini' %>
           <%= link_to t('destroy', :default => t("helpers.links.destroy")),

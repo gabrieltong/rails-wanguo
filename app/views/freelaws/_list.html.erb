@@ -18,6 +18,10 @@
         <td><%= freelaw.number %></td>
         <% end %>
         <td>
+          <%= link_to '<i class="icon-arrow-up"></i>'.html_safe,
+                      move_up_freelaw_path(freelaw), :class => 'btn  btn-mini' %>
+          <%= link_to '<i class="icon-arrow-down"></i>'.html_safe,
+                      move_down_freelaw_path(freelaw), :class => 'btn  btn-mini' %>
           <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_freelaw_path(freelaw), :class => 'btn btn-mini' %>
           <%= link_to t('destroy', :default => t("helpers.links.destroy")),

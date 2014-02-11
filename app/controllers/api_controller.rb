@@ -202,9 +202,9 @@ class ApiController < ApplicationController
   #法条班法条  
   def laws
   	if params[:id] == nil
-  		@relation = Law.roots
+  		@relation = Law.ordered_roots
   	else
-  		@relation = Law.find(params[:id]).children
+  		@relation = Law.find(params[:id]).ordered_children
   	end
     paginate
     @content = laws_to_json(@collection)
@@ -215,9 +215,9 @@ class ApiController < ApplicationController
   # 免费法条
   def freelaws
   	if params[:id] == nil
-  		@relation = Freelaw.roots
+  		@relation = Freelaw.ordered_roots
   	else
-  		@relation = Freelaw.find(params[:id]).children
+  		@relation = Freelaw.find(params[:id]).ordered_children
   	end
     paginate
     @content = freelaws_to_json(@relation)
@@ -655,6 +655,7 @@ class ApiController < ApplicationController
     render :json=>@content
   end
 
+
   private
 
   # 为问题增加一些属性 ， 例如用户是否收藏，
@@ -759,5 +760,6 @@ class ApiController < ApplicationController
     rescue
     end
   end
+
 end
 

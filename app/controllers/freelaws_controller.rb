@@ -1,10 +1,16 @@
 class FreelawsController < ApplicationController
   before_filter :authorize
   authorize_resource
+
+  before_filter :find_freelaw,:only=>[:move_up,:move_down]
+
+  def find_freelaw
+    @instance = Freelaw.find(params[:id])
+  end
   # GET /freelaws
   # GET /freelaws.json
   def index
-    @freelaws = Freelaw.roots
+    @freelaws = Freelaw.ordered_roots
 
     respond_to do |format|
       format.html # index.html.erb
@@ -21,7 +27,7 @@ class FreelawsController < ApplicationController
       add_breadcrumb freelaw.title,freelaw_path(freelaw)
     end
     add_breadcrumb @freelaw.title
-    @freelaws = @freelaw.children
+    @freelaws = @freelaw.ordered_children
 
     respond_to do |format|
       format.html # show.html.erb

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140210062302) do
+ActiveRecord::Schema.define(:version => 20140211021516) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20140210062302) do
     t.string   "category"
     t.integer  "ancestry_depth", :default => 0
     t.integer  "number"
+    t.integer  "position",       :default => 0
   end
 
   add_index "freelaws", ["ancestry"], :name => "index_freelaws_on_ancestry"

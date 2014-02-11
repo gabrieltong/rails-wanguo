@@ -1,7 +1,8 @@
 
 class Freelaw < ActiveRecord::Base
   include IsCollected
-  
+  extend GabSortable::ClassMethods
+  include GabSortable::SingletonMethods  
   attr_accessible :ancestry, :content, :title, :number
   has_ancestry :cache_depth=>true
 
@@ -15,6 +16,10 @@ class Freelaw < ActiveRecord::Base
   	instance.state = '' if instance.state == nil
   end
 
+  after_create do |instance|
+    instance.build_position
+  end
+  
   def children_state
     children.first.try(:state)
   end

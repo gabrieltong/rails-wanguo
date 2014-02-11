@@ -5,6 +5,18 @@ class ApplicationController < ActionController::Base
   
   before_filter :paginate_params
 
+  def move_up
+    @instance.move_up
+    redirect_to request.referer
+    # render :json=>@instance.move_up
+  end
+
+  def move_down
+    @instance.move_down
+    redirect_to request.referer
+    # render :json=>@instance.move_down
+  end
+
   def authenticate(params)
     User.authenticate(params[:session][:username],
                       params[:session][:password])

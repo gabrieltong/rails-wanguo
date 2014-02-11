@@ -200,10 +200,20 @@ RailsWanguo::Application.routes.draw do
   resources :exampoints
 
 
-  resources :laws
+  resources :laws do
+    member do
+      match 'move_up'
+      match 'move_down'
+    end
+  end
 
 
-  resources :freelaws
+  resources :freelaws do
+    member do
+      match 'move_up'
+      match 'move_down'
+    end
+  end
 
 
   # The priority is based upon order of creation:
