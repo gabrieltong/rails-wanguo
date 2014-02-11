@@ -19,3 +19,4 @@ log
 .ruby-gemset
 .gemset-version
 public/system
+public/assets

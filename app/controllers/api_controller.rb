@@ -323,7 +323,7 @@ class ApiController < ApplicationController
   def answer_questions    
     if params[:data].class == Array
       params[:data] = Hash[(0...params[:data].size).zip params[:data]]
-      
+
       params[:data].each_pair do |_,item|
         History.log(current_user.id,item[:id],item[:result],item[:originalMyAnswer])
       end
@@ -757,7 +757,7 @@ class ApiController < ApplicationController
 
   def save_dlog
     begin
-      Dlog.create :content=>@content,:params=>params,:method=>params[:action],:user_id=>current_user.try(:id)
+      # Dlog.create :content=>@content,:params=>params,:method=>params[:action],:user_id=>current_user.try(:id)
     rescue
     end
   end
