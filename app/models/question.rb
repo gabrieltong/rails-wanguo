@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class Question < ActiveRecord::Base
   include IsCollected
   
@@ -56,5 +57,25 @@ class Question < ActiveRecord::Base
     else
       right_count*1.0/answered_count
     end
+  end
+
+  def self.clear_special_chars
+    char = ''
+    Question.where("title like ?", "%#{char}%").each do |q|
+      q.title = q.title.gsub(char,'')
+      q.save
+    end
+
+    Question.where("description like ?", "%#{char}%").each do |q|
+      q.description = q.description.gsub(char,'')
+      q.save
+    end
+
+    Question.where("choices like ?", "%#{char}%").each do |q|
+      q.choices = q.choices.map {|c|c.gsub(char,'')}
+      q.save
+    end
+    
+    # .where("description like ?", "%#{char}%").where("choices like ?", "%#{char}%")    
   end
 end
