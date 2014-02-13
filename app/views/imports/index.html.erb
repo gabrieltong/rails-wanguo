@@ -10,6 +10,7 @@ $(function(){
 <ul class="nav nav-tabs" id="myTab">
   <li class="active"><a href="#laws_zip"><%=t :laws_zip%></a></li>
   <li><a href="#freelaws_zip"><%=t :audios%></a></li>
+  <li><a href="#explain">导入说明</a></li>
 </ul>
  
 <div class="tab-content">
@@ -18,6 +19,9 @@ $(function(){
   </div>
   <div class="tab-pane" id="freelaws_zip">
     <%= render 'list',:collection=>Import.audios.order('id desc'),:title=>t(:audios)%>
+  </div>
+  <div class="tab-pane" id="explain">
+    <%= render 'explain'%>
   </div>
 </div>
 

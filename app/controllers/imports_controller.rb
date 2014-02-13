@@ -12,6 +12,14 @@ class ImportsController < ApplicationController
     end
   end
 
+  def explain
+    # @imports = Import.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+    end
+  end
+
   # GET /imports/1
   # GET /imports/1.json
   def show

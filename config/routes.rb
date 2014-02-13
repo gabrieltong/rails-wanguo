@@ -193,7 +193,11 @@ RailsWanguo::Application.routes.draw do
 
   resources :questions
 
-  resources :imports
+  resources :imports do
+    collection do
+      match 'explain'
+    end
+  end
 
 
   resources :annexes
