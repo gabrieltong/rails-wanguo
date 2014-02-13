@@ -15,6 +15,11 @@
     - :year
     - :month
     - :day
+  people:
+    index:
+      title: '学员'
+    show:
+      title: '学员'    
   users:
     index:
       title: '学员'

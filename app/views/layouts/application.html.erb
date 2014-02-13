@@ -26,7 +26,7 @@
       <%= menu_group do %>
         <%=menu_item '下载', entrance_download_path %>  
         <% if current_user && can?(:view,School) %>
-        <%=menu_item '学员列表', users_path %>  
+        <%=menu_item '学员列表', people_path %>  
         <% end %>
 
         <% if current_user && can?(:view,School) %>

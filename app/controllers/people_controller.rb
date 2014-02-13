@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class PeopleController < Clearance::UsersController
   before_filter :find_user
   skip_before_filter :find_user,:only=>[:index]
     

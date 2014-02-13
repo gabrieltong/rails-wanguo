@@ -1,0 +1,14 @@
+<div id='clearance' class='sign-up'>
+  <h2><%= t '.title' %></h2>
+
+  <%= simple_form_for(@user,:html => {:class => 'form-horizontal' }) do |form| %>
+    <%= render :partial => '/users/form', :object => form %>
+    <div class="control-group">
+      <div class="controls">
+    <%= form.button :submit%>
+    <%= link_to t('.sign_in'), sign_in_path,:class=>'btn' %>
+    <%= link_to t('.forgot_password'), new_password_path ,:class=>'btn'%>
+      </div>
+    </div>
+  <% end %>
+</div>

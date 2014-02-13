@@ -31,7 +31,9 @@ RailsWanguo::Application.routes.draw do
 
   # get 'users/:id/view'
 
-  resources :users,:only=>[:index,:show,:destroy,:edit,:update] do
+  # resource :session, controller: 'sessions'
+
+  resources :people,:only=>[:index,:show,:destroy,:edit,:update] do
     member do
       get 'collected_laws/(:law_id)',:action=>'collected_laws'
     end
