@@ -1,5 +1,5 @@
 <%= simple_form_for @question, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :title %>
+  <%= f.input :title,:as=>:string %>
   <%= f.input :score %>
   <%= f.input :num %>
   <%= f.input :state %>
