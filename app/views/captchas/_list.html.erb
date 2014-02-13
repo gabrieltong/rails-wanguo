@@ -23,8 +23,8 @@
         <td><%= captcha.expired_at %></td>
         <td><%= minutes_to_days captcha.duration %></td>
         <td>
-          <%= link_to t('edit', :default => t("helpers.links.edit")),
-                      edit_captcha_path(captcha), :class => 'btn btn-mini' %>
+<!--           <%= link_to t('edit', :default => t("helpers.links.edit")),
+                      edit_captcha_path(captcha), :class => 'btn btn-mini' %> -->
           <%= link_to t('destroy', :default => t("helpers.links.destroy")),
                       captcha_path(captcha),
                       :method => :delete,
