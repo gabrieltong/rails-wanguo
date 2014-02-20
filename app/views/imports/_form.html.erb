@@ -1,11 +1,31 @@
-<%= simple_form_for @import, :html => { :class => 'form-horizontal' } do |f| %>
-  <%=f.input :title%>
-  <%=f.input :state,:collection=>Import::State,:as=>:radio%>
-  <%=f.input :file,:as=>:file%>
-  
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('cancel', :default => t("helpers.links.cancel")),
-                imports_path, :class => 'btn' %>
-  </div>
-<% end %>
+<div class='row'>
+	<div class='span6'>
+		<%= simple_form_for @import, :html => { :class => 'form-horizontal' } do |f| %>
+		  <%=f.input :title%>
+		  <%=f.input :state,:collection=>Import::State,:as=>:radio%>
+		  <%=f.input :file,:as=>:file%>
+		  
+		  <div class="form-actions">
+		    <%= f.submit nil, :class => 'btn btn-primary' %>
+		    <%= link_to t('cancel', :default => t("helpers.links.cancel")),
+		                imports_path, :class => 'btn' %>
+		  </div>
+		<% end %>
+	</div>
+	<div class='span6'>
+		<div class="alert">
+			<br/>
+		<ul>
+			<li>当导入法条和免费法条时 ，部门法为必填项 ，会作为内容所在的部门法大类名称</li>
+			<li>当导入真题和知识点时 ，部门法没有要求 ，填什么都可以 。</li>
+			<li>法条班excel是免费发条的一个扩展 ，所以必须先导入免费发条再导入法条班excel</li>
+			<li>知识点基于试题和发条 ，请先导入发条和试题 ，再导入知识点</li>
+			<li>法条班和试题的顺序没有要求</li>
+			<li>删除 使用网站的删除功能</li>
+			<li>添加 使用网站进行管理 ，现在支持上下移动的功能 。 </li>
+			<li>音频压缩包继续使用以前的规范</li>
+			<li>可以全部上传</li>
+		</ul>
+		</div>
+	</div>
+</div>
