@@ -72,9 +72,9 @@ RailsWanguo::Application.configure do
 end
 
 
-RailsWanguo::Application.config.middleware.use ExceptionNotification::Rack,
-  :email => {
-    :email_prefix => "[Wanguo gabrielco ",
-    :sender_address => %{"wanguoschool" <test@wanguoschool.com>},
-    :exception_recipients => %w{334812134@qq.com minyuanyang@qq.com thinking01@qq.com 114101162@qq.com}
-  }
+# RailsWanguo::Application.config.middleware.use ExceptionNotification::Rack,
+#   :email => {
+#     :email_prefix => "[Wanguo gabrielco ",
+#     :sender_address => %{"wanguoschool" <test@wanguoschool.com>},
+#     :exception_recipients => %w{334812134@qq.com minyuanyang@qq.com thinking01@qq.com 114101162@qq.com}
+#   }

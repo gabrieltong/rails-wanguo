@@ -13,7 +13,9 @@ development:
   encoding: utf8
   reconnect: false
   # database: rails-wanguo_gabriellocal
-  database: rails-wanguo_data2
+  database: rails-wanguo_gabrielco
+    # database: rails-wanguo_data2
+
   pool: 5
   username: root
   password:
@@ -57,7 +59,7 @@ gabrielco:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: rails-wanguo_data2
+  database: rails-wanguo_gabrielco
   pool: 5
   username: root
   password:

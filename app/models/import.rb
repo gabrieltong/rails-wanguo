@@ -3,7 +3,7 @@ require 'zip/zipfilesystem'
 
 require 'roo'
 class Import < ActiveRecord::Base
-  attr_accessible :file, :title, :state
+  attr_accessible :file, :title, :state,:subtitle
 
   has_attached_file :file
 
@@ -11,54 +11,60 @@ class Import < ActiveRecord::Base
 
   has_many :import_errors
   
-  State = %w(laws_zip audios)
+  State = [:audios, :freelaws, :laws, :questions, :eps]
 
-  def self.import_all
-    Import.freelaws.each {|i|i.import}
-    Import.laws.each {|i|i.import}
-    Import.questions.each {|i|i.import}
-    Import.eps.each {|i|i.import}
-  end
+  # def self.import_all
+  #   Import.freelaws.each {|i|i.import}
+  #   Import.laws.each {|i|i.import}
+  #   Import.questions.each {|i|i.import}
+  #   Import.eps.each {|i|i.import}
+  # end
 
-  def self.import_all_v2
-    Import.laws_zip.each {|i|i.import}
-  end
+  # def self.import_all_v2
+  #   Import.laws_zip.each {|i|i.import}
+  # end
+  # validate 
   # validate :validate_laws,:if=>"state = 'laws'"
-  # validate :validate_freelaws,:if=>"state = 'freelaws'"
+  validate :validate_freelaws,:if=>"state = 'freelaws'"
   # validate :validate_questions,:if=>"state = 'questions'"
   # validate :validate_eps,:if=>"state = 'eps'"
+  # validates_attachment :file, :content_type => {
+  #         :content_type=>["application/vnd.ms-excel",   
+  #           'application/octet-stream',
+  #           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  #         ]
+  #     },:unless=>"state = 'audios'"
 
   def validate_laws
-    data = open
-    unless s[0[0..6]] == %w(学科 文件名称 分类 法条章 法条节 内容 关联考点)
+    data = open(self.file.queued_for_write[:original].path)
+    unless data && data[0[0..6]] == %w(学科 文件名称 分类 法条章 法条节 内容 关联考点)
       errors.add(:file, "法条班格式错误")
     end
   end
 
   def validate_freelaws
-    data = open
-    unless s[0[0..5]] == %w(学科 文件名称 分类 法条章 法条节 内容)
+    data = open(self.file.queued_for_write[:original].path)
+    unless data && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
       errors.add(:file, "法条格式错误")
     end
   end
 
   def validate_questions
-    data = open
-    unless s[0][0..5] == %w(类型 分值 真题题号 题干 正确答案 解析)
+    data = open(self.file.queued_for_write[:original].path)
+    unless data && data[0][0..5] == %w(类型 分值 真题题号 题干 正确答案 解析)
       errors.add(:file, "问题格式错误")
     end
   end
 
   def validate_eps
-    data = open
-    unless s[0][0..5] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
+    data = open(self.file.queued_for_write[:original].path)
+    unless data && data[0][0..5] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
       errors.add(:file, "知识点格式错误")
     end
   end
 
 
-  def open(path)
-    p ">>> importing #{path}"
+  def open(path = self.file.path)
     s , data = nil,nil
     begin
       s = Roo::Excel.new(path)
@@ -75,6 +81,7 @@ class Import < ActiveRecord::Base
     rescue
     end if s == nil
 
+
     if s
       s.sheets.each_with_index do |sheet,index|
         s.default_sheet = s.sheets[index]
@@ -89,8 +96,8 @@ class Import < ActiveRecord::Base
     data
   end
 
-  state_machine :state,:initial=>:freelaws do 
-    state :audios do
+  state_machine :state,:initial=>'freelaws' do 
+    state 'audios' do
       def import 
         target_dir = 'public/audio'
         `
@@ -116,7 +123,7 @@ class Import < ActiveRecord::Base
       end
     end
 
-    state :laws_zip do 
+    state 'laws_zip' do 
       def import 
         base = 'tmp'
         # 得到zip包名
@@ -152,43 +159,35 @@ class Import < ActiveRecord::Base
       end
     end
 
-    state :freelaws_zip do 
+    state 'freelaws_zip' do 
       def import
       end
     end
 
-    state :laws do
+    state 'laws' do
       def import
         import_laws
       end
     end
 
-    state :freelaws do
+    state 'freelaws' do
       def import
-        import_freelaws
+        import_freelaw(title,file_file_name,open)
+        import_law(title,file_file_name,open)
       end
     end
 
-    state :questions do
+    state 'questions' do
       def import
         # import_questions
         import_questions_v2
       end
     end
 
-    state :eps do
+    state 'eps' do
       def import
         import_eps
       end
-    end
-
-    state :eps,:questions,:freelaws,:laws do 
-      validates_attachment :file, :content_type => {
-    :content_type=>["application/vnd.ms-excel",   
-             'application/octet-stream',
-             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-           ]
-  } 
     end
 
   end

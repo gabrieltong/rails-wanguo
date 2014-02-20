@@ -61,19 +61,10 @@ class ImportsController < ApplicationController
 
     respond_to do |format|
       if @import.save
-        if @import.state == 'audios'
-          @import.import
-        end
-
-        if @import.state == 'laws_zip'
-          @import.import
-          @import.import
-        end
-        
+        # @import.import
         format.html { redirect_to @import, notice: 'Import was successfully created.' }
         format.json { render json: @import, status: :created, location: @import }
       else
-        p @import.errors.full_messages
         format.html { render action: "new" }
         format.json { render json: @import.errors, status: :unprocessable_entity }
       end

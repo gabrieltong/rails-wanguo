@@ -43,6 +43,14 @@
     expired: 
       title: '已过期验证码'
   simple_form:
+    options:
+      import:
+        state:
+          audios: '音频压缩包'
+          freelaws: '免费法条'
+          laws: '法条'
+          questions: '真题'
+          eps: '知识点'
     labels:
       password:
         password: '密码'
@@ -57,7 +65,7 @@
         email: '邮箱'
         password: '密码'
         signature: '个性签名'
-  freelaws:  
+  freelaws:
     index:
       title: '免费法条'
     edit:
@@ -212,7 +220,8 @@
         duration: '持续时间(天)'
 
       import:
-        title: '标题'
+        title: '部门法'
+        subtitle: '部门法二级分类'
         file_file_name: '文件名称'
         file_content_type: '文件类型'
         file_file_size: '文件大小'
