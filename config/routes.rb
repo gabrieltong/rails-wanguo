@@ -197,6 +197,10 @@ RailsWanguo::Application.routes.draw do
     collection do
       match 'explain'
     end
+
+    member do
+      match 'import'
+    end
   end
 
 

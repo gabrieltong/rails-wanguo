@@ -38,6 +38,11 @@ class ImportsController < ApplicationController
     redirect_to request.referer
   end
 
+  def import
+    @import = Import.find(params[:id]).import
+    redirect_to request.referer
+  end
+
   # GET /imports/new
   # GET /imports/new.json
   def new

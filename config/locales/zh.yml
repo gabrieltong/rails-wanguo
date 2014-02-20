@@ -83,6 +83,7 @@
   freelaws_zip: '免费法条压缩包'
   imports:
     index:
+      import: '导入'
       title: '导入'
       actions: '操作'
       edit: '编辑'
@@ -113,6 +114,8 @@
     formats:
       default: "%H:%M"
   helpers:
+    links:
+      import: '导入'
     submit:
       create: "创建%{model}"
       update: "更新%{model}"

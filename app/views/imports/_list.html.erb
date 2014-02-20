@@ -17,6 +17,8 @@
         <td><%= import.file_file_name %></td>
         <td><%=t "simple_form.options.import.state.#{import.state}"%></td>
         <td>
+          <%= link_to t('import', :default => t("helpers.links.import")),
+                      import_import_path(import), :class => 'btn btn-mini' %>
           <%= link_to t('edit', :default => t("helpers.links.edit")),
                       edit_import_path(import), :class => 'btn btn-mini' %>
           <%= link_to t('destroy', :default => t("helpers.links.destroy")),
