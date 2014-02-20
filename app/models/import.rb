@@ -24,20 +24,22 @@ class Import < ActiveRecord::Base
   #   Import.laws_zip.each {|i|i.import}
   # end
   # validate 
-  # validate :validate_laws,:if=>"state = 'laws'"
-  validate :validate_freelaws,:if=>"state = 'freelaws'"
-  # validate :validate_questions,:if=>"state = 'questions'"
-  # validate :validate_eps,:if=>"state = 'eps'"
-  # validates_attachment :file, :content_type => {
-  #         :content_type=>["application/vnd.ms-excel",   
-  #           'application/octet-stream',
-  #           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  #         ]
-  #     },:unless=>"state = 'audios'"
+  validate :validate_laws,:if=>"state == 'laws'"
+  validate :validate_freelaws,:if=>"state == 'freelaws'"
+  validate :validate_questions,:if=>"state == 'questions'"
+  validate :validate_eps,:if=>"state == 'eps'"
+
+  validates_attachment :file, :content_type => {
+          :content_type=>["application/vnd.ms-excel",   
+            'application/octet-stream',
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          ]
+      },:unless=>"state == 'audios'"
 
   def validate_laws
     data = open(self.file.queued_for_write[:original].path)
-    unless data && data[0[0..6]] == %w(学科 文件名称 分类 法条章 法条节 内容 关联考点)
+    p data
+    unless data && data[0][0..6] == %w(法条编号 音频 真题 知识点 填空内容A 填空内容B 填空内容C)
       errors.add(:file, "法条班格式错误")
     end
   end
@@ -45,20 +47,21 @@ class Import < ActiveRecord::Base
   def validate_freelaws
     data = open(self.file.queued_for_write[:original].path)
     unless data && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
-      errors.add(:file, "法条格式错误")
+      errors.add(:file, "免费法条格式错误")
     end
   end
 
   def validate_questions
     data = open(self.file.queued_for_write[:original].path)
-    unless data && data[0][0..5] == %w(类型 分值 真题题号 题干 正确答案 解析)
+    p data[0][0..11]
+    unless data && data[0][0..14] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
       errors.add(:file, "问题格式错误")
     end
   end
 
   def validate_eps
     data = open(self.file.queued_for_write[:original].path)
-    unless data && data[0][0..5] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项 法条编号)
+    unless data && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
       errors.add(:file, "知识点格式错误")
     end
   end
@@ -166,7 +169,7 @@ class Import < ActiveRecord::Base
 
     state 'laws' do
       def import
-        import_laws
+        update_law(open)
       end
     end
 
@@ -179,14 +182,13 @@ class Import < ActiveRecord::Base
 
     state 'questions' do
       def import
-        # import_questions
-        import_questions_v2
+        import_question(open)
       end
     end
 
     state 'eps' do
       def import
-        import_eps
+        import_ep(open)
       end
     end
 
