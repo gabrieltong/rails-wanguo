@@ -6,6 +6,14 @@ class ApiController < ApplicationController
 
   after_filter :save_dlog
 
+  rescue_from Exception, :with => :server_error
+
+  def server_error(exception)
+    ExceptionNotifier.notify_exception(exception,
+    :env => request.env, :data => {:message => "was doing something wrong"})
+    render_fail
+  end
+
   def play_audio
     if Law.find(params[:id]).create_activity key: 'law.play_audio', owner: current_user
       render_success
@@ -761,6 +769,7 @@ class ApiController < ApplicationController
     rescue
     end
   end
+
 
 end
 
