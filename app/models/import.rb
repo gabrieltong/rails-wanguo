@@ -23,7 +23,8 @@ class Import < ActiveRecord::Base
   # def self.import_all_v2
   #   Import.laws_zip.each {|i|i.import}
   # end
-  # validate 
+
+  validate :title,:presence=>true
   validate :validate_laws,:if=>"state == 'laws'"
   validate :validate_freelaws,:if=>"state == 'freelaws'"
   validate :validate_questions,:if=>"state == 'questions'"
@@ -37,32 +38,38 @@ class Import < ActiveRecord::Base
       },:unless=>"state == 'audios'"
 
   def validate_laws
-    data = open(self.file.queued_for_write[:original].path)
-    p data
-    unless data && data[0][0..6] == %w(法条编号 音频 真题 知识点 填空内容A 填空内容B 填空内容C)
-      errors.add(:file, "法条班格式错误")
+    if self.file.queued_for_write[:original]
+      data = open(self.file.queued_for_write[:original].path)
+      unless data && data[0][0..6] == %w(法条编号 音频 真题 知识点 填空内容A 填空内容B 填空内容C)
+        errors.add(:file, "法条班格式错误")
+      end
     end
   end
 
   def validate_freelaws
-    data = open(self.file.queued_for_write[:original].path)
-    unless data && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
-      errors.add(:file, "免费法条格式错误")
+    if self.file.queued_for_write[:original]
+      data = open(self.file.queued_for_write[:original].path)
+      unless data && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
+        errors.add(:file, "免费法条格式错误")
+      end
     end
   end
 
   def validate_questions
-    data = open(self.file.queued_for_write[:original].path)
-    p data[0][0..11]
-    unless data && data[0][0..14] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
-      errors.add(:file, "问题格式错误")
+    if self.file.queued_for_write[:original]
+      data = open(self.file.queued_for_write[:original].path)
+      unless data && data[0][0..14] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
+        errors.add(:file, "问题格式错误")
+      end
     end
   end
 
   def validate_eps
-    data = open(self.file.queued_for_write[:original].path)
-    unless data && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
-      errors.add(:file, "知识点格式错误")
+    if self.file.queued_for_write[:original]
+      data = open(self.file.queued_for_write[:original].path)
+      unless data && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
+        errors.add(:file, "知识点格式错误")
+      end
     end
   end
 
