@@ -2,7 +2,7 @@
 class ApiController < ApplicationController
   # include Clearance::Controller
 
-  before_filter :authorize_token,:except=>[:login,:signup,:forget_password,:cities]
+  before_filter :authorize_token,:except=>[:login,:signup,:forget_password,:cities,:schools]
 
   after_filter :save_dlog
 
@@ -76,7 +76,12 @@ class ApiController < ApplicationController
   end
 
   def schools
-    @relation = School.where(true)
+    city = params[:city]
+    if city
+      @relation = School.where(:city=>city)
+    else
+      @relation = School.where(true)
+    end
     paginate
     @content = @collection
     render :json=>@content
