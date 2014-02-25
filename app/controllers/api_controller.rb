@@ -2,11 +2,22 @@
 class ApiController < ApplicationController
   # include Clearance::Controller
 
-  before_filter :authorize_token,:except=>[:login,:signup,:forget_password]
+  before_filter :authorize_token,:except=>[:login,:signup,:forget_password,:cities]
 
   after_filter :save_dlog
 
   rescue_from Exception, :with => :server_error
+
+  def cities
+    city = params[:city]
+    cities = School.group('city').select('city').count.keys
+    if cities.include? city
+      cities = cities.delete(city).unshift(city)
+    else
+      cities
+    end
+    render :json=>cities
+  end
 
   def server_error(exception)
     ExceptionNotifier.notify_exception(exception,

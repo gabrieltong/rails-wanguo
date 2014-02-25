@@ -48,6 +48,8 @@ RailsWanguo::Application.routes.draw do
 
   resources :heartbeats
 
+  match 'api/cities'
+
   post 'api/forget_password'
 
   post 'api/zhentis'
