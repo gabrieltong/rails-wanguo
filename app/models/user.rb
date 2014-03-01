@@ -53,6 +53,7 @@ class User < ActiveRecord::Base
     seconds = self.period_of_validity
     {
       :active=>(seconds>0),
+      :trial=>(self.captchas.count()==1),
       :seconds=>seconds
     }
   end
