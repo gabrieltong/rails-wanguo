@@ -102,6 +102,7 @@ class History < ActiveRecord::Base
   # 用户针对某道题的答题情况
   # return [:wrong,:right,nil]
   def self.question_status question,user
+    return nil if question.nil?
     relation = History.where(:question_id=>question.id,:user_id=>user.id).group(:created_at).order('created_at desc').limit(History::Limit)
     return nil if relation.count().keys.size == 0
     relation.each do |history|
