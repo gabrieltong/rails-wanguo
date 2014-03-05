@@ -9,12 +9,23 @@ class ApiController < ApplicationController
   rescue_from Exception, :with => :server_error
 
   def cities
-    city = params[:city]
+    arr = [:administrativeArea,:locality,:subAdministrativeArea,:subLocality,:country]
+
     cities = School.group('city').select('city').count.keys
-    if cities.include? city
-      cities = cities.delete(city).unshift(city)
-    else
-      cities
+
+    arr.each do |key|
+      if params[key]
+        city = params[key].delete('市')
+        items = School.where('city like ?',"%#{city}%").group('city').count.keys
+        unless items.blank?
+          items.each do |item|
+            if cities.include? item
+              cities.delete(item)
+              cities.unshift(item)
+            end
+          end
+        end
+      end
     end
     render :json=>cities
   end
