@@ -15,7 +15,10 @@ class ApiController < ApplicationController
 
     arr.each do |key|
       if params[key]
-        city = params[key].delete('市')
+        city = params[key]
+        if city[-1] == '市' && city.size >= 2
+          city.chop!
+        end
         items = School.where('city like ?',"%#{city}%").group('city').count.keys
         unless items.blank?
           items.each do |item|
