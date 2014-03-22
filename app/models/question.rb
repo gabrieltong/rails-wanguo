@@ -11,6 +11,8 @@ class Question < ActiveRecord::Base
   acts_as_collectable
 
   before_validation do |record|
+    record.choices = record.choices || []
+    record.choices_description = record.choices_description || []
     record.choices = JSON.parse(record.choices) if record.choices.class != Array
     record.choices_description = JSON.parse(record.choices_description) if record.choices_description.class != Array
   end  
