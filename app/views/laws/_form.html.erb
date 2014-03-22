@@ -1,9 +1,9 @@
 <%= simple_form_for @law, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :title ,:input_html=>{:rows=>5}%>
+  <%= f.input :title ,:input_html=>{:class=>'span6'}%>
   <% if f.object.state == 'node' %>
-  <%= f.input :blanks,:input_html=>{:rows=>5}%>
-  <%= f.input :score %>
-  <%= f.input :number %>
+  <%= f.input :blanks,:input_html=>{:class=>'span6'}%>
+  <%= f.input :score,:input_html=>{:class=>'span6'} %>
+  <%= f.input :number,:input_html=>{:class=>'span6'} %>
   <% end %>
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn-primary' %>

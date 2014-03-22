@@ -1,13 +1,21 @@
+<%
+@question.choices_description = @question.choices_description.map do |i|
+  i.to_s
+end
+@question.choices = @question.choices.map do |i|
+  i.to_s
+end
+%>
 <%= simple_form_for @question, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :title,:as=>:string %>
-  <%= f.input :score %>
-  <%= f.input :num %>
-  <%= f.input :state %>
-  <%= f.input :description %>
-  <%= f.input :answer %>
-  <%= f.input :choices %>
-  <%= f.input :description3 %>
-  <%= f.input :choices_description %>
+  <%= f.input :title,:as=>:string ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :score ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :num ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :state ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :description ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :answer ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :choices ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :description3 ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :choices_description ,:input_html=>{:class=>'span6'}%>
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn-primary' %>
     <%= link_to t('cancel', :default => t("helpers.links.cancel")),

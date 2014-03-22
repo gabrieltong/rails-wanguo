@@ -1,11 +1,11 @@
 <%= simple_form_for @school, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :title %>
-  <%= f.input :city %>
-  <%= f.input :price %>
-  <%= f.input :started_at %>
-  <%= f.input :url %>
-  <%= f.input :file %>
-  <%= f.input :details,:input_html=>{:rows=>5} %>
+  <%= f.input :title ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :city ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :price ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :started_at ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :url ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :file ,:input_html=>{:class=>'span6'}%>
+  <%= f.input :details,:input_html=>{:rows=>5} ,:input_html=>{:class=>'span6'}%>
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn-primary' %>
     <%= link_to t('cancel', :default => t("helpers.links.cancel")),

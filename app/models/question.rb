@@ -2,14 +2,19 @@
 class Question < ActiveRecord::Base
   include IsCollected
   
-  attr_accessible :answer, :choices, :description, :num, :score, :state, :title
+  attr_accessible :answer, :choices, :description, :num, :score, :state, :title,:description3,:choices_description
   serialize :choices
   serialize :choices_description  
   
   has_many :ep_questions
   has_many :histories
   acts_as_collectable
-  
+
+  before_validation do |record|
+    record.choices = JSON.parse(record.choices) if record.choices.class != Array
+    record.choices_description = JSON.parse(record.choices_description) if record.choices_description.class != Array
+  end  
+
   has_many :eps,:through=>:ep_questions,:source => :exampoint,:uniq=>true
   has_many :global_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>''},:source => :exampoint,:uniq=>true
   has_many :a_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>'A'},:source => :exampoint,:uniq=>true
@@ -78,4 +83,5 @@ class Question < ActiveRecord::Base
     
     # .where("description like ?", "%#{char}%").where("choices like ?", "%#{char}%")    
   end
+
 end
