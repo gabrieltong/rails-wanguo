@@ -305,7 +305,7 @@ class Import < ActiveRecord::Base
     if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
       data[1..-1].each do |row|
         if row[1]
-          q = Question.find_or_create_by_num row[0].to_i
+          q = Question.find_or_initialize_by_num row[0].to_i
           q.title = row[1].strip
           q.state = row[2]
           q.score = row[3]
