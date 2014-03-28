@@ -1,5 +1,6 @@
 # encoding: UTF-8
 class Law < ActiveRecord::Base
+  acts_as_paranoid
   include PublicActivity::Model
   include IsCollected
   extend GabSortable::ClassMethods
@@ -72,5 +73,11 @@ class Law < ActiveRecord::Base
         l.destroy
       end
     end
+  end
+
+  private
+  
+  def destroy_subtree
+
   end
 end

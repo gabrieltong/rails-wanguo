@@ -49,6 +49,8 @@ class Import < ActiveRecord::Base
   def validate_freelaws
     if self.file.queued_for_write[:original]
       data = open(self.file.queued_for_write[:original].path)
+      p '<'*100
+      p data
       unless data && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
         errors.add(:file, "免费法条格式错误")
       end
@@ -210,29 +212,29 @@ class Import < ActiveRecord::Base
   def import_law(name,other,data)
     # 导入法条与免费法条
     if data &&  data[0] && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
-      one = Law.find_or_create_by_title name.strip
+      one = Law.with_deleted.find_or_create_by_title name.strip
       data[1..-1].each do |row|
-        last = one.children.find_or_create_by_title other.split('.')[0..-2].join('.').strip
+        last = one.children.with_deleted.find_or_create_by_title other.split('.')[0..-2].join('.').strip
         if row[1]
-          last = last.children.find_or_initialize_by_title row[1].strip
+          last = last.children.with_deleted.find_or_initialize_by_title row[1].strip
           last.state = 'bian'
           last.save
         end
 
         if row[2]
-          last = last.children.find_or_initialize_by_title row[2].strip
+          last = last.children.with_deleted.find_or_initialize_by_title row[2].strip
           last.state = 'zhang'
           last.save
         end
 
         if row[3]
-          last = last.children.find_or_initialize_by_title row[3].strip
+          last = last.children.with_deleted.find_or_initialize_by_title row[3].strip
           last.state = 'jie'
           last.save
         end
 
         if row[4]
-          last = last.children.find_or_initialize_by_number row[0]
+          last = last.children.with_deleted.find_or_initialize_by_number row[0]
           last.title = row[4].strip
           last.state = 'node'
           last.save
@@ -279,8 +281,9 @@ class Import < ActiveRecord::Base
     # 更新法条班
     if data && data[0] && data[0][0..3] == %w(法条编号 音频 真题 知识点)
       data[1..-1].each do |row|
-        node = Law.find_by_number(row[0])
+        node = Law.with_deleted.find_by_number(row[0])
         if node
+          node.recover
           node.sound = row[1]
           node.exampoints = []
           row[3].to_s.split(/[，,、]/).each do |ep|
@@ -360,5 +363,9 @@ class Import < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def self.fix_laws
+    Law.all.each {|l|l.delete}
   end
 end
