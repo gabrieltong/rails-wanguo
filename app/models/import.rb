@@ -367,5 +367,6 @@ class Import < ActiveRecord::Base
 
   def self.fix_laws
     Law.all.each {|l|l.delete}
+    Import.laws.each {|l|l.import}
   end
 end
