@@ -14,7 +14,7 @@
       <tr>
         <td><%= link_to import.id, import_path(import) %></td>
         <td><%= import.title %></td>
-        <td><%= import.file_file_name %></td>
+        <td><%= link_to import.file_file_name,import.file.url %></td>
         <td><%=t "simple_form.options.import.state.#{import.state}"%></td>
         <td>
           <%= link_to t('import', :default => t("helpers.links.import")),
