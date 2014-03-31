@@ -308,7 +308,8 @@ class Import < ActiveRecord::Base
   end
   def import_question(data)
     # 导入真题
-    if data && data[0] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
+    if data && data[0][0..14] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
+
       data[1..-1].each do |row|
         if row[1]
           q = Question.find_or_initialize_by_num row[0].to_i
@@ -322,7 +323,7 @@ class Import < ActiveRecord::Base
           q.description3 = row[6]
           q.choices = []
           q.choices_description = []
-          row[7..-1].each_with_index do |cell,index|
+          row[7..14].each_with_index do |cell,index|
             if(index%2 == 0)
               q.choices.push cell
             else
