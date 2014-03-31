@@ -283,6 +283,9 @@ class Import < ActiveRecord::Base
       data[1..-1].each do |row|
         node = Law.with_deleted.find_by_number(row[0])
         if node
+          node.ancestors.with_deleted.each do |item|
+            item.recover
+          end
           node.recover
           node.sound = row[1]
           node.exampoints = []
