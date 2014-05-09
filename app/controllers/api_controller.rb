@@ -176,7 +176,7 @@ class ApiController < ApplicationController
     # 开始缓存
     current_user.auto_cache_setting
     @content = {
-      :istudy_day=>current_user.heartbeats.group_by_day(:created_at).relation.count.size,
+      :istudy_day=>current_user.heartbeats.group(:day).count.keys.size,
       :istudy_epmenus_summaries=>current_user.settings.istudy_epmenus_summaries,
       :istudy_complex_rank=>current_user.settings.istudy_complex_rank,
       :istudy_xueba=>current_user.settings.istudy_xueba,

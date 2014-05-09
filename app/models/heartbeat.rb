@@ -9,6 +9,11 @@ class Heartbeat < ActiveRecord::Base
   define_statistic :sum_time, :sum => :all, :column_name => :duration
   # after_save :set_duration
 
+  after_save do |record|
+    record.day = record.created_at
+    record.save :validate=>false 
+  end
+
   def set_duration
     self.duration = 0
 
