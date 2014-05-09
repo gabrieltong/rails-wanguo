@@ -90,3 +90,4 @@ gem 'exception_notification'
 # gem 'acts_as_list'
 gem "acts_as_paranoid", "~>0.4.0"
 gem 'yaml_db'
+gem 'groupdate'
