@@ -9,13 +9,10 @@ class Heartbeat < ActiveRecord::Base
   define_statistic :sum_time, :sum => :all, :column_name => :duration
   # after_save :set_duration
 
-  after_save :set_day
+  before_save :set_day
 
   def set_day
     self.day = self.created_at
-    Heartbeat.skip_callback(:save,:after,:set_day)
-    self.save :validate=>false 
-    Heartbeat.set_callback(:save,:after,:set_day)
   end
 
   def set_duration
@@ -52,6 +49,8 @@ class Heartbeat < ActiveRecord::Base
     hb.beatable = beatable
   	hb.user = user
   	hb.save
+    # to save day
+    hb.save
     hb
   end
 
@@ -60,6 +59,8 @@ class Heartbeat < ActiveRecord::Base
     hb.beatable = beatable
   	hb.user = user
   	hb.save
+    # to save day
+    hb.save
     hb
   end
 
@@ -68,6 +69,8 @@ class Heartbeat < ActiveRecord::Base
     hb.beatable = beatable
   	hb.user = user
   	hb.save
+    # to save day
+    hb.save
     hb
   end
 
