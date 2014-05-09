@@ -15,6 +15,7 @@ class Heartbeat < ActiveRecord::Base
     self.day = self.created_at
     Heartbeat.skip_callback(:save,:after,:set_day)
     self.save :validate=>false 
+    Heartbeat.set_callback(:save,:after,:set_day)
   end
 
   def set_duration
