@@ -22,7 +22,7 @@
     <%= javascript_include_tag "application" %>
   </head>
   <body>
-    <%= nav_bar :fixed => :top, :brand => "考拉", :responsive => true do %>
+    <%= nav_bar :fixed => :top, :brand => "万国司考", :responsive => true do %>
       <%= menu_group do %>
         <%=menu_item '下载', entrance_download_path %>  
         <% if current_user && can?(:view,School) %>
