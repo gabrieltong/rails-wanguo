@@ -209,6 +209,7 @@ GEM
     uglifier (2.3.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    useragent (0.10.0)
     will_paginate (3.0.5)
     will_paginate-bootstrap (0.2.5)
       will_paginate (>= 3.0.3)
@@ -252,5 +253,6 @@ DEPENDENCIES
   therubyracer
   twitter-bootstrap-rails
   uglifier (>= 1.0.3)
+  useragent
   will_paginate-bootstrap (= 0.2.5)
   yaml_db
