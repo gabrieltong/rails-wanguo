@@ -5,4 +5,12 @@ class EntranceController < ApplicationController
 
   def welcome
   end
+
+  def download
+
+  end
+
+  def download_link
+  	
+  end
 end

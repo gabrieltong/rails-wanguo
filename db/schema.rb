@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140220060308) do
+ActiveRecord::Schema.define(:version => 20140509030328) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(:version => 20140220060308) do
     t.string   "beatable_type"
     t.integer  "beatable_id"
     t.integer  "duration"
+    t.date     "day"
   end
 
   add_index "heartbeats", ["state"], :name => "index_heartbeats_on_state"
@@ -247,6 +248,7 @@ ActiveRecord::Schema.define(:version => 20140220060308) do
     t.integer  "number"
     t.text     "questions_number"
     t.integer  "position",           :default => 0
+    t.datetime "deleted_at"
   end
 
   add_index "laws", ["ancestry"], :name => "index_laws_on_ancestry"
