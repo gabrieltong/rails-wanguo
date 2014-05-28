@@ -9,5 +9,11 @@
 <a href="http://zhushou.360.cn/detail/index/soft_id/1579992?recrefer=SE_D_" class='btn'>安卓版本下载</a>
 <a href='http://mp.weixin.qq.com/mp/redirect?url=https://itunes.apple.com/cn/app/wan-guo-si-kao/id852759260?mt=8' class='btn'>IOS版本下载</a>
 <br/>
-<%=image_tag 'download_qrcode.png'%>
+<% if request.host == 'app.wanguoschool.net' %>
+<%= image_tag 'download_qrcode.png'%>
+<% end %>
+
+<% if request.host == 'wg.edu58.cn' %>
+<%= image_tag 'download_qrcode_edu58.png'%>
+<% end %>
 </div>
