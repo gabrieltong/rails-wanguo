@@ -16,9 +16,4 @@
 <% if request.host == 'wg.edu58.cn' %>
 <%= image_tag 'download_qrcode_edu58.png'%>
 <% end %>
-
-<%
-user_agent = UserAgent.parse(request.user_agent)
-%>
-<%= user_agent.platform %>
 </div>
