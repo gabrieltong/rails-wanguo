@@ -19,6 +19,8 @@ RailsWanguo::Application.routes.draw do
 
   get 'entrance/download'
 
+  get 'entrance/download_link'
+
   get "captchas/generate"
   
   get "captchas/valid"
