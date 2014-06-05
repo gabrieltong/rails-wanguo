@@ -337,10 +337,10 @@ class ApiController < ApplicationController
     # questions = Question.where(:id=>questions.collect{|i|i.id})
     volumn = params[:volumn]
     volumn = "0#{volumn}" if volumn.size == 1
-    year_first = Question.order('num asc').limit(1).first.num.to_s[0..3].to_i
-    year_last = Question.order('num desc').limit(1).first.num.to_s[0..3].to_i
+    year_first = Question.zhenti.order('num asc').limit(1).first.num.to_s[0..3].to_i
+    year_last = Question.zhenti.order('num desc').limit(1).first.num.to_s[0..3].to_i
     year = (year_first..year_last).to_a.sample
-    questions = Question.where("num like '#{year}#{volumn}%'").random(15)
+    questions = Question.zhenti.where("num like '#{year}#{volumn}%'").random(15)
     @content = wrap_questions(questions)
     render :json=>@content
   end

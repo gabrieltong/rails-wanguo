@@ -3,7 +3,7 @@ require 'zip/zipfilesystem'
 
 require 'roo'
 class Import < ActiveRecord::Base
-  attr_accessible :file, :title, :state,:subtitle
+  attr_accessible :file, :title, :state,:subtitle,:question_kind
 
   has_attached_file :file
 
@@ -24,7 +24,7 @@ class Import < ActiveRecord::Base
   #   Import.laws_zip.each {|i|i.import}
   # end
 
-  validate :title,:presence=>true
+  validate :title,:presence=>true,:if=>"state == 'laws' || state == 'freelaws' || question_kind == 'moni'"
   validate :validate_laws,:if=>"state == 'laws'"
   validate :validate_freelaws,:if=>"state == 'freelaws'"
   validate :validate_questions,:if=>"state == 'questions'"

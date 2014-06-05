@@ -45,6 +45,9 @@
   simple_form:
     options:
       import:
+        question_kind:
+          zhenti: '真题'
+          moni: '模拟'
         state:
           audios: '音频压缩包'
           freelaws: '免费法条'
@@ -223,6 +226,7 @@
         duration: '持续时间(天)'
 
       import:
+        question_kind: '真题/模拟'
         title: '部门法'
         subtitle: '部门法二级分类'
         file_file_name: '文件名称'
