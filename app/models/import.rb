@@ -40,7 +40,7 @@ class Import < ActiveRecord::Base
   def validate_laws
     if self.file.queued_for_write[:original]
       data = open(self.file.queued_for_write[:original].path)
-      unless data && data[0][0..6] == %w(法条编号 音频 真题 知识点 填空内容A 填空内容B 填空内容C)
+      unless data && data[0][0..10] == %w(法条编号 编 章 节 法条内容 音频 真题 知识点 填空内容A 填空内容B 填空内容C)
         errors.add(:file, "法条班格式错误")
       end
     end
@@ -49,8 +49,6 @@ class Import < ActiveRecord::Base
   def validate_freelaws
     if self.file.queued_for_write[:original]
       data = open(self.file.queued_for_write[:original].path)
-      p '<'*100
-      p data
       unless data && data[0][0..4] == %w(法条编号 编 章 节 法条内容)
         errors.add(:file, "免费法条格式错误")
       end
@@ -178,14 +176,13 @@ class Import < ActiveRecord::Base
 
     state 'laws' do
       def import
-        update_law(open)
+        import_law2(title,file_file_name,open)
       end
     end
 
     state 'freelaws' do
       def import
         import_freelaw(title,file_file_name,open)
-        import_law(title,file_file_name,open)
       end
     end
 
@@ -238,6 +235,64 @@ class Import < ActiveRecord::Base
           last.title = row[4].strip
           last.state = 'node'
           last.save
+        end
+      end
+    end
+  end
+
+  # 新的倒入脚本 ， 法条单独上传
+  def import_law2(name,other,data)
+    # 导入法条与免费法条
+    p data[0]
+    p '.'*100
+    if data &&  data[0] && data[0][0..10] == %w(法条编号 编 章 节 法条内容 音频 真题 知识点 填空内容A 填空内容B 填空内容C)
+      one = Law.with_deleted.find_or_create_by_title name.strip
+      data[1..-1].each do |row|
+        last = one.children.with_deleted.find_or_create_by_title other.split('.')[0..-2].join('.').strip
+        if row[1]
+          last = last.children.with_deleted.find_or_initialize_by_title row[1].strip
+          last.state = 'bian'
+          last.save
+        end
+
+        if row[2]
+          last = last.children.with_deleted.find_or_initialize_by_title row[2].strip
+          last.state = 'zhang'
+          last.save
+        end
+
+        if row[3]
+          last = last.children.with_deleted.find_or_initialize_by_title row[3].strip
+          last.state = 'jie'
+          last.save
+        end
+
+        if row[4]
+          last = last.children.with_deleted.find_or_initialize_by_number row[0]
+          last.title = row[4].strip
+          last.state = 'node'
+          last.save
+        end
+
+        last.exampoints = []
+        row[7].to_s.split(/[，,、]/).each do |ep|
+          last.exampoints << Exampoint.find_or_create_by_title(ep)
+        end
+
+        last.questions_number = []
+
+        row[6].to_s.split(/[，,、]/).each do |number|
+          last.questions_number.push number
+        end
+
+        last.blanks = row[8..-1].delete_if{|i|i.blank?}
+        last.score = 1
+        last.save
+
+        begin
+          last.sound = row[5] unless sound.blank?
+          last.save
+        rescue
         end
       end
     end
@@ -306,6 +361,7 @@ class Import < ActiveRecord::Base
       end
     end
   end
+  
   def import_question(data)
     # 导入真题
     if data && data[0][0..14] == %w(真题题号 标题 类型 分值 答案 解析一 解析三 选项A 解析A 选项B 解析B 选项C 解析C 选项D 解析D)
