@@ -46,8 +46,8 @@
     options:
       import:
         question_kind:
-          zhenti: '真题'
-          moni: '模拟'
+          scope_zhenti: '真题'
+          scope_moni: '模拟'
         state:
           audios: '音频压缩包'
           freelaws: '免费法条'

@@ -2,7 +2,7 @@
 class Question < ActiveRecord::Base
   include IsCollected
   
-  attr_accessible :answer, :choices, :description, :num, :score, :state, :title,:description3,:choices_description
+  attr_accessible :answer, :choices, :description, :num, :score, :state, :title,:description3,:choices_description,:kind,:epmenu
   serialize :choices
   serialize :choices_description  
   
@@ -28,18 +28,8 @@ class Question < ActiveRecord::Base
   has_many :g_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>'G'},:source => :exampoint,:uniq=>true
   has_many :h_eps,:through=>:ep_questions,:conditions=>{"ep_questions.state"=>'H'},:source => :exampoint,:uniq=>true
 
-  
-  state_machine :state,:initial=>'zhenti' do 
-    state 'zhenti' do
-    end
-
-    state 'moni' do
-    end
-  end
-
-  state_machine.states.map do |state|
-    scope state.name, :conditions => { :state => state.name.to_s }
-  end
+  scope 'scope_zhenti', :conditions => { :kind =>'scope_zhenti'  }
+  scope 'scope_moni', :conditions => { :kind =>'scope_moni'  }
 
   def self.zhentis
     year_first = 2000

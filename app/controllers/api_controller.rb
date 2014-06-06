@@ -324,6 +324,13 @@ class ApiController < ApplicationController
   end
 
   # 根据知识点菜单结构随机返回题
+  def epmenu_questions_moni
+    questions = Question.scope_moni.where(:epmenu=>Epmenu.find(params[:id]).title)
+    @content = wrap_questions(questions)
+    render :json=>@content
+  end
+
+  # 根据知识点菜单结构随机返回题
   def epmenu_questions
     questions = R.new.rand_questions_by_epm(Epmenu.find(params[:id]),params[:limit].to_i)
     questions = Question.where(:id=>questions.collect{|i|i.id})

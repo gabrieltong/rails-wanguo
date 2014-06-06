@@ -2,7 +2,7 @@
 	<div class='span6'>
 		<%= simple_form_for @import, :html => { :class => 'form-horizontal' } do |f| %>
 		  <%=f.input :state,:collection=>Import::State,:as=>:radio%>
-		  <%=f.input :question_kind,:collection=>[:zhenti,:moni],:as=>:radio%>
+		  <%=f.input :question_kind,:collection=>[:scope_zhenti,:scope_moni],:as=>:radio%>
 		  <%=f.input :title,:collection=>Istudy::Map.collect{|i|i[:title]},:as=>:select%>
 		  <%=f.input :file,:as=>:file%>
 		  
@@ -73,7 +73,7 @@
 			}
 			if(state=='questions'){
 				$("input[name='import[question_kind]']").parent().parent().parent().show()
-				if($("input[name='import[question_kind]']:checked").val()=='moni'){
+				if($("input[name='import[question_kind]']:checked").val()=='scope_moni'){
 					$("select[name='import[title]']").parent().parent().show()
 				}
 			}
