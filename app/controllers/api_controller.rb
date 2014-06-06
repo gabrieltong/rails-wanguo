@@ -325,8 +325,8 @@ class ApiController < ApplicationController
 
   # 根据知识点菜单结构随机返回题
   def epmenu_questions_moni
-    if params['id'] == '综合练习'
-      epmenu = params['id']
+    if params['id'].to_i == 0
+      epmenu = '综合练习'
     else
       epmenu = Epmenu.find(params[:id]).title
     end
