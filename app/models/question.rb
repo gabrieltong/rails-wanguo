@@ -37,9 +37,9 @@ class Question < ActiveRecord::Base
     (year_first..year_last).to_a.map do |year|
       {
         :year=>year,
-        :count1=>Question.where("`num` like '?01%' ",year).count(),
-        :count2=>Question.where("`num` like '?02%' ",year).count(),
-        :count3=>Question.where("`num` like '?03%' ",year).count()
+        :count1=>Question.scope_zhenti.where("`num` like '?01%' ",year).count(),
+        :count2=>Question.scope_zhenti.where("`num` like '?02%' ",year).count(),
+        :count3=>Question.scope_zhenti.where("`num` like '?03%' ",year).count()
       }
     end.select do |item|
       item[:count1] !=0 || item[:count2] !=0 || item[:count3] !=0
@@ -47,7 +47,7 @@ class Question < ActiveRecord::Base
   end
 
   def self.zhenti(year,volumn)
-    relation = Question.where("`num` like '#{year}#{volumn}%' ")
+    relation = Question.scope_zhenti.where("`num` like '#{year}#{volumn}%' ")
     relation
   end
 
