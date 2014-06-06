@@ -243,8 +243,6 @@ class Import < ActiveRecord::Base
   # 新的倒入脚本 ， 法条单独上传
   def import_law2(name,other,data)
     # 导入法条与免费法条
-    p data[0]
-    p '.'*100
     if data &&  data[0] && data[0][0..10] == %w(法条编号 编 章 节 法条内容 音频 真题 知识点 填空内容A 填空内容B 填空内容C)
       one = Law.with_deleted.find_or_create_by_title name.strip
       data[1..-1].each do |row|

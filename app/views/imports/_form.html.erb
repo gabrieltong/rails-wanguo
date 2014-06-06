@@ -3,7 +3,7 @@
 		<%= simple_form_for @import, :html => { :class => 'form-horizontal' } do |f| %>
 		  <%=f.input :state,:collection=>Import::State,:as=>:radio%>
 		  <%=f.input :question_kind,:collection=>[:scope_zhenti,:scope_moni],:as=>:radio%>
-		  <%=f.input :title,:collection=>Istudy::Map.collect{|i|i[:title]},:as=>:select%>
+		  <%=f.input :title,:collection=>Istudy::Map.collect{|i|i[:title]}+['综合练习'],:as=>:select%>
 		  <%=f.input :file,:as=>:file%>
 		  
 		  <div class="form-actions">
@@ -67,6 +67,7 @@
 
 			$("input[name='import[question_kind]']").parent().parent().parent().hide()
 			$("select[name='import[title]']").parent().parent().hide()
+			$("select[name='import[title]'] option:last").attr('disabled','disabled')
 
 			if(state=='freelaws' || state=='laws'){
 				$("select[name='import[title]']").parent().parent().show()
@@ -75,9 +76,11 @@
 				$("input[name='import[question_kind]']").parent().parent().parent().show()
 				if($("input[name='import[question_kind]']:checked").val()=='scope_moni'){
 					$("select[name='import[title]']").parent().parent().show()
+					$("select[name='import[title]'] option:last").removeAttr('disabled')
 				}
 			}
 		}
+
 		$("input[name='import[state]']").change(display_inputs)
 		$("input[name='import[question_kind]']").change(display_inputs)
 
