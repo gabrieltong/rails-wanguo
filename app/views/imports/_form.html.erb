@@ -3,7 +3,7 @@
 		<%= simple_form_for @import, :html => { :class => 'form-horizontal' } do |f| %>
 		  <%=f.input :state,:collection=>Import::State,:as=>:radio%>
 		  <%=f.input :question_kind,:collection=>[:scope_zhenti,:scope_moni],:as=>:radio%>
-		  <%=f.input :title,:collection=>Istudy::Map.collect{|i|i[:title]}+['综合练习'],:as=>:select%>
+		  <%=f.input :title,:collection=>Epmenu.roots.collect{|i|i.title}+['综合练习'],:as=>:select%>
 		  <%=f.input :file,:as=>:file%>
 		  
 		  <div class="form-actions">
