@@ -3,7 +3,8 @@
 		<%= simple_form_for @import, :html => { :class => 'form-horizontal' } do |f| %>
 		  <%=f.input :state,:collection=>Import::State,:as=>:radio%>
 		  <%=f.input :question_kind,:collection=>[:scope_zhenti,:scope_moni],:as=>:radio%>
-		  <%=f.input :title,:collection=>Epmenu.roots.collect{|i|i.title}+['综合练习'],:as=>:select%>
+		  <%#=f.input :title,:collection=>Epmenu.roots.collect{|i|i.title}+['综合练习'],:as=>:select%>
+		  <%=f.input :title %>
 		  <%=f.input :file,:as=>:file%>
 		  
 		  <div class="form-actions">
@@ -66,17 +67,17 @@
 			var state = $("input[name='import[state]']:checked").val();
 
 			$("input[name='import[question_kind]']").parent().parent().parent().hide()
-			$("select[name='import[title]']").parent().parent().hide()
-			$("select[name='import[title]'] option:last").attr('disabled','disabled')
+			$("*[name='import[title]']").parent().parent().hide()
+			$("*[name='import[title]'] option:last").attr('disabled','disabled')
 
 			if(state=='freelaws' || state=='laws'){
-				$("select[name='import[title]']").parent().parent().show()
+				$("*[name='import[title]']").parent().parent().show()
 			}
 			if(state=='questions'){
 				$("input[name='import[question_kind]']").parent().parent().parent().show()
 				if($("input[name='import[question_kind]']:checked").val()=='scope_moni'){
-					$("select[name='import[title]']").parent().parent().show()
-					$("select[name='import[title]'] option:last").removeAttr('disabled')
+					$("*[name='import[title]']").parent().parent().show()
+					$("*[name='import[title]'] option:last").removeAttr('disabled')
 				}
 			}
 		}

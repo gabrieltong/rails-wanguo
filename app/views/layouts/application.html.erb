@@ -54,7 +54,11 @@
         <% end %>
 
         <% if current_user && can?(:view,Question) %>
-        <%=menu_item '历年真题', questions_path %>  
+        <%=menu_item '历年真题', questions_path(:kind=>:zhenti) %>  
+        <% end %>
+
+        <% if current_user && can?(:view,Question) %>
+        <%=menu_item '模拟题', questions_path(:kind=>:moni) %>  
         <% end %>
 
         <%=menu_item '统计信息', 'http://www.umeng.com/apps/' %>  

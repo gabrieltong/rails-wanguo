@@ -1,3 +1,4 @@
+# encoding: utf-8
 class QuestionsController < ApplicationController
   before_filter :authorize,:get_epmenu
   authorize_resource
@@ -9,8 +10,23 @@ class QuestionsController < ApplicationController
     else
       @relation = Question.where(true)
     end
+
+    if params['kind'] == 'zhenti'
+      @title = '历年真题'
+      @relation = @relation.scope_zhenti
+    end
+
+    if params['kind'] == 'moni'
+      @title = '模拟题'
+      @relation = @relation.scope_moni
+    end
     
+    if params['epmenu']
+      @relation = @relation.scope_moni.where(:epmenu=>params['epmenu'])
+    end
+
     paginate
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @questions }

@@ -1,13 +1,28 @@
 <%- model_class = Question -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+  <h1><%=@title%></h1>
 </div>
+
+<% if params['kind'] == 'zhenti'%>
 <ul class="nav nav-pills">
-  <li class="<%=request.fullpath.include?(questions_path) ? 'active' : '' %>"><%=link_to '全部',questions_path%></li>
+  <li class="<%=request.fullpath.include?(questions_path) ? 'active' : '' %>">
+    <%=link_to '全部',questions_path%></li>
   <% Epmenu.roots.each do |epmenu|%>
     <li class="<%= request.fullpath.include?(epmenu_questions_path(epmenu)) ? 'active' : '' %>"><%=link_to epmenu.title, epmenu_questions_path(epmenu)%></li>
   <% end %>
 </ul>
+<% end %>
+
+<% if params['kind'] == 'moni'%>
+<ul class="nav nav-pills">
+  <li class="<%=request.fullpath == questions_path(:kind=>:moni) ? 'active' : '' %>">
+    <%=link_to '全部',questions_path(:kind=>:moni)%></li>
+  <% Epmenu.roots.each do |epmenu|%>
+    <li class="<%= request.fullpath == questions_path(:kind=>:moni,:epmenu=>epmenu.title) ? 'active' : '' %>"><%=link_to epmenu.title, questions_path(:kind=>:moni,:epmenu=>epmenu.title) %></li>
+  <% end %>
+</ul>
+<% end %>
+
 <table class="table table-striped table-bordered">
   <thead>
     <tr>
@@ -44,3 +59,18 @@
 </table>
 
 <%= will_paginate @collection, renderer: BootstrapPagination::Rails,:class=>'text-center pagination' %>
+
+<script>
+  $(function(){
+    var href_arr = window.location.href.split('/');
+    var path = href_arr[href_arr.length-1];
+    if(path=='questions'){
+      $("a[href='/questions']").parent().addClass('active');
+      $("a[href='/questions?kind=moni']").parent().removeClass('active');
+    }
+    if(path=='questions?kind=moni'){
+      $("a[href='/questions']").parent().removeClass('active');
+      $("a[href='/questions?kind=moni']").parent().addClass('active');
+    }
+  })
+</script>

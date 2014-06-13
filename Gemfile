@@ -92,3 +92,4 @@ gem "acts_as_paranoid", "~>0.4.0"
 gem 'yaml_db'
 gem 'groupdate'
 gem 'useragent'
+gem 'httparty'
