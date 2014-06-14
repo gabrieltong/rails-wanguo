@@ -59,11 +59,26 @@ class ApiController < ApplicationController
   #   Law.find(params[:law_id]).create_activity key: 'law.audio_played', owner: current_user
   # end
 
+  # def forget_password
+  #   user = User.where(:email=>params[:email]).first
+
+  #   ClearanceMailer.change_password(user).deliver
+  #   if user
+  #     user.forgot_password!
+  #     ClearanceMailer.change_password(user).deliver
+  #     render_success
+  #   else
+  #     render_fail
+  #   end
+  # end
+
   def forget_password
-    user = User.where(:email=>params[:email]).first
+    user = User.where(:phone=>params[:phone]).first
+    p user
     if user
       user.forgot_password!
-      ClearanceMailer.change_password(user).deliver
+      content = "http://#{request.host}/users/#{user.id}/password/edit?token=#{user.confirmation_token}"
+      Inolink.new.batch_send user.phone,content
       render_success
     else
       render_fail
