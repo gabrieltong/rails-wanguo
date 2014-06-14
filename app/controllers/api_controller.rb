@@ -74,10 +74,9 @@ class ApiController < ApplicationController
 
   def forget_password
     user = User.where(:phone=>params[:phone]).first
-    p user
     if user
       user.forgot_password!
-      content = "http://#{request.host}/users/#{user.id}/password/edit?token=#{user.confirmation_token}"
+      content = "http://#{request.host}/users/#{user.id}/password/edit?token=#{user.confirmation_token}&"
       Inolink.new.batch_send user.phone,content
       render_success
     else
