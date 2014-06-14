@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140509030328) do
+ActiveRecord::Schema.define(:version => 20140613071502) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -170,7 +170,7 @@ ActiveRecord::Schema.define(:version => 20140509030328) do
     t.string   "state"
     t.string   "category"
     t.integer  "ancestry_depth", :default => 0
-    t.integer  "number"
+    t.string   "number"
     t.integer  "position",       :default => 0
   end
 
@@ -226,6 +226,7 @@ ActiveRecord::Schema.define(:version => 20140509030328) do
     t.datetime "updated_at",        :null => false
     t.string   "state"
     t.string   "subtitle"
+    t.string   "question_kind"
   end
 
   add_index "imports", ["state"], :name => "index_imports_on_state"
@@ -245,15 +246,23 @@ ActiveRecord::Schema.define(:version => 20140509030328) do
     t.string   "sound_content_type"
     t.integer  "sound_file_size"
     t.datetime "sound_updated_at"
-    t.integer  "number"
+    t.string   "number"
     t.text     "questions_number"
-    t.integer  "position",           :default => 0
+    t.integer  "position"
     t.datetime "deleted_at"
   end
 
   add_index "laws", ["ancestry"], :name => "index_laws_on_ancestry"
   add_index "laws", ["ancestry_depth"], :name => "index_laws_on_ancestry_depth"
   add_index "laws", ["state"], :name => "index_laws_on_state"
+
+  create_table "phonesigns", :force => true do |t|
+    t.string   "phone"
+    t.string   "sign"
+    t.string   "kind"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "questions", :force => true do |t|
     t.text     "title"
@@ -263,10 +272,12 @@ ActiveRecord::Schema.define(:version => 20140509030328) do
     t.text     "description"
     t.string   "answer"
     t.text     "choices"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
     t.text     "description3"
     t.text     "choices_description"
+    t.string   "kind",                :default => "scope_zhenti"
+    t.string   "epmenu"
   end
 
   add_index "questions", ["num"], :name => "index_questions_on_num"

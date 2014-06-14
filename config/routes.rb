@@ -1,5 +1,9 @@
 RailsWanguo::Application.routes.draw do
 
+  match "phonesign/generate"
+
+  match "phonesign/validate"
+
   resources :dlogs
 
 
@@ -52,7 +56,7 @@ RailsWanguo::Application.routes.draw do
 
   match 'api/cities'
 
-  post 'api/forget_password'
+  match 'api/forget_password'
 
   post 'api/zhentis'
 
