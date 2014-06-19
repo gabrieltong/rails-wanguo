@@ -16,7 +16,12 @@ RailsWanguo::Application.routes.draw do
   resources :schools
 
 
-  resources :books
+  resources :books do 
+    member do
+      match 'move_up'
+      match 'move_down'
+    end
+  end
 
 
   resources :import_errors

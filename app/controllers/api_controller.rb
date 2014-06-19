@@ -97,7 +97,7 @@ class ApiController < ApplicationController
   end
 
   def books
-    @relation = Book.where(true)
+    @relation = Book.order('position asc')
     paginate
     @content = @collection
     render :json=>@content

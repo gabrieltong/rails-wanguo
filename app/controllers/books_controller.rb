@@ -1,10 +1,11 @@
 class BooksController < ApplicationController
   before_filter :authorize
   authorize_resource
+  before_filter :find_instance,:only=>[:move_up,:move_down]    
   # GET /books
   # GET /books.json
   def index
-    @books = Book.all
+    @books = Book.order('position asc')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -81,5 +82,9 @@ class BooksController < ApplicationController
       format.html { redirect_to books_url }
       format.json { head :no_content }
     end
+  end
+
+  def find_instance
+    @instance = Book.find(params[:id])
   end
 end

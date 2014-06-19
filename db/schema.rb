@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140613071502) do
+ActiveRecord::Schema.define(:version => 20140619075203) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -45,13 +45,14 @@ ActiveRecord::Schema.define(:version => 20140613071502) do
     t.string   "author"
     t.text     "details"
     t.text     "taobao"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.string   "file_file_name"
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
     t.string   "published_at"
+    t.integer  "position",          :default => 1
   end
 
   create_table "captchas", :force => true do |t|
