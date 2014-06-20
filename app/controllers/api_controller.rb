@@ -2,7 +2,7 @@
 class ApiController < ApplicationController
   # include Clearance::Controller
 
-  before_filter :authorize_token,:except=>[:login,:signup,:forget_password,:cities,:schools,:moni_menu,:epmenu_questions_moni]
+  before_filter :authorize_token,:except=>[:login,:signup,:forget_password,:cities,:schools]
 
   after_filter :save_dlog
 
