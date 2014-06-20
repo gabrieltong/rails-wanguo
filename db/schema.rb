@@ -249,7 +249,7 @@ ActiveRecord::Schema.define(:version => 20140619075203) do
     t.datetime "sound_updated_at"
     t.string   "number"
     t.text     "questions_number"
-    t.integer  "position"
+    t.integer  "position",           :default => 0
     t.datetime "deleted_at"
   end
 

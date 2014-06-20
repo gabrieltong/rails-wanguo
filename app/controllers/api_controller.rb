@@ -2,11 +2,15 @@
 class ApiController < ApplicationController
   # include Clearance::Controller
 
-  before_filter :authorize_token,:except=>[:login,:signup,:forget_password,:cities,:schools]
+  before_filter :authorize_token,:except=>[:login,:signup,:forget_password,:cities,:schools,:moni_menu,:epmenu_questions_moni]
 
   after_filter :save_dlog
 
   rescue_from Exception, :with => :server_error
+
+  def moni_menu
+    render :json=>Question.scope_moni.select('epmenu').group('epmenu').collect{|i|i.epmenu}
+  end
 
   def cities
     arr = [:administrativeArea,:locality,:subAdministrativeArea,:subLocality,:country]
@@ -337,15 +341,8 @@ class ApiController < ApplicationController
     end
   end
 
-  # 根据知识点菜单结构随机返回题
   def epmenu_questions_moni
-    if params['id'].to_i == 0
-      epmenu = '综合练习'
-    else
-      epmenu = Epmenu.find(params[:id]).title
-    end
-
-    questions = Question.scope_moni.where(:epmenu=>epmenu)
+    questions = Question.scope_moni.where(:epmenu=>params[:epmenu])
     @content = wrap_questions(questions)
     render :json=>@content
   end
@@ -827,7 +824,5 @@ class ApiController < ApplicationController
     rescue
     end
   end
-
-
 end
 

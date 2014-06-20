@@ -17,8 +17,8 @@
 <ul class="nav nav-pills">
   <li class="<%=request.fullpath == questions_path(:kind=>:moni) ? 'active' : '' %>">
     <%=link_to '全部',questions_path(:kind=>:moni)%></li>
-  <% Epmenu.roots.each do |epmenu|%>
-    <li class="<%= request.fullpath == questions_path(:kind=>:moni,:epmenu=>epmenu.title) ? 'active' : '' %>"><%=link_to epmenu.title, questions_path(:kind=>:moni,:epmenu=>epmenu.title) %></li>
+  <% Question.scope_moni.select('epmenu').group('epmenu').collect{|i|i.epmenu}.each do |epmenu|%>
+    <li class="<%= request.fullpath == questions_path(:kind=>:moni,:epmenu=>epmenu) ? 'active' : '' %>"><%=link_to epmenu, questions_path(:kind=>:moni,:epmenu=>epmenu) %></li>
   <% end %>
 </ul>
 <% end %>
@@ -64,7 +64,8 @@
   $(function(){
     var href_arr = window.location.href.split('/');
     var path = href_arr[href_arr.length-1];
-    if(path=='questions'){
+    if(path=='questions?kind=zhenti' || path=='questions'){
+      $("a[href='/questions?kind=zhenti']").parent().addClass('active');
       $("a[href='/questions']").parent().addClass('active');
       $("a[href='/questions?kind=moni']").parent().removeClass('active');
     }

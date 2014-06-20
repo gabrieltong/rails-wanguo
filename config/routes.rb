@@ -59,6 +59,8 @@ RailsWanguo::Application.routes.draw do
 
   resources :heartbeats
 
+  match 'api/moni_menu'
+  
   match 'api/cities'
 
   match 'api/forget_password'
