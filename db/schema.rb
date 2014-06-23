@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140619075203) do
+ActiveRecord::Schema.define(:version => 20140623065510) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -268,7 +268,7 @@ ActiveRecord::Schema.define(:version => 20140619075203) do
   create_table "questions", :force => true do |t|
     t.text     "title"
     t.integer  "score"
-    t.integer  "num"
+    t.string   "num"
     t.string   "state"
     t.text     "description"
     t.string   "answer"
