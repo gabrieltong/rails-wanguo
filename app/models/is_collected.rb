@@ -5,8 +5,11 @@ module IsCollected
   end
 
   def is_collected
-    raise NoCurrentUser unless (current_user.is_a? User)
-    Collect.is_collected(current_user,self)
+    if current_user.is_a? User
+    	Collect.is_collected(current_user,self)
+    else
+    	false
+    end
   end
 
   class NoCurrentUser < StandardError
