@@ -400,7 +400,8 @@ class Import < ActiveRecord::Base
     if data && data[0] && data[0][0..3] == %w(一级目录 二级目录 知识点（考点） 真题题号和选项)
       data[1..-1].each do |row|
         if row[0] && row[1] && row[2] && row[3]
-          menu = Epmenu.find_or_create_by_title(row[0].strip)
+          row[0].strip.gsub(/^\d+/,'')
+          menu = Epmenu.find_or_create_by_title(row[0].strip.gsub(/^\d+/,''))
           sub = menu.children.find_or_create_by_title(row[1].strip)
           ep = Exampoint.find_or_create_by_title(row[2].strip)
           menu.exampoints << ep
